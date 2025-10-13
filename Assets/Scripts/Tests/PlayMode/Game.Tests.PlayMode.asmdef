@@ -1,0 +1,19 @@
+{
+    "name": "Game.Tests.PlayMode",
+    "rootNamespace": "Undermarch.Tests",
+    "references": [
+        "GUID:4f9ce18eb536f4975a418e6b975821b3",
+        "GUID:1aeee74991d994137ad4d4e5ba31d26b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,30 @@
+using System.Collections.Generic;
+
+namespace Undermarch.Simulation.Combat
+{
+    public enum DamageType { Physical, Fire, Frost, Poison, Arcane }
+
+    public sealed class DamagePacket
+    {
+        public readonly Dictionary<DamageType, int> Amounts = new();
+        public void Add(DamageType type, int amount) => Amounts[type] = (Amounts.TryGetValue(type, out var v) ? v : 0) + amount;
+    }
+
+    public interface IEffect { int RemainingTicks { get; } void OnApply(); void OnTick(); void OnExpire(); }
+    public enum Faction { Hero, Defender, Neutral, ProjectileHero, ProjectileDefender }
+
+    public static class InteractionMatrix
+    {
+        public static bool TrapTriggersOn(Faction trapOwner, Faction target)
+        {
+            // Example: a defender trap triggers on heroes only
+            if (trapOwner == Faction.Defender && target == Faction.Hero) return true;
+            return false;
+        }
+        public static bool ProjectileHits(Faction projectile, Faction target)
+        {
+            if (projectile == Faction.ProjectileHero && target == Faction.Hero) return false; // no friendly fire
+            return true;
+        }
+    }
+}
