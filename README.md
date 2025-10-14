@@ -3,7 +3,7 @@
 Tile-based tick-driven reverse-dungeon game. Headless simulation with Unity presentation.
 
 ## Team:
-- Joosep Podekrat (master)
+- Joosep Podekrat (foreperson)
 - Osvald Nigola (labourer)
 - Leo-Martin Pala (labourer)
 - Anna Liisa Nurm (labourer)
