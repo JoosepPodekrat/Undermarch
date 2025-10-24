@@ -19,11 +19,13 @@ namespace Undermarch.Simulation.Combat
         {
             // Example: a defender trap triggers on heroes only
             if (trapOwner == Faction.Defender && target == Faction.Hero) return true;
+            if (trapOwner == Faction.Hero && target == Faction.Defender) return true; //support for heroes laying traps, implement later if at all
             return false;
         }
         public static bool ProjectileHits(Faction projectile, Faction target)
         {
-            if (projectile == Faction.ProjectileHero && target == Faction.Hero) return false; // no friendly fire
+            if (projectile == Faction.ProjectileHero && target == Faction.Hero) return false;
+            if (projectile == Faction.ProjectileDefender && target == Faction.Defender) return false; // no friendly fire for either faction with projectiles
             return true;
         }
     }
