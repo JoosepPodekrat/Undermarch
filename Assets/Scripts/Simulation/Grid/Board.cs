@@ -6,6 +6,8 @@ namespace Undermarch.Simulation.Grid
     {
         public readonly int Width;
         public readonly int Height;
+        public bool HasWallAt(TilePos pos) => _wall.ContainsKey(IndexOf(pos));
+
 
         // One occupancy map per layer (simple approach; can optimize later)
         private readonly Dictionary<int, object> _wall;          // key = index, value = wall data or null

@@ -1,10 +1,17 @@
 namespace Undermarch.Simulation.Grid
 {
-    public readonly struct TilePos
+    // pure simulation data
+    public struct TilePos
     {
-        public readonly int x;
-        public readonly int y;
-        public TilePos(int x, int y) { this.x = x; this.y = y; }
+        public int x;
+        public int y;
+
+        public TilePos(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
         public override string ToString() => $"({x},{y})";
     }
 
