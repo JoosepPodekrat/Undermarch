@@ -1,0 +1,12 @@
+namespace Undermarch
+{
+    public interface Armor
+    {
+        string name { get; }
+        string description { get; }
+        void Equip(Character target);
+        void Unequip(Character target);
+
+        void Apply(Character target);
+    }
+}

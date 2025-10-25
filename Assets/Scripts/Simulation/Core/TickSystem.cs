@@ -2,19 +2,19 @@ namespace Undermarch.Simulation.Core
 {
     public interface ITickSystem
     {
-        int CurrentTick { get; }
+        int currentTick { get; }
         void Tick(); // advances simulation by 1 tick
     }
 
     public sealed class TickSystem : ITickSystem
     {
-        public int CurrentTick { get; private set; }
+        public int currentTick { get; private set; }
         public event System.Action<int> OnTick;
 
         public void Tick()
         {
-            CurrentTick++;
-            OnTick?.Invoke(CurrentTick);
+            currentTick++;
+            OnTick?.Invoke(currentTick);
         }
     }
 }

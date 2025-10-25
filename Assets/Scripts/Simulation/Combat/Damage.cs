@@ -2,12 +2,12 @@ using System.Collections.Generic;
 
 namespace Undermarch.Simulation.Combat
 {
-    public enum DamageType { Physical, Fire, Frost, Poison, Arcane }
+    public enum DamageType { Physical, Fire, Frost, Poison, Arcane, Light, Dark, Bleed }
 
     public sealed class DamagePacket
     {
-        public readonly Dictionary<DamageType, int> Amounts = new();
-        public void Add(DamageType type, int amount) => Amounts[type] = (Amounts.TryGetValue(type, out var v) ? v : 0) + amount;
+        public readonly Dictionary<DamageType, int> amounts = new();
+        public void Add(DamageType type, int amount) => amounts[type] = (amounts.TryGetValue(type, out var v) ? v : 0) + amount;
     }
 
     public interface IEffect { int RemainingTicks { get; } void OnApply(); void OnTick(); void OnExpire(); }
