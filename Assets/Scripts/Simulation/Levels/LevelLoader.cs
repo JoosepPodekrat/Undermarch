@@ -21,12 +21,12 @@ namespace Undermarch.Simulation.Levels
                 "###.....###.....####",
                 "###.....###.....####",
                 "###.....###.....####",
-                "###.....###.M...####",
+                "###.....###.....####",
                 "###.....###.....####",
                 "###.....###.....####",
                 "#######.....########",
                 "#########.##########",
-                "#########T##########",
+                "#########.##########",
                 "######      ########",
                 "#####   H    #######",
                 "######      ########",
@@ -51,16 +51,9 @@ namespace Undermarch.Simulation.Levels
                             var hero = CharacterDatabase.peasant.Clone();
                             board.AddEntity(pos, hero);
                             break;
-                        case 'M':
-                            var monster = CharacterDatabase.slimeMonster.Clone();
-                            board.AddEntity(pos, monster);
-                            break;
                         case 'D':
                             var dm = CharacterDatabase.dungeonMaster.Clone();
                             board.AddEntity(pos, dm);
-                            break;
-                        case 'T':
-                            board.AddInteractable(pos, new SpikeTrap());
                             break;
                         // '.', 'E', and ' ' are empty spaces, so we do nothing.
                     }

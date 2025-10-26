@@ -2,7 +2,8 @@
     "name": "Game.Presentation",
     "rootNamespace": "Undermarch",
     "references": [
-        "GUID:1aeee74991d994137ad4d4e5ba31d26b"
+        "GUID:1aeee74991d994137ad4d4e5ba31d26b",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

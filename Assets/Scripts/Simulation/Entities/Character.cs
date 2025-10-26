@@ -6,6 +6,7 @@ using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Effects.Buffs;
 using Undermarch.Simulation.Effects.Debuffs;
 using Undermarch.Simulation.Grid;
+using Undermarch.Simulation.Core;
 
 namespace Undermarch.Simulation.Entities
 {
@@ -240,12 +241,14 @@ namespace Undermarch.Simulation.Entities
                 // Only heroes can trigger traps for now.
                 if (this.faction == Faction.Hero)
                 {
+                    SimulationLog.Log($"{this.Name} triggered a {trap.Name} at ({pos.x}, {pos.y})!");
                     this.TakeDamage(trap.DamagePacket);
                     trap.Durability--;
 
                     if (trap.Durability <= 0)
                     {
                         board.RemoveInteractable(pos);
+                        SimulationLog.Log($"{trap.Name} was destroyed.");
                     }
                 }
             }

@@ -1,21 +1,27 @@
 using System.Linq;
-using System.Linq;
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Entities.Characters.DungeonMaster;
 using Undermarch.Simulation.Grid;
-using Undermarch.Simulation.Levels; // Added this using statement
+using Undermarch.Simulation.Levels;
 using UnityEngine;
 
 namespace Undermarch.Presentation.Managers
 {
+    public enum GameState
+    {
+        Placement,
+        Combat
+    }
+
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
 
         public Board Board { get; private set; }
         public TickSystem TickSystem { get; private set; }
+        public GameState CurrentState { get; private set; }
 
         private bool isHeroTurn = true;
 
@@ -27,10 +33,10 @@ namespace Undermarch.Presentation.Managers
                 return;
             }
             Instance = this;
-            Debug.Log("GameManager: Awake()");
+            CurrentState = GameState.Placement;
+            Debug.Log("GameManager: Awake() - State: Placement");
 
-            // Initialize the simulation state
-            Board = new Board(20, 20); // Using a 20x20 board for now.
+            Board = new Board(20, 20);
             TickSystem = new TickSystem();
             
             Debug.Log("GameManager initialized. Board and TickSystem created.");
@@ -39,18 +45,17 @@ namespace Undermarch.Presentation.Managers
         private void Start()
         {
             Debug.Log("GameManager: Start()");
-            // Load the level content onto the board
             LevelLoader.LoadLevel1(Board);
             Debug.Log("GameManager: Level 1 loaded.");
+        }
 
-            if (TickSystem != null)
+        public void StartCombat()
+        {
+            if (CurrentState == GameState.Placement)
             {
+                CurrentState = GameState.Combat;
+                Debug.Log("GameManager: StartCombat() - State: Combat");
                 TickSystem.OnTick += HandleTick;
-                Debug.Log("GameManager: Subscribed to OnTick event.");
-            }
-            else
-            {
-                Debug.LogError("GameManager: TickSystem is null, cannot subscribe to OnTick event.");
             }
         }
 
@@ -75,64 +80,60 @@ namespace Undermarch.Presentation.Managers
             }
         }
 
-                private void HandleTick(int tick)
+        private void HandleTick(int tick)
+        {
+            if (CurrentState != GameState.Combat) return;
+
+            var characters = Board.GetAllCharacters().ToList();
+            Debug.Log($"HandleTick: Tick {tick}, Processing {characters.Count} characters. It is {(isHeroTurn ? "Hero" : "Monster")} turn.");
+
+            if (isHeroTurn)
+            {
+                foreach (var character in characters.Where(c => c.faction == Faction.Hero && !c.IsDead))
                 {
-                    var characters = Board.GetAllCharacters().ToList();
-                    Debug.Log($"HandleTick: Tick {tick}, Processing {characters.Count} characters. It is {(isHeroTurn ? "Hero" : "Monster")} turn.");
-        
-                    if (isHeroTurn)
+                    character.Act(Board);
+                }
+            }
+            else
+            {
+                foreach (var character in characters.Where(c => c.faction == Faction.Defender && !c.IsDead))
+                {
+                    character.Act(Board);
+                }
+            }
+
+            foreach (var character in characters)
+            {
+                if (character.IsDead)
+                {
+                    var pos = Board.GetPositionOf(character);
+                    if (pos.IsValid())
                     {
-                        // Heroes' turn
-                        foreach (var character in characters.Where(c => c.faction == Faction.Hero && !c.IsDead))
-                        {
-                            character.Act(Board);
-                        }
+                        Board.RemoveEntity(pos);
+                        Debug.Log($"Removed dead character at {pos.x},{pos.y}");
                     }
-                    else
-                    {
-                        // Monsters' and Dungeon Master's turn
-                        foreach (var character in characters.Where(c => c.faction == Faction.Defender && !c.IsDead))
-                        {
-                            character.Act(Board);
-                        }
-                    }
-        
-                    // Remove dead characters from the board.
-                    // We iterate through the original list of characters we fetched at the start of the tick.
-                    // If any of them died during the turn, their `IsDead` flag will be true.
-                    foreach (var character in characters)
-                    {
-                        if (character.IsDead)
-                        {
-                            var pos = Board.GetPositionOf(character);
-                            if (pos.IsValid())
-                            {
-                                Board.RemoveEntity(pos);
-                                Debug.Log($"Removed dead character at {pos.x},{pos.y}");
-                            }
-                        }
-                    }
-        
-                                // Check for Win/Loss Conditions
-                                // We need to get a fresh list of characters as some may have been removed.
-                                var remainingCharacters = Board.GetAllCharacters().ToList();
-                                bool dungeonMasterIsAlive = remainingCharacters.Any(c => c is DungeonMaster);
-                                bool heroesAreAlive = remainingCharacters.Any(c => c.faction == Faction.Hero);
-                    
-                                if (!dungeonMasterIsAlive)
-                                {
-                                    Debug.Log("Game Over: The Dungeon Master has been defeated! YOU LOSE!");
-                                    TickSystem.Stop();
-                                    return; // Stop processing this tick
-                                }
-                                
-                                if (!heroesAreAlive)
-                                {
-                                    Debug.Log("Game Over: All heroes have been defeated! YOU WIN!");
-                                    TickSystem.Stop();
-                                    return; // Stop processing this tick
-                                }
-                    
-                                // Switch turns for the next tick
-                                isHeroTurn = !isHeroTurn;                }    }
+                }
+            }
+
+            var remainingCharacters = Board.GetAllCharacters().ToList();
+            bool dungeonMasterIsAlive = remainingCharacters.Any(c => c is DungeonMaster);
+            bool heroesAreAlive = remainingCharacters.Any(c => c.faction == Faction.Hero);
+
+            if (!dungeonMasterIsAlive)
+            {
+                Debug.Log("Game Over: The Dungeon Master has been defeated! YOU LOSE!");
+                TickSystem.Stop();
+                return;
+            }
+            
+            if (!heroesAreAlive)
+            {
+                Debug.Log("Game Over: All heroes have been defeated! YOU WIN!");
+                TickSystem.Stop();
+                return;
+            }
+
+            isHeroTurn = !isHeroTurn;
+        }
+    }
 }
