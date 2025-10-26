@@ -1,6 +1,6 @@
-
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
+using Undermarch.Simulation.Levels; // Added this using statement
 using UnityEngine;
 
 namespace Undermarch.Presentation.Managers
@@ -26,6 +26,13 @@ namespace Undermarch.Presentation.Managers
             TickSystem = new TickSystem();
             
             Debug.Log("GameManager initialized. Board and TickSystem created.");
+        }
+
+        private void Start()
+        {
+            // Load the level content onto the board
+            LevelLoader.LoadLevel1(Board);
+            Debug.Log("GameManager: Level 1 loaded.");
         }
     }
 }

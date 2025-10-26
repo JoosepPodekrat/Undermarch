@@ -145,7 +145,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 23215821}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &23215823
 Camera:
   m_ObjectHideFlags: 0
@@ -310,9 +310,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1908932529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e5ad11e85bc3df0283a89a3256d0a10, type: 3}
+  m_Script: {fileID: 11500000, guid: ed5c6f5264dfd58af8bcb26d354eb3bc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Testing.BoardTest
+  m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Testing.Phase1_RendererTest
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

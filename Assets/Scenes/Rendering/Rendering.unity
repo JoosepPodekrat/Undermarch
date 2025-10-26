@@ -380,8 +380,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 825309209}
-  - component: {fileID: 825309208}
-  - component: {fileID: 825309210}
   m_Layer: 0
   m_Name: BoardSpawner
   m_TagString: Untagged
@@ -389,19 +387,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &825309208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825309207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8596fde83dd02144c83cdbde241eaf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Presentation::Undermarch.BoardTestSpawner
-  tilemapRenderer: {fileID: 1320872573}
 --- !u!4 &825309209
 Transform:
   m_ObjectHideFlags: 0
@@ -417,19 +402,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &825309210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825309207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c606becb16a5cce4cb2b5febc6143cd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Presentation::BoardTestSpawner
-  tilemapRenderer: {fileID: 1320872575}
 --- !u!1 &919119356
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,7 +447,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919119356}
   m_Enabled: 1
-  m_CellSize: {x: 0.5, y: 0.5, z: 0}
+  m_CellSize: {x: 1, y: 1, z: 0}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
@@ -740,7 +712,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1320872574}
-  - component: {fileID: 1320872573}
   - component: {fileID: 1320872575}
   m_Layer: 0
   m_Name: TilemapRenderer
@@ -749,35 +720,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1320872573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1320872572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb781986b648a5747ad87d2082ff503f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Rendering.TilemapRenderer
-  groundTilemap: {fileID: 437377466}
-  wallTilemap: {fileID: 1885301522}
-  interactableTilemap: {fileID: 1209406365}
-  entityTilemap: {fileID: 6652438}
-  effectsTilemap: {fileID: 1084575804}
-  groundTile: {fileID: 11400000, guid: d243a0e41724b89439cc662978cd941d, type: 2}
-  wallTile: {fileID: 11400000, guid: c103946d5fec0684b83f17bd6674a017, type: 2}
-  interactableTile: {fileID: 11400000, guid: a5fbd33b93726fe40898a1d6c6f26b57, type: 2}
-  entityTile: {fileID: 11400000, guid: f7623be1759bec54ba3ced245dca3a3d, type: 2}
-  effectTile: {fileID: 11400000, guid: 324289614af5e6a47a9836f24cfc672f, type: 2}
-  testWalls:
-  - x: 2
-    y: 2
-  - x: 3
-    y: 4
-  - x: 5
-    y: 1
 --- !u!4 &1320872574
 Transform:
   m_ObjectHideFlags: 0
@@ -802,9 +744,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1320872572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe5ca068fab01d946b30ede4aa7acb64, type: 3}
+  m_Script: {fileID: 11500000, guid: 44b70c93f4b60c6f3a28aa16e38e40f5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Rendering.TilemapRendererr
+  m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Rendering.TilemapRenderer
   groundTilemap: {fileID: 437377466}
   wallTilemap: {fileID: 1885301522}
   interactableTilemap: {fileID: 1209406365}
@@ -812,10 +754,7 @@ MonoBehaviour:
   effectsTilemap: {fileID: 1084575804}
   groundTile: {fileID: 11400000, guid: 38eb825decbb73ec683e5580516bdcbf, type: 2}
   wallTile: {fileID: 11400000, guid: e9e14f14ec74b242cb2f6a80bb8a9964, type: 2}
-  interactableTile: {fileID: 11400000, guid: 114233fb95ac53510b1304ba2f2e0412, type: 2}
   entityTile: {fileID: 11400000, guid: df8d1c67e87f1a06b81ff9de1c0ddc4f, type: 2}
-  effectTile: {fileID: 11400000, guid: 8fb1e44aeaec908ca9fc7d63f83d0486, type: 2}
-  testWalls: []
 --- !u!1 &1802145946
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,6 +767,7 @@ GameObject:
   - component: {fileID: 1802145948}
   - component: {fileID: 1802145947}
   - component: {fileID: 1802145950}
+  - component: {fileID: 1802145951}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -953,6 +893,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1802145951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802145946}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b84d06fd603474a85039ccd6bd5814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Rendering.CameraController
 --- !u!1 &1885301519
 GameObject:
   m_ObjectHideFlags: 0
