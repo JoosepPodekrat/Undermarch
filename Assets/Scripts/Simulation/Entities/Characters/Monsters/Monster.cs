@@ -1,4 +1,5 @@
 using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Pathfinding;
 
@@ -8,6 +9,12 @@ namespace Undermarch.Simulation.Entities.Characters.Monsters
     {
         public override void Act(Board board)
         {
+            if (this.Name == "Slime Monster")
+            {
+                float damage = (charWeapon != null ? charWeapon.damage : 0) + effectiveStrength;
+                SimulationLog.Log($"Slime Monster Turn: HP={currentHP}/{maxHP}, Damage={damage}");
+            }
+
             // Find the closest hero
             Character target = board.FindClosestTarget(this, Faction.Hero);
             if (target == null) return; // No heroes left

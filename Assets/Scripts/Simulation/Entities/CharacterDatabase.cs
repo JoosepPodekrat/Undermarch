@@ -13,9 +13,10 @@ namespace Undermarch.Simulation.Entities
 
         public static readonly Hero peasant = new Hero
         {
+            Name = "Peasant",
             faction = Faction.Hero,
-            strength = 12,
-            stamina = 11,
+            strength = 5,
+            stamina = 2,
             agility = 9,
             intelligence = 8,
             spirit = 10,
@@ -59,6 +60,7 @@ namespace Undermarch.Simulation.Entities
 
         public static readonly Monster slimeMonster = new Monster
         {
+            Name = "Slime Monster",
             faction = Faction.Defender,
             strength = 9,
             stamina = 8,
@@ -105,7 +107,7 @@ namespace Undermarch.Simulation.Entities
             strength = 15,
             stamina = 20,
             agility = 10,
-            intelligence = 18,
+            intelligence = 23,
             spirit = 15,
             charWeapon = ItemDatabase.apprenticeStaff, // Placeholder
             charArmor = ItemDatabase.apprenticeRobe, // Placeholder

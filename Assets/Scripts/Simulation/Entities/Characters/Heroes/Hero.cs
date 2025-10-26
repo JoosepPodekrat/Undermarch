@@ -1,4 +1,5 @@
 using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Pathfinding;
 
@@ -6,10 +7,16 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
 {
     public class Hero : Character
     {
-                public override void Act(Board board)
-                {
-                    // Target monsters first
-                    Character target = board.FindClosestTarget(this, Faction.Defender);
+                        public override void Act(Board board)
+                        {
+                            if (this.Name == "Peasant")
+                            {
+                                float damage = (charWeapon != null ? charWeapon.damage : 0) + effectiveStrength;
+                                SimulationLog.Log($"Peasant Turn: HP={currentHP}/{maxHP}, Damage={damage}");
+                            }
+                
+                            // Target monsters first
+                            Character target = board.FindClosestTarget(this, Faction.Defender);
         
                     // If no monsters, target the Dungeon Master
                     if (target == null)

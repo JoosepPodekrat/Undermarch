@@ -3,6 +3,7 @@ using System.Linq;
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
+using Undermarch.Simulation.Entities.Characters.DungeonMaster;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Levels; // Added this using statement
 using UnityEngine;
@@ -112,7 +113,26 @@ namespace Undermarch.Presentation.Managers
                         }
                     }
         
-                    // Switch turns for the next tick
-                    isHeroTurn = !isHeroTurn;
-                }    }
+                                // Check for Win/Loss Conditions
+                                // We need to get a fresh list of characters as some may have been removed.
+                                var remainingCharacters = Board.GetAllCharacters().ToList();
+                                bool dungeonMasterIsAlive = remainingCharacters.Any(c => c is DungeonMaster);
+                                bool heroesAreAlive = remainingCharacters.Any(c => c.faction == Faction.Hero);
+                    
+                                if (!dungeonMasterIsAlive)
+                                {
+                                    Debug.Log("Game Over: The Dungeon Master has been defeated! YOU LOSE!");
+                                    TickSystem.Stop();
+                                    return; // Stop processing this tick
+                                }
+                                
+                                if (!heroesAreAlive)
+                                {
+                                    Debug.Log("Game Over: All heroes have been defeated! YOU WIN!");
+                                    TickSystem.Stop();
+                                    return; // Stop processing this tick
+                                }
+                    
+                                // Switch turns for the next tick
+                                isHeroTurn = !isHeroTurn;                }    }
 }

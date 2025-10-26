@@ -11,10 +11,19 @@ namespace Undermarch.Simulation.Core
         public int currentTick { get; private set; }
         public event System.Action<int> OnTick;
 
+        private bool _isRunning = true;
+
         public void Tick()
         {
+            if (!_isRunning) return;
+
             currentTick++;
             OnTick?.Invoke(currentTick);
+        }
+
+        public void Stop()
+        {
+            _isRunning = false;
         }
     }
 }

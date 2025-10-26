@@ -13,6 +13,7 @@ namespace Undermarch.Simulation.Entities
     {
         bool isDead = false;
         bool isScared = false;
+        public string Name = "Character";
         // base stats, i think these should default to 10, so every point increase is roughly a 10% increase in effectiveness of the stat.
         public Faction faction; // { Hero, Defender, Neutral, ProjectileHero, ProjectileDefender }
         public int agility = 10; // Influences speed, increases armor, increases crit 
@@ -31,8 +32,9 @@ namespace Undermarch.Simulation.Entities
 
 
         public int maxHP = 1; // some k * stamine
-        public int currentHP = 1; // if 0, dies
+        public int currentHP = 1;
         public float maxHPModifier = 1;
+        private const int StaminaToHealthMultiplier = 5;
         // regen
 
 
@@ -92,7 +94,7 @@ namespace Undermarch.Simulation.Entities
         }
         public void InitStats() // call after calculate stats when initating character
         {
-            this.maxHP = (int) Math.Round(effectiveStamina * maxHPModifier);
+            this.maxHP = (int) Math.Round(effectiveStamina * maxHPModifier * StaminaToHealthMultiplier);
             this.maxMana = (int) Math.Round(effectiveIntelligence * maxManaModifier);
             this.maxMorale = (int) Math.Round(effectiveSpirit * maxMoraleModifier);
             
@@ -152,8 +154,8 @@ namespace Undermarch.Simulation.Entities
             copy.charAccessory = this.charAccessory;
 
             // set up stats
-            CalculateStats();
-            InitStats();
+            copy.CalculateStats();
+            copy.InitStats();
 
             // Reset runtime stats
             copy.currentHP = copy.maxHP;
