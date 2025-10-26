@@ -1,0 +1,2509 @@
+fileFormatVersion: 2
+guid: 7b1eb91d918e0a07991d752fde3965ca
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -9049753636669085814
+    second: tegelased_0
+  - first:
+      213: -7098008012317770321
+    second: tegelased_1
+  - first:
+      213: -2219572796011786831
+    second: tegelased_2
+  - first:
+      213: -5427409653034378254
+    second: tegelased_3
+  - first:
+      213: -4330946317992179224
+    second: tegelased_4
+  - first:
+      213: -8531704206050190257
+    second: tegelased_5
+  - first:
+      213: 7607775725521949805
+    second: tegelased_6
+  - first:
+      213: 4185268238922426904
+    second: tegelased_7
+  - first:
+      213: -6221107417199918519
+    second: tegelased_8
+  - first:
+      213: 2134759347159789586
+    second: tegelased_9
+  - first:
+      213: -8063407835783112571
+    second: tegelased_10
+  - first:
+      213: -5090013335803257523
+    second: tegelased_11
+  - first:
+      213: -5055135822379463368
+    second: tegelased_12
+  - first:
+      213: 5434374437899732742
+    second: tegelased_13
+  - first:
+      213: -8349988280300532519
+    second: tegelased_14
+  - first:
+      213: 5674901800628023602
+    second: tegelased_15
+  - first:
+      213: 1650116376775110353
+    second: tegelased_16
+  - first:
+      213: 96372582676192465
+    second: tegelased_17
+  - first:
+      213: -7650987256465096501
+    second: tegelased_18
+  - first:
+      213: 7831288472172244540
+    second: tegelased_19
+  - first:
+      213: 8157996257065730486
+    second: tegelased_20
+  - first:
+      213: 22432687346816169
+    second: tegelased_21
+  - first:
+      213: -5156366024193918604
+    second: tegelased_22
+  - first:
+      213: -7852021092045616078
+    second: tegelased_23
+  - first:
+      213: 3978639861786981786
+    second: tegelased_24
+  - first:
+      213: 3407217804886440382
+    second: tegelased_25
+  - first:
+      213: 2379046187105697188
+    second: tegelased_26
+  - first:
+      213: -8252483406289854942
+    second: tegelased_27
+  - first:
+      213: 7355636500106433571
+    second: tegelased_28
+  - first:
+      213: -2781325700978743566
+    second: tegelased_29
+  - first:
+      213: -5245549486819850443
+    second: tegelased_30
+  - first:
+      213: 8512730357380628772
+    second: tegelased_31
+  - first:
+      213: 2315037663981678763
+    second: tegelased_32
+  - first:
+      213: -5556503623970485375
+    second: tegelased_33
+  - first:
+      213: -3712615897094373669
+    second: tegelased_34
+  - first:
+      213: -7992386675429978595
+    second: tegelased_35
+  - first:
+      213: 1146774133562410719
+    second: tegelased_36
+  - first:
+      213: -388854914211824527
+    second: tegelased_37
+  - first:
+      213: 346035757047765003
+    second: tegelased_38
+  - first:
+      213: 2875995419845479304
+    second: tegelased_39
+  - first:
+      213: -9147417135063952544
+    second: tegelased_40
+  - first:
+      213: 213799403409701788
+    second: tegelased_41
+  - first:
+      213: 8517157692404290182
+    second: tegelased_42
+  - first:
+      213: -3007430862981217678
+    second: tegelased_43
+  - first:
+      213: 3749113140201720699
+    second: tegelased_44
+  - first:
+      213: 1444858052157041609
+    second: tegelased_45
+  - first:
+      213: -525630282833432173
+    second: tegelased_46
+  - first:
+      213: 6682989645093865426
+    second: tegelased_47
+  - first:
+      213: 1506975047278572461
+    second: tegelased_48
+  - first:
+      213: 1165246532467215475
+    second: tegelased_49
+  - first:
+      213: 5445980255331275720
+    second: tegelased_50
+  - first:
+      213: 6073166227676800626
+    second: tegelased_51
+  - first:
+      213: 9070676019753023321
+    second: tegelased_52
+  - first:
+      213: -1454582374443043293
+    second: tegelased_53
+  - first:
+      213: -1665512328046275399
+    second: tegelased_54
+  - first:
+      213: -4077488052414346841
+    second: tegelased_55
+  - first:
+      213: -718884792510789734
+    second: tegelased_56
+  - first:
+      213: -6942686539315506634
+    second: tegelased_57
+  - first:
+      213: -8991302591072732533
+    second: tegelased_58
+  - first:
+      213: -6441367807326347694
+    second: tegelased_59
+  - first:
+      213: -5069554224992956295
+    second: tegelased_60
+  - first:
+      213: -3954206598376515211
+    second: tegelased_61
+  - first:
+      213: 8530283034162542798
+    second: tegelased_62
+  - first:
+      213: 6270657215129167340
+    second: tegelased_63
+  - first:
+      213: -8355556453482666771
+    second: tegelased_64
+  - first:
+      213: 5143482476053670705
+    second: tegelased_65
+  - first:
+      213: 8796109794396161364
+    second: tegelased_66
+  - first:
+      213: -7511291817225116521
+    second: tegelased_67
+  - first:
+      213: -1241757317263184778
+    second: tegelased_68
+  - first:
+      213: 7449802120139840310
+    second: tegelased_69
+  - first:
+      213: 3200136979784379550
+    second: tegelased_70
+  - first:
+      213: -4854473581875211174
+    second: tegelased_71
+  - first:
+      213: -8325735553354182977
+    second: tegelased_72
+  - first:
+      213: 1364539407787011273
+    second: tegelased_73
+  - first:
+      213: 6269980133393823881
+    second: tegelased_74
+  - first:
+      213: -6630889985905601433
+    second: tegelased_75
+  - first:
+      213: 3015234618535222980
+    second: tegelased_76
+  - first:
+      213: 3400291236731095486
+    second: tegelased_77
+  - first:
+      213: 9067144865163677696
+    second: tegelased_78
+  - first:
+      213: -7057810715608789757
+    second: tegelased_79
+  - first:
+      213: 2482605073420783246
+    second: tegelased_80
+  - first:
+      213: 940991953297615166
+    second: tegelased_81
+  - first:
+      213: -1312275959612103935
+    second: tegelased_82
+  - first:
+      213: 774066163333553217
+    second: tegelased_83
+  - first:
+      213: 1013177237319137871
+    second: tegelased_84
+  - first:
+      213: 2258961266370524597
+    second: tegelased_85
+  - first:
+      213: 2682208253919669325
+    second: tegelased_86
+  - first:
+      213: 4708099246396431646
+    second: tegelased_87
+  - first:
+      213: 2313225333369583659
+    second: tegelased_88
+  - first:
+      213: 412380833471899616
+    second: tegelased_89
+  - first:
+      213: 752621230720762012
+    second: tegelased_90
+  - first:
+      213: 4754046167772158904
+    second: tegelased_91
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 50
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: tegelased_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 352
+        width: 37
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a872a8dd301d86280800000000000000
+      internalID: -9049753636669085814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_1
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 346
+        width: 39
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fad3ce4d15fce7d90800000000000000
+      internalID: -7098008012317770321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_2
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 340
+        width: 32
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bdc8944d4e7231e0800000000000000
+      internalID: -2219572796011786831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_3
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 334
+        width: 29
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fb1c5c1da7fda4b0800000000000000
+      internalID: -5427409653034378254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_4
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 335
+        width: 33
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e94ac6254365e3c0800000000000000
+      internalID: -4330946317992179224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_5
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 335
+        width: 30
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4c1cad3a3c499980800000000000000
+      internalID: -8531704206050190257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_6
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 336
+        width: 35
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d645392f6bf349960800000000000000
+      internalID: 7607775725521949805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_7
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 334
+        width: 28
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81a22bee94f051a30800000000000000
+      internalID: 4185268238922426904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_8
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 336
+        width: 35
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9424040d3cf2aa9a0800000000000000
+      internalID: -6221107417199918519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_9
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 335
+        width: 28
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2107768d05030ad10800000000000000
+      internalID: 2134759347159789586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_10
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 334
+        width: 33
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 588db0d8b45091090800000000000000
+      internalID: -8063407835783112571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_11
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 335
+        width: 28
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4d1271d6d3ac59b0800000000000000
+      internalID: -5090013335803257523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_12
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 302
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83d48b7b0cc88d9b0800000000000000
+      internalID: -5055135822379463368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_13
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 301
+        width: 27
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6070a7b32c6ca6b40800000000000000
+      internalID: 5434374437899732742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_14
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 297
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dc030236e1ee1c80800000000000000
+      internalID: -8349988280300532519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_15
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 287
+        width: 33
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23178a9ee1d41ce40800000000000000
+      internalID: 5674901800628023602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_16
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 305
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1de2cbb1a1466e610800000000000000
+      internalID: 1650116376775110353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_17
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 287
+        width: 31
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1dc50847a52665100800000000000000
+      internalID: 96372582676192465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_18
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 286
+        width: 36
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc08b5d70ab32d590800000000000000
+      internalID: -7650987256465096501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_19
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 287
+        width: 25
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3e207d9f535eac60800000000000000
+      internalID: 7831288472172244540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_20
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 286
+        width: 21
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b18e557f56073170800000000000000
+      internalID: 8157996257065730486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_21
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 286
+        width: 25
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a41aa80962bf4000800000000000000
+      internalID: 22432687346816169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_22
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 287
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 479370cab68e078b0800000000000000
+      internalID: -5156366024193918604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_23
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 287
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23c0fb72b64080390800000000000000
+      internalID: -7852021092045616078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_24
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 287
+        width: 29
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a95b503efd7f63730800000000000000
+      internalID: 3978639861786981786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_25
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 249
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb974a49a8ed84f20800000000000000
+      internalID: 3407217804886440382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_26
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 253
+        width: 27
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4adbea607e1140120800000000000000
+      internalID: 2379046187105697188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_27
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 254
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22e9945c01a497d80800000000000000
+      internalID: -8252483406289854942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_28
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 238
+        width: 36
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 324ddbdcc68741660800000000000000
+      internalID: 7355636500106433571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_29
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 235
+        width: 31
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f66f74d20fb669d0800000000000000
+      internalID: -2781325700978743566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_30
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 257
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 537ce5aa8801437b0800000000000000
+      internalID: -5245549486819850443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_31
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 238
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4214b5c582b432670800000000000000
+      internalID: 8512730357380628772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_32
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 239
+        width: 25
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba037436d7aa02020800000000000000
+      internalID: 2315037663981678763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_33
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 239
+        width: 21
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18b8114c46553e2b0800000000000000
+      internalID: -5556503623970485375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_34
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 239
+        width: 25
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdeb83a03832a7cc0800000000000000
+      internalID: -3712615897094373669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_35
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 191
+        width: 36
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1e4e670aa6551190800000000000000
+      internalID: -7992386675429978595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_36
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 191
+        width: 31
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd60894aff82aef00800000000000000
+      internalID: 1146774133562410719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_37
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 191
+        width: 32
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17c3d3904828a9af0800000000000000
+      internalID: -388854914211824527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_38
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 208
+        width: 34
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b085a6a00bd5dc400800000000000000
+      internalID: 346035757047765003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_39
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 207
+        width: 35
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88b4a8fb89699e720800000000000000
+      internalID: 2875995419845479304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_40
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 201
+        width: 35
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 063113ca498dd0180800000000000000
+      internalID: -9147417135063952544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_41
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 191
+        width: 26
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9bfc65bc6197f200800000000000000
+      internalID: 213799403409701788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_42
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 191
+        width: 31
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6825ebf9bc5033670800000000000000
+      internalID: 8517157692404290182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_43
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 191
+        width: 33
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 272457d60957346d0800000000000000
+      internalID: -3007430862981217678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_44
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 143
+        width: 31
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7b09709986870430800000000000000
+      internalID: 3749113140201720699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_45
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 191
+        width: 26
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cbeea54eba2d0410800000000000000
+      internalID: 1444858052157041609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_46
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 190
+        width: 28
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 391768cea0694b8f0800000000000000
+      internalID: -525630282833432173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_47
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 143
+        width: 28
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d70f699cafbebc50800000000000000
+      internalID: 6682989645093865426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_48
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 95
+        width: 21
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da3ba6a32d9d9e410800000000000000
+      internalID: 1506975047278572461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_49
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 141
+        width: 29
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37cc67b2c89cb2010800000000000000
+      internalID: 1165246532467215475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_50
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 143
+        width: 28
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c3dfcc2032049b40800000000000000
+      internalID: 5445980255331275720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_51
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 95
+        width: 25
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 276239ec188384450800000000000000
+      internalID: 6073166227676800626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_52
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 142
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 957780e08c381ed70800000000000000
+      internalID: 9070676019753023321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_53
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 138
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32637c2890940dbe0800000000000000
+      internalID: -1454582374443043293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_54
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 143
+        width: 45
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b494c5ac59e2e8e0800000000000000
+      internalID: -1665512328046275399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_55
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 143
+        width: 30
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a981f3483ad967c0800000000000000
+      internalID: -4077488052414346841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_56
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 143
+        width: 30
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a97c6fb07120606f0800000000000000
+      internalID: -718884792510789734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_57
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 143
+        width: 42
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 632963d506f96af90800000000000000
+      internalID: -6942686539315506634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_58
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 142
+        width: 45
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8a7f0f6ee9783380800000000000000
+      internalID: -8991302591072732533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_59
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 143
+        width: 49
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25e1da86b1aab96a0800000000000000
+      internalID: -6441367807326347694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_60
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 0
+        width: 37
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 970d6b1ca4355a9b0800000000000000
+      internalID: -5069554224992956295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_61
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 1
+        width: 44
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 579134f8c06df19c0800000000000000
+      internalID: -3954206598376515211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_62
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 95
+        width: 18
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec8bcc46937a16670800000000000000
+      internalID: 8530283034162542798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_63
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 47
+        width: 21
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce5a3088389d50750800000000000000
+      internalID: 6270657215129167340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_64
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 94
+        width: 32
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de46179dca91b0c80800000000000000
+      internalID: -8355556453482666771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_65
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 90
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13b20a58f02516740800000000000000
+      internalID: 5143482476053670705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_66
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 94
+        width: 32
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4554154114f021a70800000000000000
+      internalID: 8796109794396161364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_67
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 95
+        width: 25
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 794aff583e782c790800000000000000
+      internalID: -7511291817225116521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_68
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 95
+        width: 19
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67c294f8c4464cee0800000000000000
+      internalID: -1241757317263184778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_69
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 95
+        width: 33
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63b13e9be83036760800000000000000
+      internalID: 7449802120139840310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_70
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 94
+        width: 41
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9ca3a8c0ab296c20800000000000000
+      internalID: 3200136979784379550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_71
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 94
+        width: 42
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a545fc45ff171acb0800000000000000
+      internalID: -4854473581875211174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_72
+      rect:
+        serializedVersion: 2
+        x: 534
+        y: 95
+        width: 35
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbecb7830ab057c80800000000000000
+      internalID: -8325735553354182977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_73
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 0
+        width: 33
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ccaa2b9c51dfe210800000000000000
+      internalID: 1364539407787011273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_74
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 47
+        width: 32
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 988f1b726b1730750800000000000000
+      internalID: 6269980133393823881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_75
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 47
+        width: 33
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 764d66590b85af3a0800000000000000
+      internalID: -6630889985905601433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_76
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 47
+        width: 39
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ce904009e348d920800000000000000
+      internalID: 3015234618535222980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_77
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 0
+        width: 32
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb90b324dd2403f20800000000000000
+      internalID: 3400291236731095486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_78
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 47
+        width: 33
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 000961f0738f4dd70800000000000000
+      internalID: 9067144865163677696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_79
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 0
+        width: 34
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30d413c4c8e9d0e90800000000000000
+      internalID: -7057810715608789757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_80
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 47
+        width: 19
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8e04de292cf37220800000000000000
+      internalID: 2482605073420783246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_81
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 0
+        width: 32
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e392ec822331f0d00800000000000000
+      internalID: 940991953297615166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_82
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 47
+        width: 25
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 103290ca7fbd9cde0800000000000000
+      internalID: -1312275959612103935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_83
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 47
+        width: 35
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14c552a03190eba00800000000000000
+      internalID: 774066163333553217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_84
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 47
+        width: 41
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4a3bec44578f0e00800000000000000
+      internalID: 1013177237319137871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_85
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 0
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b5b163ad41795f10800000000000000
+      internalID: 2258961266370524597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_86
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 47
+        width: 33
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4ca08c223e193520800000000000000
+      internalID: 2682208253919669325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_87
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 0
+        width: 40
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1d5ebce157865140800000000000000
+      internalID: 4708099246396431646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_88
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 0
+        width: 45
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b28bde84f2a3a1020800000000000000
+      internalID: 2313225333369583659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_89
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 1
+        width: 42
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e7a543ee2219b500800000000000000
+      internalID: 412380833471899616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_90
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 46
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9047839509d17a00800000000000000
+      internalID: 752621230720762012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tegelased_91
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 0
+        width: 38
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bbddd33dc3c9f140800000000000000
+      internalID: 4754046167772158904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      tegelased_0: -9049753636669085814
+      tegelased_1: -7098008012317770321
+      tegelased_10: -8063407835783112571
+      tegelased_11: -5090013335803257523
+      tegelased_12: -5055135822379463368
+      tegelased_13: 5434374437899732742
+      tegelased_14: -8349988280300532519
+      tegelased_15: 5674901800628023602
+      tegelased_16: 1650116376775110353
+      tegelased_17: 96372582676192465
+      tegelased_18: -7650987256465096501
+      tegelased_19: 7831288472172244540
+      tegelased_2: -2219572796011786831
+      tegelased_20: 8157996257065730486
+      tegelased_21: 22432687346816169
+      tegelased_22: -5156366024193918604
+      tegelased_23: -7852021092045616078
+      tegelased_24: 3978639861786981786
+      tegelased_25: 3407217804886440382
+      tegelased_26: 2379046187105697188
+      tegelased_27: -8252483406289854942
+      tegelased_28: 7355636500106433571
+      tegelased_29: -2781325700978743566
+      tegelased_3: -5427409653034378254
+      tegelased_30: -5245549486819850443
+      tegelased_31: 8512730357380628772
+      tegelased_32: 2315037663981678763
+      tegelased_33: -5556503623970485375
+      tegelased_34: -3712615897094373669
+      tegelased_35: -7992386675429978595
+      tegelased_36: 1146774133562410719
+      tegelased_37: -388854914211824527
+      tegelased_38: 346035757047765003
+      tegelased_39: 2875995419845479304
+      tegelased_4: -4330946317992179224
+      tegelased_40: -9147417135063952544
+      tegelased_41: 213799403409701788
+      tegelased_42: 8517157692404290182
+      tegelased_43: -3007430862981217678
+      tegelased_44: 3749113140201720699
+      tegelased_45: 1444858052157041609
+      tegelased_46: -525630282833432173
+      tegelased_47: 6682989645093865426
+      tegelased_48: 1506975047278572461
+      tegelased_49: 1165246532467215475
+      tegelased_5: -8531704206050190257
+      tegelased_50: 5445980255331275720
+      tegelased_51: 6073166227676800626
+      tegelased_52: 9070676019753023321
+      tegelased_53: -1454582374443043293
+      tegelased_54: -1665512328046275399
+      tegelased_55: -4077488052414346841
+      tegelased_56: -718884792510789734
+      tegelased_57: -6942686539315506634
+      tegelased_58: -8991302591072732533
+      tegelased_59: -6441367807326347694
+      tegelased_6: 7607775725521949805
+      tegelased_60: -5069554224992956295
+      tegelased_61: -3954206598376515211
+      tegelased_62: 8530283034162542798
+      tegelased_63: 6270657215129167340
+      tegelased_64: -8355556453482666771
+      tegelased_65: 5143482476053670705
+      tegelased_66: 8796109794396161364
+      tegelased_67: -7511291817225116521
+      tegelased_68: -1241757317263184778
+      tegelased_69: 7449802120139840310
+      tegelased_7: 4185268238922426904
+      tegelased_70: 3200136979784379550
+      tegelased_71: -4854473581875211174
+      tegelased_72: -8325735553354182977
+      tegelased_73: 1364539407787011273
+      tegelased_74: 6269980133393823881
+      tegelased_75: -6630889985905601433
+      tegelased_76: 3015234618535222980
+      tegelased_77: 3400291236731095486
+      tegelased_78: 9067144865163677696
+      tegelased_79: -7057810715608789757
+      tegelased_8: -6221107417199918519
+      tegelased_80: 2482605073420783246
+      tegelased_81: 940991953297615166
+      tegelased_82: -1312275959612103935
+      tegelased_83: 774066163333553217
+      tegelased_84: 1013177237319137871
+      tegelased_85: 2258961266370524597
+      tegelased_86: 2682208253919669325
+      tegelased_87: 4708099246396431646
+      tegelased_88: 2313225333369583659
+      tegelased_89: 412380833471899616
+      tegelased_9: 2134759347159789586
+      tegelased_90: 752621230720762012
+      tegelased_91: 4754046167772158904
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
