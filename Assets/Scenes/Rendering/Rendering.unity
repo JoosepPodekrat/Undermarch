@@ -381,6 +381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 825309209}
   - component: {fileID: 825309208}
+  - component: {fileID: 825309210}
   m_Layer: 0
   m_Name: BoardSpawner
   m_TagString: Untagged
@@ -416,6 +417,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &825309210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825309207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c606becb16a5cce4cb2b5febc6143cd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Presentation::BoardTestSpawner
+  tilemapRenderer: {fileID: 1320872575}
 --- !u!1 &919119356
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,6 +741,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1320872574}
   - component: {fileID: 1320872573}
+  - component: {fileID: 1320872575}
   m_Layer: 0
   m_Name: TilemapRenderer
   m_TagString: Untagged
@@ -778,6 +793,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1320872575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320872572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe5ca068fab01d946b30ede4aa7acb64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Rendering.TilemapRendererr
+  groundTilemap: {fileID: 437377466}
+  wallTilemap: {fileID: 1885301522}
+  interactableTilemap: {fileID: 1209406365}
+  entityTilemap: {fileID: 6652438}
+  effectsTilemap: {fileID: 1084575804}
+  groundTile: {fileID: 11400000, guid: 38eb825decbb73ec683e5580516bdcbf, type: 2}
+  wallTile: {fileID: 11400000, guid: e9e14f14ec74b242cb2f6a80bb8a9964, type: 2}
+  interactableTile: {fileID: 11400000, guid: 114233fb95ac53510b1304ba2f2e0412, type: 2}
+  entityTile: {fileID: 11400000, guid: df8d1c67e87f1a06b81ff9de1c0ddc4f, type: 2}
+  effectTile: {fileID: 11400000, guid: 8fb1e44aeaec908ca9fc7d63f83d0486, type: 2}
+  testWalls: []
 --- !u!1 &1802145946
 GameObject:
   m_ObjectHideFlags: 0
