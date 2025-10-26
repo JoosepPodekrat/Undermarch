@@ -7,6 +7,7 @@ using Undermarch.Simulation.Entities.Characters.DungeonMaster;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Levels;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Undermarch.Presentation.Managers
 {
@@ -66,6 +67,12 @@ namespace Undermarch.Presentation.Managers
                 Debug.Log("GameManager: StartCombat() - State: Combat");
                 TickSystem.OnTick += HandleTick;
             }
+        }
+
+        public void RestartGame()
+        {
+            // Reload the bootstrap scene to restart the game
+            SceneManager.LoadScene("Bootstrap");
         }
 
         public void InitializeTickDriver(Bootstrap.TickDriver driver)

@@ -1,4 +1,5 @@
 using TMPro;
+using Undermarch.Presentation.Managers;
 using UnityEngine;
 
 namespace Undermarch.Presentation.UI
@@ -15,6 +16,11 @@ namespace Undermarch.Presentation.UI
                 endGamePanel.SetActive(true);
                 endGameText.text = message;
             }
+        }
+
+        public void OnClick_PlayAgain()
+        {
+            GameManager.Instance.RestartGame();
         }
     }
 }
