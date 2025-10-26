@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Undermarch;
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Effects.Buffs;
 using Undermarch.Simulation.Effects.Debuffs;
@@ -229,6 +230,25 @@ namespace Undermarch.Simulation.Entities
             //TODO: Death
         }
 
+        private void TriggerTraps(Board board, TilePos pos)
+        {
+            var interactable = board.GetInteractableAt(pos);
+            if (interactable is Trap trap)
+            {
+                // Only heroes can trigger traps for now.
+                if (this.faction == Faction.Hero)
+                {
+                    this.TakeDamage(trap.DamagePacket);
+                    trap.Durability--;
+
+                    if (trap.Durability <= 0)
+                    {
+                        board.RemoveInteractable(pos);
+                    }
+                }
+            }
+        }
+
         protected bool HandleMove(Board board, TilePos currentPos, TilePos nextPos)
         {
             if (!board.InBounds(nextPos) || board.HasWallAt(nextPos))
@@ -254,6 +274,7 @@ namespace Undermarch.Simulation.Entities
             {
                 // The tile is empty, so move
                 board.MoveEntity(currentPos, nextPos);
+                TriggerTraps(board, nextPos); // Check for traps on the new tile
                 return true; // Action taken: Move
             }
         }

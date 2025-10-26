@@ -1,3 +1,4 @@
+using Undermarch;
 using Undermarch.Presentation.Managers;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Entities.Characters.DungeonMaster;
@@ -24,6 +25,7 @@ namespace Undermarch.Presentation.Rendering
         public TileBase heroTile;
         public TileBase monsterTile;
         public TileBase dungeonMasterTile;
+        public TileBase trapTile;
 
         private Board _board;
 
@@ -88,6 +90,17 @@ namespace Undermarch.Presentation.Rendering
             else
             {
                 wallTilemap.SetTile(cellPos, null);
+            }
+
+            // Interactable Layer (Traps)
+            var interactable = _board.GetInteractableAt(pos);
+            if (interactable is Trap)
+            {
+                interactableTilemap.SetTile(cellPos, trapTile);
+            }
+            else
+            {
+                interactableTilemap.SetTile(cellPos, null);
             }
 
             // Entity Layer

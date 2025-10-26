@@ -1,4 +1,5 @@
 using Undermarch.Simulation.Entities;
+using Undermarch.Simulation.Entities.Traps;
 using Undermarch.Simulation.Grid;
 
 namespace Undermarch.Simulation.Levels
@@ -7,7 +8,7 @@ namespace Undermarch.Simulation.Levels
     {
         public static void LoadLevel1(Board board)
         {
-            // # = Wall, . = Floor, H = Hero, M = Monster, D = Dungeon Master
+            // # = Wall, . = Floor, H = Hero, M = Monster, D = Dungeon Master, T = Trap
             string[] levelLayout = new string[]
             {
                 "####################",
@@ -25,7 +26,7 @@ namespace Undermarch.Simulation.Levels
                 "###.....###.....####",
                 "#######.....########",
                 "#########.##########",
-                "#########.##########",
+                "#########T##########",
                 "######      ########",
                 "#####   H    #######",
                 "######      ########",
@@ -58,10 +59,14 @@ namespace Undermarch.Simulation.Levels
                             var dm = CharacterDatabase.dungeonMaster.Clone();
                             board.AddEntity(pos, dm);
                             break;
+                        case 'T':
+                            board.AddInteractable(pos, new SpikeTrap());
+                            break;
                         // '.', 'E', and ' ' are empty spaces, so we do nothing.
                     }
                 }
             }
+
         }
     }
 }

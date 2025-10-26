@@ -37,6 +37,28 @@ namespace Undermarch.Simulation.Grid
             OnBoardChanged?.Invoke(pos);
         }
 
+        // === Interactable Layer ===
+        public object GetInteractableAt(TilePos pos)
+        {
+            _interactable.TryGetValue(IndexOf(pos), out var interactable);
+            return interactable;
+        }
+
+        public void AddInteractable(TilePos pos, object interactable)
+        {
+            if (!InBounds(pos)) return;
+            _interactable[IndexOf(pos)] = interactable;
+            OnBoardChanged?.Invoke(pos);
+        }
+
+        public void RemoveInteractable(TilePos pos)
+        {
+            if (_interactable.Remove(IndexOf(pos)))
+            {
+                OnBoardChanged?.Invoke(pos);
+            }
+        }
+
         // === Entity Layer ===
         public Character GetEntityAt(TilePos pos)
         {
