@@ -1,4 +1,5 @@
 using System.Linq;
+using Undermarch.Presentation.UI;
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
@@ -22,6 +23,7 @@ namespace Undermarch.Presentation.Managers
         public Board Board { get; private set; }
         public TickSystem TickSystem { get; private set; }
         public GameState CurrentState { get; private set; }
+        public EndGameUI endGameUI;
 
         private bool isHeroTurn = true;
 
@@ -47,6 +49,13 @@ namespace Undermarch.Presentation.Managers
             Debug.Log("GameManager: Start()");
             LevelLoader.LoadLevel1(Board);
             Debug.Log("GameManager: Level 1 loaded.");
+
+            // Find the EndGameUI in the scene
+            endGameUI = FindObjectOfType<EndGameUI>();
+            if (endGameUI == null)
+            {
+                Debug.LogWarning("GameManager: Could not find an EndGameUI component in the scene.");
+            }
         }
 
         public void StartCombat()
@@ -122,6 +131,10 @@ namespace Undermarch.Presentation.Managers
             if (!dungeonMasterIsAlive)
             {
                 Debug.Log("Game Over: The Dungeon Master has been defeated! YOU LOSE!");
+                if (endGameUI != null)
+                {
+                    endGameUI.ShowEndGamePopup("You Lose!");
+                }
                 TickSystem.Stop();
                 return;
             }
@@ -129,6 +142,10 @@ namespace Undermarch.Presentation.Managers
             if (!heroesAreAlive)
             {
                 Debug.Log("Game Over: All heroes have been defeated! YOU WIN!");
+                if (endGameUI != null)
+                {
+                    endGameUI.ShowEndGamePopup("You Win!");
+                }
                 TickSystem.Stop();
                 return;
             }

@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e135072e5f504648aa86f3adfd0bdb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.Bootstrap.TickDriver
-  ticksPerSecond: 1
+  ticksPerSecond: 3
   paused: 0
 --- !u!4 &1371554499
 Transform:
