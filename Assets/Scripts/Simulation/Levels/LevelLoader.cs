@@ -7,43 +7,61 @@ namespace Undermarch.Simulation.Levels
     {
         public static void LoadLevel1(Board board)
         {
-            // Create a simple room
-            // Top and bottom walls
-            for (int x = 0; x < board.Width; x++)
+            // # = Wall, . = Floor, H = Hero, M = Monster, D = Dungeon Master
+            string[] levelLayout = new string[]
             {
-                board.AddWall(new TilePos(x, 0));
-                board.AddWall(new TilePos(x, board.Height - 1));
-            }
+                "####################",
+                "######      ########",
+                "#####   D    #######",
+                "######      ########",
+                "#########.##########",
+                "#########.##########",
+                "#######.....########",
+                "###.....###.....####",
+                "###.....###.....####",
+                "###.....###.....####",
+                "###.....###.M...####",
+                "###.....###.....####",
+                "###.....###.....####",
+                "#######.....########",
+                "#########.##########",
+                "#########.##########",
+                "######      ########",
+                "#####   H    #######",
+                "######      ########",
+                "####################",
+            };
 
-            // Left and right walls
-            for (int y = 1; y < board.Height - 1; y++)
+            for (int y = 0; y < levelLayout.Length; y++)
             {
-                board.AddWall(new TilePos(0, y));
-                board.AddWall(new TilePos(board.Width - 1, y));
+                // The map is defined top-to-bottom, board is bottom-to-top.
+                int boardY = board.Height - 1 - y;
+                for (int x = 0; x < levelLayout[y].Length; x++)
+                {
+                    var pos = new TilePos(x, boardY);
+                    char tileType = levelLayout[y][x];
+
+                    switch (tileType)
+                    {
+                        case '#':
+                            board.AddWall(pos);
+                            break;
+                        case 'H':
+                            var hero = CharacterDatabase.peasant.Clone();
+                            board.AddEntity(pos, hero);
+                            break;
+                        case 'M':
+                            var monster = CharacterDatabase.slimeMonster.Clone();
+                            board.AddEntity(pos, monster);
+                            break;
+                        case 'D':
+                            var dm = CharacterDatabase.dungeonMaster.Clone();
+                            board.AddEntity(pos, dm);
+                            break;
+                        // '.', 'E', and ' ' are empty spaces, so we do nothing.
+                    }
+                }
             }
-
-            // Add some inner obstacles
-            board.AddWall(new TilePos(5, 5));
-            board.AddWall(new TilePos(5, 6));
-            board.AddWall(new TilePos(5, 7));
-            board.AddWall(new TilePos(5, 8));
-
-            board.AddWall(new TilePos(15, 5));
-            board.AddWall(new TilePos(15, 6));
-            board.AddWall(new TilePos(15, 7));
-            board.AddWall(new TilePos(15, 8));
-
-            // Spawn a hero (peasant)
-            var hero = CharacterDatabase.peasant.Clone();
-            board.AddEntity(new TilePos(3, 10), hero);
-
-            // Spawn a monster (slimeMonster)
-            var monster = CharacterDatabase.slimeMonster.Clone();
-            board.AddEntity(new TilePos(17, 10), monster);
-
-            // Spawn the Dungeon Master
-            var dm = CharacterDatabase.dungeonMaster.Clone();
-            board.AddEntity(new TilePos(10, 18), dm);
         }
     }
 }
