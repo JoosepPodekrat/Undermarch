@@ -8,7 +8,10 @@ namespace Undermarch
         {
         }
         public void Remove(Character target) { }
-        public void Apply(Character target) { }
+        public void Apply(Character target)
+        {
+            target.buffs.Add(this);
+        }
 
     }
 }
