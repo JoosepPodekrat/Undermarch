@@ -5,16 +5,16 @@ using System.Security.Cryptography.X509Certificates;
 using Undermarch.Simulation.Combat;
 namespace Undermarch
 {
-    public abstract class Character
+    public class Character
     {
 
         // base stats, i think these should default to 10, so every point increase is roughly a 10% increase in effectiveness of the stat.
         public Faction faction; // { Hero, Defender, Neutral, ProjectileHero, ProjectileDefender }
-        public int agility; // Influences speed, increases armor, increases crit 
-        public int intelligence; // Increases maximum mana, casting modifiers
-        public int stamina; // hp and health regen
-        public int strength; // melee damage
-        public int spirit; //  mana regeneration and morale
+        public int agility = 10; // Influences speed, increases armor, increases crit 
+        public int intelligence = 10; // Increases maximum mana, casting modifiers
+        public int stamina = 10; // hp and health regen
+        public int strength = 10; // melee damage
+        public int spirit = 10; //  mana regeneration and morale
 
         // effective stats
 
@@ -85,6 +85,8 @@ namespace Undermarch
         {
             this.maxHP = (int) Math.Round(effectiveStamina * maxHPModifier);
             this.maxMana = (int) Math.Round(effectiveIntelligence * maxManaModifier);
+            this.armor = this.effectiveAgility;
+
 
         }
         // debuffs[x].apply(); should be called for each debuff
@@ -95,7 +97,57 @@ namespace Undermarch
             GetGearEffect();
             ApplyBuffs();
             ApplyDebuffs();
+            InitStats();
         }
+        public string PrintStats()
+        {
+            string answer =
+                $"=== Character Stats ===\n" +
+                $"Effective Agility: {effectiveAgility}\n" +
+                $"Effective Intelligence: {effectiveIntelligence}\n" +
+                $"Effective Stamina: {effectiveStamina}\n" +
+                $"Effective Strength: {effectiveStrength}\n" +
+                $"Effective Spirit: {effectiveSpirit}\n\n" +
+
+                $"Max HP: {maxHP}\n" +
+                $"Current HP: {currentHP}\n" +
+                $"Max Mana: {maxMana}\n" +
+                $"Current Mana: {currentMana}\n" +
+                $"Max Morale: {maxMorale}\n" +
+                $"Current Morale: {currentMorale}\n\n" +
+
+                $"Health Regen: {healthRegen}\n" +
+                $"Mana Regen: {manaRegen}\n" +
+                $"Armor: {armor}\n" +
+                $"Damage Reduction: {damageReduction:F2}\n" +
+                $"Damage Modifier: {damageModifier:F2}";
+
+            return answer;
+        }
+
+        public Character Clone()
+        {
+            // Create a shallow copy (base stats and primitive fields)
+            Character copy = (Character)this.MemberwiseClone();
+
+            // Create new lists so buffs/debuffs aren’t shared between instances
+            copy.buffs = new List<Buff>();
+            copy.debuffs = new List<Debuff>();
+
+            // Copy equipment references (these can stay shared unless they change dynamically)
+            copy.charWeapon = this.charWeapon;
+            copy.charArmor = this.charArmor;
+            copy.charHelmet = this.charHelmet;
+            copy.charAccessory = this.charAccessory;
+
+            // Reset runtime stats
+            copy.currentHP = copy.maxHP;
+            copy.currentMana = copy.maxMana;
+            copy.currentMorale = copy.maxMorale;
+
+            return copy;
+        }
+
         public void Attack(Character target)
         {
             float damage = 0;
@@ -134,6 +186,7 @@ namespace Undermarch
             // Clamp at 0
             if (currentHP <= 0)
                 currentHP = 0;
+            //TODO: Death
         }
     }
 }

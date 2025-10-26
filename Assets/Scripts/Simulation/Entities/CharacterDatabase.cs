@@ -1,0 +1,100 @@
+using System.Threading;
+using Undermarch.Simulation.Combat;
+
+namespace Undermarch
+{
+    public static class CharacterDatabase
+    {
+        // ==========================
+        // CharacterES
+        // ==========================
+
+        public static readonly Character warrior = new Character
+        {
+            faction = Faction.Hero,
+            strength = 12,
+            stamina = 11,
+            agility = 9,
+            intelligence = 8,
+            spirit = 10,
+            charWeapon = ItemDatabase.ironSword,
+            charArmor = ItemDatabase.chainmailArmor,
+            charHelmet = ItemDatabase.ironHelmet,
+            charAccessory = ItemDatabase.ironRing
+        };
+
+        public static readonly Character apprenticeMage = new Character
+        {
+            faction = Faction.Hero,
+            strength = 7,
+            stamina = 9,
+            agility = 9,
+            intelligence = 13,
+            spirit = 11,
+            charWeapon = ItemDatabase.apprenticeStaff,
+            charArmor = ItemDatabase.apprenticeRobe,
+            charHelmet = ItemDatabase.mysticCowl,
+            charAccessory = ItemDatabase.charmOfFocus
+        };
+
+        public static readonly Character rogue = new Character
+        {
+            faction = Faction.Hero,
+            strength = 9,
+            stamina = 10,
+            agility = 13,
+            intelligence = 8,
+            spirit = 10,
+            charWeapon = ItemDatabase.ironDagger,
+            charArmor = ItemDatabase.leatherArmor,
+            charHelmet = ItemDatabase.leatherCap,
+            charAccessory = ItemDatabase.luckyPendant
+        };
+
+        // ==========================
+        // CharacterS
+        // ==========================
+
+        public static readonly Character goblin = new Character
+        {
+            faction = Faction.Defender,
+            strength = 9,
+            stamina = 8,
+            agility = 11,
+            intelligence = 6,
+            spirit = 7,
+            charWeapon = ItemDatabase.ironDagger,
+            charArmor = ItemDatabase.tatteredArmor,
+            charHelmet = ItemDatabase.crackedHelm,
+            charAccessory = ItemDatabase.cursedTalisman
+        };
+
+        public static readonly Character troll = new Character
+        {
+            faction = Faction.Defender,
+            strength = 14,
+            stamina = 13,
+            agility = 6,
+            intelligence = 6,
+            spirit = 8,
+            charWeapon = ItemDatabase.swordAndShield,
+            charArmor = ItemDatabase.chainmailArmor,
+            charHelmet = ItemDatabase.ironHelmet,
+            charAccessory = ItemDatabase.ironRing
+        };
+
+        public static readonly Character skeletonMage = new Character
+        {
+            faction = Faction.Defender,
+            strength = 7,
+            stamina = 8,
+            agility = 8,
+            intelligence = 12,
+            spirit = 10,
+            charWeapon = ItemDatabase.apprenticeStaff,
+            charArmor = ItemDatabase.apprenticeRobe,
+            charHelmet = ItemDatabase.mysticCowl,
+            charAccessory = ItemDatabase.charmOfFocus
+        };
+    }
+}
