@@ -1,7 +1,9 @@
-using System.Threading;
 using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Entities.Characters.DungeonMaster;
+using Undermarch.Simulation.Entities.Characters.Heroes;
+using Undermarch.Simulation.Entities.Characters.Monsters;
 
-namespace Undermarch
+namespace Undermarch.Simulation.Entities
 {
     public static class CharacterDatabase
     {
@@ -9,7 +11,7 @@ namespace Undermarch
         // CharacterES
         // ==========================
 
-        public static readonly Character warrior = new Character
+        public static readonly Hero warrior = new Hero
         {
             faction = Faction.Hero,
             strength = 12,
@@ -23,7 +25,7 @@ namespace Undermarch
             charAccessory = ItemDatabase.ironRing
         };
 
-        public static readonly Character apprenticeMage = new Character
+        public static readonly Hero apprenticeMage = new Hero
         {
             faction = Faction.Hero,
             strength = 7,
@@ -37,7 +39,7 @@ namespace Undermarch
             charAccessory = ItemDatabase.charmOfFocus
         };
 
-        public static readonly Character rogue = new Character
+        public static readonly Hero rogue = new Hero
         {
             faction = Faction.Hero,
             strength = 9,
@@ -55,7 +57,7 @@ namespace Undermarch
         // CharacterS
         // ==========================
 
-        public static readonly Character goblin = new Character
+        public static readonly Monster goblin = new Monster
         {
             faction = Faction.Defender,
             strength = 9,
@@ -69,7 +71,7 @@ namespace Undermarch
             charAccessory = ItemDatabase.cursedTalisman
         };
 
-        public static readonly Character troll = new Character
+        public static readonly Monster troll = new Monster
         {
             faction = Faction.Defender,
             strength = 14,
@@ -83,7 +85,7 @@ namespace Undermarch
             charAccessory = ItemDatabase.ironRing
         };
 
-        public static readonly Character skeletonMage = new Character
+        public static readonly Monster skeletonMage = new Monster
         {
             faction = Faction.Defender,
             strength = 7,
@@ -95,6 +97,20 @@ namespace Undermarch
             charArmor = ItemDatabase.apprenticeRobe,
             charHelmet = ItemDatabase.mysticCowl,
             charAccessory = ItemDatabase.charmOfFocus
+        };
+
+        public static readonly DungeonMaster dungeonMaster = new DungeonMaster
+        {
+            faction = Faction.Defender,
+            strength = 15,
+            stamina = 20,
+            agility = 10,
+            intelligence = 18,
+            spirit = 15,
+            charWeapon = ItemDatabase.apprenticeStaff, // Placeholder
+            charArmor = ItemDatabase.apprenticeRobe, // Placeholder
+            charHelmet = ItemDatabase.mysticCowl, // Placeholder
+            charAccessory = ItemDatabase.charmOfFocus // Placeholder
         };
     }
 }

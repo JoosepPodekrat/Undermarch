@@ -1,5 +1,6 @@
 using System;
 using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Entities;
 
 namespace Undermarch
 {

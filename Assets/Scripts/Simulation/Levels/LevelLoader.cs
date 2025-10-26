@@ -1,3 +1,4 @@
+using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Grid;
 
 namespace Undermarch.Simulation.Levels
@@ -32,13 +33,17 @@ namespace Undermarch.Simulation.Levels
             board.AddWall(new TilePos(15, 7));
             board.AddWall(new TilePos(15, 8));
 
-            // Spawn a player character (warrior)
-            var player = CharacterDatabase.warrior.Clone();
-            board.AddEntity(new TilePos(3, 10), player);
+            // Spawn a hero (warrior)
+            var hero = CharacterDatabase.warrior.Clone();
+            board.AddEntity(new TilePos(3, 10), hero);
 
-            // Spawn an enemy (goblin)
-            var enemy = CharacterDatabase.goblin.Clone();
-            board.AddEntity(new TilePos(17, 10), enemy);
+            // Spawn a monster (goblin)
+            var monster = CharacterDatabase.goblin.Clone();
+            board.AddEntity(new TilePos(17, 10), monster);
+
+            // Spawn the Dungeon Master
+            var dm = CharacterDatabase.dungeonMaster.Clone();
+            board.AddEntity(new TilePos(10, 18), dm);
         }
     }
 }

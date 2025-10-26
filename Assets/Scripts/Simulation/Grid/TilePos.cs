@@ -3,7 +3,9 @@ namespace Undermarch.Simulation.Grid
     // pure simulation data
     public struct TilePos
     {
-        public int x;
+        public static readonly TilePos Invalid = new TilePos(-1, -1);
+
+        public readonly int x;
         public int y;
 
         public TilePos(int x, int y)
@@ -13,6 +15,15 @@ namespace Undermarch.Simulation.Grid
         }
 
         public override string ToString() => $"({x},{y})";
+
+        public bool IsValid() => x != -1 && y != -1;
+
+        public static float DistanceSq(TilePos a, TilePos b)
+        {
+            float dx = a.x - b.x;
+            float dy = a.y - b.y;
+            return dx * dx + dy * dy;
+        }
     }
 
     public enum TileLayer

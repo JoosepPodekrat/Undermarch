@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Entities;
 
 namespace Undermarch.Simulation.Grid
 {
@@ -66,6 +68,53 @@ namespace Undermarch.Simulation.Grid
             AddEntity(to, entity);
             // Note: RemoveEntity and AddEntity already invoke OnBoardChanged,
             // so we don't need to do it again here.
+        }
+
+        public IEnumerable<Character> GetAllCharacters()
+        {
+            return _entity.Values;
+        }
+
+        public TilePos GetPositionOf(Character character)
+        {
+            foreach (var pair in _entity)
+            {
+                if (pair.Value == character)
+                {
+                    int index = pair.Key;
+                    int y = index / Width;
+                    int x = index % Width;
+                    return new TilePos(x, y);
+                }
+            }
+            return TilePos.Invalid;
+        }
+
+        public Character FindClosestTarget(Character self, Faction factionToTarget)
+        {
+            TilePos selfPos = GetPositionOf(self);
+            if (!selfPos.IsValid()) return null;
+
+            Character closestTarget = null;
+            float minDistanceSq = float.MaxValue;
+
+            foreach (Character target in GetAllCharacters())
+            {
+                if (target.faction == factionToTarget)
+                {
+                    TilePos targetPos = GetPositionOf(target);
+                    if (!targetPos.IsValid()) continue;
+
+                    float distanceSq = TilePos.DistanceSq(selfPos, targetPos);
+                    if (distanceSq < minDistanceSq)
+                    {
+                        minDistanceSq = distanceSq;
+                        closestTarget = target;
+                    }
+                }
+            }
+
+            return closestTarget;
         }
     }
 }

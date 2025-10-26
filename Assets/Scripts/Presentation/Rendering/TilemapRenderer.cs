@@ -1,4 +1,8 @@
 using Undermarch.Presentation.Managers;
+using Undermarch.Simulation.Entities;
+using Undermarch.Simulation.Entities.Characters.DungeonMaster;
+using Undermarch.Simulation.Entities.Characters.Heroes;
+using Undermarch.Simulation.Entities.Characters.Monsters;
 using Undermarch.Simulation.Grid;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -17,7 +21,9 @@ namespace Undermarch.Presentation.Rendering
         [Header("Tile Assets")]
         public TileBase groundTile;
         public TileBase wallTile;
-        public TileBase entityTile; // For now, one tile for all entities
+        public TileBase heroTile;
+        public TileBase monsterTile;
+        public TileBase dungeonMasterTile;
 
         private Board _board;
 
@@ -88,10 +94,16 @@ namespace Undermarch.Presentation.Rendering
             var entity = _board.GetEntityAt(pos);
             if (entity != null)
             {
-                entityTilemap.SetTile(cellPos, entityTile);
+                TileBase tile = null;
+                if (entity is Hero) tile = heroTile;
+                else if (entity is Monster) tile = monsterTile;
+                else if (entity is DungeonMaster) tile = dungeonMasterTile;
+                Debug.Log($"TilemapRenderer: Setting tile for {entity.GetType().Name} at {cellPos}");
+                entityTilemap.SetTile(cellPos, tile);
             }
             else
             {
+                // Debug.Log($"TilemapRenderer: Clearing entity tile at {cellPos}");
                 entityTilemap.SetTile(cellPos, null);
             }
         }

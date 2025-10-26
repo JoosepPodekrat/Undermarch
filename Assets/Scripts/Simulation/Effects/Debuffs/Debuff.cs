@@ -1,4 +1,6 @@
-namespace Undermarch
+using Undermarch.Simulation.Entities;
+
+namespace Undermarch.Simulation.Effects.Debuffs
 {
     public class Debuff : ICharacterEffect
     {

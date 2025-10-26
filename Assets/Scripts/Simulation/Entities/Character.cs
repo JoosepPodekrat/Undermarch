@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Undermarch.Simulation.Combat;
-namespace Undermarch
+using Undermarch.Simulation.Effects.Buffs;
+using Undermarch.Simulation.Effects.Debuffs;
+using Undermarch.Simulation.Grid;
+
+namespace Undermarch.Simulation.Entities
 {
     public class Character
     {
@@ -132,12 +135,12 @@ namespace Undermarch
             return answer;
         }
 
-        public Character Clone()
+        public virtual Character Clone()
         {
             // Create a shallow copy (base stats and primitive fields)
             Character copy = (Character)this.MemberwiseClone();
 
-            // Create new lists so buffs/debuffs aren’t shared between instances
+            // Create new lists so buffs/debuffs arenï¿½t shared between instances
             copy.buffs = new List<Buff>();
             copy.debuffs = new List<Debuff>();
 
@@ -157,6 +160,13 @@ namespace Undermarch
             copy.currentMorale = copy.maxMorale;
 
             return copy;
+        }
+
+        public bool IsDead => isDead;
+
+        public virtual void Act(Board board)
+        {
+            // Base character does nothing.
         }
 
         public void Attack(Character target)

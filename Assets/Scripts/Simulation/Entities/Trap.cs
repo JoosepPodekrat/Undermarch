@@ -5,10 +5,16 @@ namespace Undermarch
 {
     public abstract class Trap
     {
-        string name { get; }
-        int durability { get; } // how many times the trap can trigger before expiring
+        public string Name { get; protected set; }
+        public int Durability { get; set; }
+        public DamagePacket DamagePacket { get; protected set; }
 
-        DamagePacket damagePacket { get; }
+        protected Trap(string name, int durability, DamagePacket damagePacket)
+        {
+            Name = name;
+            Durability = durability;
+            DamagePacket = damagePacket;
+        }
     
     
     
