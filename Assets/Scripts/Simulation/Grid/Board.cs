@@ -21,7 +21,6 @@ namespace Undermarch.Simulation.Grid
         public int IndexOf(TilePos p) => p.y * Width + p.x;
         public bool InBounds(TilePos p) => p.x >= 0 && p.x < Width && p.y >= 0 && p.y < Height;
 
-        // Walls
         public bool HasWallAt(TilePos pos) => _wall.ContainsKey(IndexOf(pos));
         public void PlaceWall(TilePos pos)
         {
@@ -29,7 +28,7 @@ namespace Undermarch.Simulation.Grid
             _wall[IndexOf(pos)] = new object();
         }
 
-        // Entities
+
         public bool TryPlaceEntity(Entity e, TilePos pos)
         {
             if (!InBounds(pos)) return false;
@@ -57,7 +56,6 @@ namespace Undermarch.Simulation.Grid
             return true;
         }
 
-        // Interactables
         public bool HasInteractable(TilePos pos) => _interactable.ContainsKey(IndexOf(pos));
         public void PlaceInteractable(TilePos pos)
         {
@@ -65,7 +63,6 @@ namespace Undermarch.Simulation.Grid
             _interactable[IndexOf(pos)] = new object();
         }
 
-        // Effects
         public void AddEffect(TilePos pos, object effect)
         {
             if (!InBounds(pos)) return;
@@ -81,7 +78,6 @@ namespace Undermarch.Simulation.Grid
         }
     }
 
-    // Minimal Entity wrapper for now
     public class Entity
     {
         public TilePos Position { get; set; }
