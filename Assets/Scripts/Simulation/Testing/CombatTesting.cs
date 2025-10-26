@@ -9,7 +9,7 @@ namespace Undermarch
         public static void Main(string[] args)
         {
             // Spawn characters (clones of the database templates)
-            Character goblin = CharacterDatabase.goblin.Clone();
+            Character goblin = CharacterDatabase.slimeMonster.Clone();
             Character skeletonMage = CharacterDatabase.skeletonMage.Clone();
             Character rogue = CharacterDatabase.rogue.Clone();
             Character mage = CharacterDatabase.apprenticeMage.Clone();
