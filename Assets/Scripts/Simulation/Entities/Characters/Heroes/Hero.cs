@@ -38,26 +38,28 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             int moveX = System.Math.Sign(dx);
             int moveY = System.Math.Sign(dy);
 
-            TilePos nextPos = new TilePos(currentPos.x + moveX, currentPos.y + moveY);
+            // If we are on the target, do nothing.
+            if (moveX == 0 && moveY == 0) return;
 
-            // Basic movement: prefer horizontal, then vertical. No diagonal moves yet.
-            // Also, no collision detection yet.
+            // Try to move horizontally first
             if (moveX != 0)
             {
-                nextPos = new TilePos(currentPos.x + moveX, currentPos.y);
-            }
-            else if (moveY != 0)
-            {
-                nextPos = new TilePos(currentPos.x, currentPos.y + moveY);
-            }
-            else
-            {
-                // We are on the target, do nothing for now
-                return;
+                var nextPos = new TilePos(currentPos.x + moveX, currentPos.y);
+                if (HandleMove(board, currentPos, nextPos))
+                {
+                    return; // Action was taken (move or attack)
+                }
             }
 
-            // For now, just move. We will add collision detection later.
-            board.MoveEntity(currentPos, nextPos);
+            // If horizontal move was blocked or not possible, try vertical
+            if (moveY != 0)
+            { 
+                var nextPos = new TilePos(currentPos.x, currentPos.y + moveY);
+                if (HandleMove(board, currentPos, nextPos))
+                {
+                    return; // Action was taken (move or attack)
+                }
+            }
         }
     }
 }

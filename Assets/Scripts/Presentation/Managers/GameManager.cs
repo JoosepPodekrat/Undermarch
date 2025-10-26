@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Linq;
+using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
+using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Levels; // Added this using statement
 using UnityEngine;
@@ -13,6 +15,8 @@ namespace Undermarch.Presentation.Managers
 
         public Board Board { get; private set; }
         public TickSystem TickSystem { get; private set; }
+
+        private bool isHeroTurn = true;
 
         private void Awake()
         {
@@ -70,20 +74,45 @@ namespace Undermarch.Presentation.Managers
             }
         }
 
-        private void HandleTick(int tick)
-        {
-            var characters = Board.GetAllCharacters().ToList();
-            Debug.Log($"HandleTick: Processing {characters.Count} characters.");
-
-            // .ToList() creates a copy of the collection, so we can modify the original
-            // collection inside the loop without causing an error.
-            foreach (var character in characters)
-            {
-                if (!character.IsDead)
+                private void HandleTick(int tick)
                 {
-                    character.Act(Board);
-                }
-            }
-        }
-    }
+                    var characters = Board.GetAllCharacters().ToList();
+                    Debug.Log($"HandleTick: Tick {tick}, Processing {characters.Count} characters. It is {(isHeroTurn ? "Hero" : "Monster")} turn.");
+        
+                    if (isHeroTurn)
+                    {
+                        // Heroes' turn
+                        foreach (var character in characters.Where(c => c.faction == Faction.Hero && !c.IsDead))
+                        {
+                            character.Act(Board);
+                        }
+                    }
+                    else
+                    {
+                        // Monsters' and Dungeon Master's turn
+                        foreach (var character in characters.Where(c => c.faction == Faction.Defender && !c.IsDead))
+                        {
+                            character.Act(Board);
+                        }
+                    }
+        
+                    // Remove dead characters from the board.
+                    // We iterate through the original list of characters we fetched at the start of the tick.
+                    // If any of them died during the turn, their `IsDead` flag will be true.
+                    foreach (var character in characters)
+                    {
+                        if (character.IsDead)
+                        {
+                            var pos = Board.GetPositionOf(character);
+                            if (pos.IsValid())
+                            {
+                                Board.RemoveEntity(pos);
+                                Debug.Log($"Removed dead character at {pos.x},{pos.y}");
+                            }
+                        }
+                    }
+        
+                    // Switch turns for the next tick
+                    isHeroTurn = !isHeroTurn;
+                }    }
 }

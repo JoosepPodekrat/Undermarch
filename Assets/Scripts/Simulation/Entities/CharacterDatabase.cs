@@ -11,7 +11,7 @@ namespace Undermarch.Simulation.Entities
         // CharacterES
         // ==========================
 
-        public static readonly Hero warrior = new Hero
+        public static readonly Hero peasant = new Hero
         {
             faction = Faction.Hero,
             strength = 12,
@@ -57,7 +57,7 @@ namespace Undermarch.Simulation.Entities
         // CharacterS
         // ==========================
 
-        public static readonly Monster goblin = new Monster
+        public static readonly Monster slimeMonster = new Monster
         {
             faction = Faction.Defender,
             strength = 9,

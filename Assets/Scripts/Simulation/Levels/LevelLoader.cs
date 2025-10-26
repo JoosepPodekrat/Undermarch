@@ -33,12 +33,12 @@ namespace Undermarch.Simulation.Levels
             board.AddWall(new TilePos(15, 7));
             board.AddWall(new TilePos(15, 8));
 
-            // Spawn a hero (warrior)
-            var hero = CharacterDatabase.warrior.Clone();
+            // Spawn a hero (peasant)
+            var hero = CharacterDatabase.peasant.Clone();
             board.AddEntity(new TilePos(3, 10), hero);
 
-            // Spawn a monster (goblin)
-            var monster = CharacterDatabase.goblin.Clone();
+            // Spawn a monster (slimeMonster)
+            var monster = CharacterDatabase.slimeMonster.Clone();
             board.AddEntity(new TilePos(17, 10), monster);
 
             // Spawn the Dungeon Master

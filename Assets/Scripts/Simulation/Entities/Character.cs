@@ -228,5 +228,34 @@ namespace Undermarch.Simulation.Entities
             
             //TODO: Death
         }
+
+        protected bool HandleMove(Board board, TilePos currentPos, TilePos nextPos)
+        {
+            if (!board.InBounds(nextPos) || board.HasWallAt(nextPos))
+            {
+                return false; // Blocked by wall or out of bounds
+            }
+
+            var occupant = board.GetEntityAt(nextPos);
+            if (occupant != null)
+            {
+                // If the occupant is an enemy, attack it
+                if (occupant.faction != this.faction)
+                {
+                    Attack(occupant);
+                    return true; // Action taken: Attack
+                }
+                else
+                {
+                    return false; // Blocked by an ally
+                }
+            }
+            else
+            {
+                // The tile is empty, so move
+                board.MoveEntity(currentPos, nextPos);
+                return true; // Action taken: Move
+            }
+        }
     }
 }
