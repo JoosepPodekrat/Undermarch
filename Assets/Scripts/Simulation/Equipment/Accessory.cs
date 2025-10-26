@@ -1,23 +1,35 @@
+using Undermarch.Simulation.Combat;
+
 namespace Undermarch
 {
-    public interface IAccessory
+    public class Accessory : IEquipment
     {
-        string name { get; }
-        string description { get; }
-        public int agility { get; } // Influences speed, increases armor, increases crit 
-        public int intelligence { get; } // Increases maximum mana, casting modifiers
-        public int stamina { get; } // hp and so on
-        public int strength { get; } // melee damage
-        public int spirit { get; } // regeneration 
-        void Equip(Character target) // equips accessory on target
+        // fields that can be assigned by subclasses
+        public string name { get; protected set; }
+        public string description { get; protected set; }
+
+        public int agility { get; protected set; }       // influences speed, increases armor, increases crit
+        public int intelligence { get; protected set; }  // increases maximum mana, casting modifiers
+        public int stamina { get; protected set; }       // hp and so on
+        public int strength { get; protected set; }      // melee damage
+        public int spirit { get; protected set; }        // regeneration
+
+        public int damage { get; protected set; }
+        public DamageType damageType { get; protected set; }
+
+        public void equip(Character target)              // equips a weapon on the character
         {
             target.charAccessory = this;
         }
-        void Unequip(Character target) // unequips accessory on target
+
+        public void unequip(Character target)            // unequips a weapon from the character
         {
             target.charAccessory = null;
         }
 
-        void Apply(Character target);
+        public virtual void apply(Character target)      // optionally overridden for unique effects
+        {
+            // placeholder logic for special weapon effects
+        }
     }
 }

@@ -1,7 +1,7 @@
 
 namespace Undermarch
 {
-    public interface ITrap
+    public abstract class Trap
     {
         string Name { get; }
     

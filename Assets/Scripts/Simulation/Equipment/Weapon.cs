@@ -2,28 +2,34 @@ using Undermarch.Simulation.Combat;
 
 namespace Undermarch
 {
-    public interface IWeapon
+    public class Weapon : IEquipment
     {
-        string name { get; }
-        string description { get; }
-        public int agility { get; } // Influences speed, increases armor, increases crit 
-        public int intelligence { get; } // Increases maximum mana, casting modifiers
-        public int stamina { get; } // hp and so on
-        public int strength { get; } // melee damage
-        public int spirit { get; } // regeneration 
-        
-        public int damage { get; }
-        public DamageType damageType { get; }
+        // fields that can be assigned by subclasses
+        public string name { get;  set; }
+        public string description { get; set; }
 
-        void Equip (Character target) // equips a weapon on the character
+        public int agility { get;  set; }       // influences speed, increases armor, increases crit
+        public int intelligence { get;  set; }  // increases maximum mana, casting modifiers
+        public int stamina { get;  set; }       // hp and so on
+        public int strength { get;  set; }      // melee damage
+        public int spirit { get;  set; }        // regeneration
+
+        public int damage { get;  set; }
+        public DamageType damageType { get;  set; }
+
+        public void equip(Character target)              // equips a weapon on the character
         {
             target.charWeapon = this;
         }
-        void Unequip (Character target) // unequips a weapon on the character
+
+        public void unequip(Character target)            // unequips a weapon from the character
         {
             target.charWeapon = null;
         }
 
-        void Apply(Character target);
+        public virtual void apply(Character target)      // optionally overridden for unique effects
+        {
+            // placeholder logic for special weapon effects
+        }
     }
 }
