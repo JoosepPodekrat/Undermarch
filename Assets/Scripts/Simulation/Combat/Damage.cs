@@ -8,6 +8,16 @@ namespace Undermarch.Simulation.Combat
     {
         public readonly Dictionary<DamageType, int> amounts = new();
         public void Add(DamageType type, int amount) => amounts[type] = (amounts.TryGetValue(type, out var v) ? v : 0) + amount;
+
+        public int TotalDamage()
+        {
+            int total = 0;
+            foreach (var amount in amounts.Values)
+            {
+                total += amount;
+            }
+            return total;
+        }
     }
 
     public interface IEffect { int RemainingTicks { get; } void OnApply(); void OnTick(); void OnExpire(); }

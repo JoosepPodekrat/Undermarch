@@ -24,6 +24,40 @@ namespace Undermarch.Simulation.Grid
             float dy = a.y - b.y;
             return dx * dx + dy * dy;
         }
+
+        public static int ManhattanDistance(TilePos a, TilePos b)
+        {
+            return System.Math.Abs(a.x - b.x) + System.Math.Abs(a.y - b.y);
+        }
+
+        public static TilePos operator +(TilePos a, TilePos b)
+        {
+            return new TilePos(a.x + b.x, a.y + b.y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TilePos other)
+            {
+                return x == other.x && y == other.y;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return (x, y).GetHashCode();
+        }
+
+        public static bool operator ==(TilePos a, TilePos b)
+        {
+            return a.x == b.x && a.y == b.y;
+        }
+
+        public static bool operator !=(TilePos a, TilePos b)
+        {
+            return !(a == b);
+        }
     }
 
     public enum TileLayer

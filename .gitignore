@@ -97,3 +97,9 @@ crashlytics-build.properties
 
 # TestRunner generated files
 InitTestScene*.unity*
+
+# Custom .NET build artifacts (for standalone simulation testing)
+/bin/
+/TempCompile/
+dotnet-install.sh
+simulation_files.txt

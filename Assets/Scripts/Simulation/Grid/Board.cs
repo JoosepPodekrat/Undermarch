@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Entities;
+using Undermarch.Simulation.Interfaces;
 
 namespace Undermarch.Simulation.Grid
 {
-    public sealed class Board
+    public sealed class Board : IBoard
     {
-        public readonly int Width;
-        public readonly int Height;
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         // Event to notify listeners (like the renderer) of changes
         public event Action<TilePos> OnBoardChanged;

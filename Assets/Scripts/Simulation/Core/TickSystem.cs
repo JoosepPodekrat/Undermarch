@@ -1,29 +1,230 @@
+using System.Collections.Generic;
+using Undermarch.Simulation.Entities;
+using Undermarch.Simulation.Grid;
+using Undermarch.Simulation.Interfaces;
+
 namespace Undermarch.Simulation.Core
 {
-    public interface ITickSystem
+    public class TickSystem : ITickSystem
     {
-        int currentTick { get; }
-        void Tick(); // advances simulation by 1 tick
-    }
+        public TickMode Mode { get; set; }
+        public int TicksPerSecond { get; set; }
+        public int CurrentTick { get; private set; }
 
-    public sealed class TickSystem : ITickSystem
-    {
-        public int currentTick { get; private set; }
-        public event System.Action<int> OnTick;
+        private IBoard board;
+        private IGameState gameState;
+        private WaveSpawner waveSpawner;
 
-        private bool _isRunning = true;
+        public TickSystem(IBoard board, IGameState gameState, int ticksPerSecond = 2, WaveSpawner waveSpawner = null)
+        {
+            this.board = board;
+            this.gameState = gameState;
+            this.waveSpawner = waveSpawner;
+            TicksPerSecond = ticksPerSecond;
+            Mode = TickMode.Paused;
+            CurrentTick = 0;
+        }
+
+        public void SetWaveSpawner(WaveSpawner spawner)
+        {
+            waveSpawner = spawner;
+        }
+
+        public void Pause()
+        {
+            Mode = TickMode.Paused;
+        }
+
+        public void Resume()
+        {
+            Mode = TickMode.Auto;
+        }
+
+        public void Step()
+        {
+            Tick();
+            Mode = TickMode.Paused;
+        }
 
         public void Tick()
         {
-            if (!_isRunning) return;
+            if (gameState.Phase != GamePhase.Combat)
+            {
+                return; // Only tick during combat
+            }
 
-            currentTick++;
-            OnTick?.Invoke(currentTick);
+            CurrentTick++;
+            SimulationLog.Log($"=== Tick {CurrentTick} ===");
+
+            // Wave Spawning (before phases)
+            if (waveSpawner != null && board is Board b)
+            {
+                waveSpawner.CheckSpawn(CurrentTick, b);
+            }
+
+            // Phase 1: Entities Phase
+            EntitiesPhase();
+
+            // Phase 2: Projectiles Phase
+            ProjectilesPhase();
+
+            // Phase 3: Effects Phase
+            EffectsPhase();
+
+            // Phase 4: Cleanup Phase
+            CleanupPhase();
+
+            // Check game over
+            CheckGameOver();
+
+            // Auto-step to paused if in step mode
+            if (Mode == TickMode.Step)
+            {
+                Mode = TickMode.Paused;
+            }
         }
 
-        public void Stop()
+        private void EntitiesPhase()
         {
-            _isRunning = false;
+            // All characters act
+            List<Character> characters = new List<Character>(board.GetAllCharacters());
+
+            foreach (var character in characters)
+            {
+                // Skip dead characters
+                if (character.IsDead || character.currentHP <= 0)
+                {
+                    continue;
+                }
+
+                // Recalculate stats before acting (in case buffs changed)
+                character.CalculateStats();
+
+                // Act
+                if (board is Board b)
+                {
+                    character.Act(b);
+                }
+            }
+        }
+
+        private void ProjectilesPhase()
+        {
+            // Collect all projectiles
+            List<Projectile> projectiles = new List<Projectile>();
+
+            for (int y = 0; y < board.Height; y++)
+            {
+                for (int x = 0; x < board.Width; x++)
+                {
+                    TilePos pos = new TilePos(x, y);
+                    object interactable = board.GetInteractableAt(pos);
+                    if (interactable is Projectile projectile && projectile.IsActive)
+                    {
+                        projectiles.Add(projectile);
+                    }
+                }
+            }
+
+            // Tick all projectiles
+            foreach (var projectile in projectiles)
+            {
+                if (projectile.IsActive)
+                {
+                    projectile.Tick(board);
+                }
+            }
+        }
+
+        private void EffectsPhase()
+        {
+            // Tick down tile effects
+            List<TileEffect> expiredEffects = new List<TileEffect>();
+
+            for (int y = 0; y < board.Height; y++)
+            {
+                for (int x = 0; x < board.Width; x++)
+                {
+                    TilePos pos = new TilePos(x, y);
+                    object interactable = board.GetInteractableAt(pos);
+                    if (interactable is TileEffect effect)
+                    {
+                        effect.Tick();
+                        if (effect.IsExpired())
+                        {
+                            expiredEffects.Add(effect);
+                        }
+                    }
+                }
+            }
+
+            // Remove expired effects
+            foreach (var effect in expiredEffects)
+            {
+                board.RemoveInteractable(effect.Position);
+            }
+
+            // Tick character buffs/debuffs
+            foreach (var character in board.GetAllCharacters())
+            {
+                character.TickBuffsAndDebuffs();
+            }
+        }
+
+        private void CleanupPhase()
+        {
+            // Remove dead characters
+            List<Character> deadCharacters = new List<Character>();
+
+            foreach (var character in board.GetAllCharacters())
+            {
+                if (character.IsDead || character.currentHP <= 0)
+                {
+                    deadCharacters.Add(character);
+                }
+            }
+
+            foreach (var dead in deadCharacters)
+            {
+                TilePos pos = board.GetPositionOf(dead);
+                if (pos.IsValid())
+                {
+                    board.RemoveEntity(pos);
+                    SimulationLog.Log($"{dead.Name} has been removed from the board.");
+                }
+            }
+        }
+
+        private void CheckGameOver()
+        {
+            bool anyHeroesAlive = false;
+            bool dungeonMasterAlive = false;
+
+            foreach (var character in board.GetAllCharacters())
+            {
+                if (character.faction == Combat.Faction.Hero)
+                {
+                    anyHeroesAlive = true;
+                }
+
+                if (character is Entities.Characters.DungeonMaster.DungeonMaster)
+                {
+                    dungeonMasterAlive = true;
+                }
+            }
+
+            if (!anyHeroesAlive)
+            {
+                gameState.Phase = GamePhase.GameOver;
+                Mode = TickMode.Paused;
+                SimulationLog.Log("Victory! All heroes defeated!");
+            }
+            else if (!dungeonMasterAlive)
+            {
+                gameState.Phase = GamePhase.GameOver;
+                Mode = TickMode.Paused;
+                SimulationLog.Log("Defeat! The Dungeon Master has fallen!");
+            }
         }
     }
 }

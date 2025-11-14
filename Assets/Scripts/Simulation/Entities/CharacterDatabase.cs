@@ -101,6 +101,25 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.charmOfFocus
         };
 
+        public static readonly ArcherMonster archerMonster = new ArcherMonster
+        {
+            Name = "Archer Monster",
+            faction = Faction.Defender,
+            strength = 7,
+            stamina = 9,
+            agility = 12,
+            intelligence = 7,
+            spirit = 8,
+            charWeapon = ItemDatabase.ironDagger,
+            charArmor = ItemDatabase.leatherArmor,
+            charHelmet = ItemDatabase.leatherCap,
+            charAccessory = ItemDatabase.ironRing,
+            AttackRange = 5,
+            ArrowSpeed = 3,
+            ArrowRange = 10,
+            CooldownTicks = 2
+        };
+
         public static readonly DungeonMaster dungeonMaster = new DungeonMaster
         {
             faction = Faction.Defender,

@@ -26,6 +26,12 @@ namespace Undermarch.Presentation.Rendering
         public TileBase monsterTile;
         public TileBase dungeonMasterTile;
         public TileBase trapTile;
+        public TileBase chestTile;
+        public TileBase arrowTile;
+        public TileBase poisonCloudTile;
+        public TileBase slowZoneTile;
+        public TileBase fireZoneTile;
+        public TileBase fogZoneTile;
 
         private Board _board;
 
@@ -92,15 +98,50 @@ namespace Undermarch.Presentation.Rendering
                 wallTilemap.SetTile(cellPos, null);
             }
 
-            // Interactable Layer (Traps)
+            // Interactable Layer (Traps, Chests)
             var interactable = _board.GetInteractableAt(pos);
             if (interactable is Trap)
             {
                 interactableTilemap.SetTile(cellPos, trapTile);
             }
+            else if (interactable is Chest chest && !chest.Looted)
+            {
+                interactableTilemap.SetTile(cellPos, chestTile);
+            }
             else
             {
                 interactableTilemap.SetTile(cellPos, null);
+            }
+
+            // Effects Layer (Projectiles, Tile Effects)
+            // Check for projectiles first (they are stored in interactables)
+            if (interactable is Projectile proj && proj.IsActive)
+            {
+                effectsTilemap.SetTile(cellPos, arrowTile);
+            }
+            // Check for tile effects
+            else if (interactable is TileEffect effect)
+            {
+                TileBase effectTile = effect.Type switch
+                {
+                    EffectType.Poison => poisonCloudTile,
+                    EffectType.Slow => slowZoneTile,
+                    EffectType.Fire => fireZoneTile,
+                    EffectType.Fog => fogZoneTile,
+                    _ => null
+                };
+                if (effectTile != null)
+                {
+                    effectsTilemap.SetTile(cellPos, effectTile);
+                }
+                else
+                {
+                    effectsTilemap.SetTile(cellPos, null);
+                }
+            }
+            else
+            {
+                effectsTilemap.SetTile(cellPos, null);
             }
 
             // Entity Layer

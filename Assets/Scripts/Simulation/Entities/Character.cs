@@ -15,6 +15,7 @@ namespace Undermarch.Simulation.Entities
         bool isDead = false;
         bool isScared = false;
         public string Name = "Character";
+        public int gold = 0; // Gold carried by this character
         // base stats, i think these should default to 10, so every point increase is roughly a 10% increase in effectiveness of the stat.
         public Faction faction; // { Hero, Defender, Neutral, ProjectileHero, ProjectileDefender }
         public int agility = 10; // Influences speed, increases armor, increases crit 
@@ -64,34 +65,68 @@ namespace Undermarch.Simulation.Entities
         public Accessory charAccessory;
         // buffs
         public List<Buff> buffs = new();
-        public void ApplyBuffs()
-        {
-            foreach (Buff buff in buffs)
-            {
-                buff.Apply(this);
-                buff.duration -= 1;
-            }
-        }
+
         //debuffs
         public List<Debuff> debuffs = new();
-        public void ApplyDebuffs()
+
+        public void TickBuffsAndDebuffs()
         {
+            // Tick and apply each buff
+            foreach (Buff buff in buffs.ToList())
+            {
+                buff.Apply(this); // Per-tick effects like damage-over-time
+                buff.Tick();
+            }
+
+            // Tick and apply each debuff
+            foreach (Debuff debuff in debuffs.ToList())
+            {
+                debuff.Apply(this); // Per-tick effects like damage-over-time
+                debuff.Tick();
+            }
+
+            // Remove expired effects
+            buffs.RemoveAll(b => b.IsExpired());
+            debuffs.RemoveAll(d => d.IsExpired());
+
+            // Recalculate stats after effects change
+            GetGearEffect();
+        }
+        public int GetStatModifier(StatType statType)
+        {
+            int modifier = 0;
+
+            foreach (Buff buff in buffs)
+            {
+                if (buff.statModifiers.TryGetValue(statType, out int buffMod))
+                {
+                    modifier += buffMod;
+                }
+            }
+
             foreach (Debuff debuff in debuffs)
             {
-                debuff.Apply(this);
-                debuff.duration -= 1;
+                if (debuff.statModifiers.TryGetValue(statType, out int debuffMod))
+                {
+                    modifier += debuffMod;
+                }
             }
+
+            return modifier;
         }
+
         public void GetGearEffect()
         {
             List<IEquipment> equipment = new() { charWeapon, charArmor, charHelmet, charAccessory };
 
-            effectiveAgility = agility + equipment.Sum(e => e.agility);
-            effectiveIntelligence = intelligence + equipment.Sum(e => e.intelligence);
-            effectiveStamina = stamina + equipment.Sum(e => e.stamina);
-            effectiveStrength = strength + equipment.Sum(e => e.strength);
-            effectiveSpirit = spirit + equipment.Sum(e => e.spirit);
+            effectiveAgility = agility + equipment.Sum(e => e.agility) + GetStatModifier(StatType.Agility);
+            effectiveIntelligence = intelligence + equipment.Sum(e => e.intelligence) + GetStatModifier(StatType.Intelligence);
+            effectiveStamina = stamina + equipment.Sum(e => e.stamina) + GetStatModifier(StatType.Stamina);
+            effectiveStrength = strength + equipment.Sum(e => e.strength) + GetStatModifier(StatType.Strength);
+            effectiveSpirit = spirit + equipment.Sum(e => e.spirit) + GetStatModifier(StatType.Spirit);
 
+            armor = effectiveAgility + GetStatModifier(StatType.Armor);
+            magicresist = GetStatModifier(StatType.MagicResist);
         }
         public void InitStats() // call after calculate stats when initating character
         {
@@ -108,10 +143,6 @@ namespace Undermarch.Simulation.Entities
         public void CalculateStats()
         {
             GetGearEffect();
-            ApplyBuffs();
-            ApplyDebuffs();
-            this.armor = this.effectiveAgility;
-
         }
         public string PrintStats()
         {
@@ -233,6 +264,17 @@ namespace Undermarch.Simulation.Entities
             //TODO: Death
         }
 
+        private void ApplyTileEffects(Board board, TilePos pos)
+        {
+            // Check for tile effects at position
+            // Note: Board stores effects in a List at each position, but for now we'll check interactables
+            var interactable = board.GetInteractableAt(pos);
+            if (interactable is TileEffect tileEffect)
+            {
+                tileEffect.ApplyTo(this);
+            }
+        }
+
         private void TriggerTraps(Board board, TilePos pos)
         {
             var interactable = board.GetInteractableAt(pos);
@@ -280,6 +322,7 @@ namespace Undermarch.Simulation.Entities
                 // The tile is empty, so move
                 board.MoveEntity(currentPos, nextPos);
                 TriggerTraps(board, nextPos); // Check for traps on the new tile
+                ApplyTileEffects(board, nextPos); // Check for tile effects
                 return true; // Action taken: Move
             }
         }

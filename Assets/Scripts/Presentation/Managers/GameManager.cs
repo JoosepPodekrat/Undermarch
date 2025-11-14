@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Undermarch.Presentation.UI;
 using Undermarch.Simulation.Combat;
@@ -11,7 +12,7 @@ using UnityEngine.SceneManagement;
 
 namespace Undermarch.Presentation.Managers
 {
-    public enum GameState
+    public enum GamePhase
     {
         Placement,
         Combat
@@ -23,10 +24,15 @@ namespace Undermarch.Presentation.Managers
 
         public Board Board { get; private set; }
         public TickSystem TickSystem { get; private set; }
-        public GameState CurrentState { get; private set; }
+        public Simulation.Core.GameState GameState { get; private set; }
+        public GamePhase CurrentPhase { get; private set; }
         public EndGameUI endGameUI;
 
-        private bool isHeroTurn = true;
+        // Optional: Assign these in Unity Editor if you want UI displays
+        public ResourceDisplay resourceDisplay;
+        public TickControlUI tickControlUI;
+
+        private WaveSpawner waveSpawner;
 
         private void Awake()
         {
@@ -36,20 +42,47 @@ namespace Undermarch.Presentation.Managers
                 return;
             }
             Instance = this;
-            CurrentState = GameState.Placement;
-            Debug.Log("GameManager: Awake() - State: Placement");
+            CurrentPhase = GamePhase.Placement;
+            Debug.Log("GameManager: Awake() - Phase: Placement");
 
             Board = new Board(20, 20);
-            TickSystem = new TickSystem();
-            
-            Debug.Log("GameManager initialized. Board and TickSystem created.");
+            GameState = new Simulation.Core.GameState(startingGold: 200);
+
+            Debug.Log("GameManager initialized. Board and GameState created.");
         }
 
         private void Start()
         {
             Debug.Log("GameManager: Start()");
-            LevelLoader.LoadLevel1(Board);
-            Debug.Log("GameManager: Level 1 loaded.");
+
+            // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
+            List<TilePos> entrances;
+            List<TilePos> chestPositions;
+            LevelLoader.LoadDungeon(Board, out entrances, out chestPositions);
+            Debug.Log($"GameManager: Dungeon loaded. {chestPositions.Count} chests, {entrances.Count} entrance(s).");
+
+            // Create wave spawner with 9-wave schedule
+            waveSpawner = LevelLoader.CreateWaveSchedule(entrances);
+            Debug.Log($"GameManager: Wave schedule created. {waveSpawner.TotalWaves} waves scheduled.");
+
+            // Initialize TickSystem with new constructor
+            TickSystem = new TickSystem(Board, GameState, ticksPerSecond: 2, waveSpawner);
+            TickSystem.OnTick += HandleTick;
+            TickSystem.Pause(); // Start paused in placement phase
+            Debug.Log("GameManager: TickSystem initialized (2 TPS, paused).");
+
+            // Initialize UI components if assigned
+            if (resourceDisplay != null)
+            {
+                resourceDisplay.Initialize(GameState);
+                Debug.Log("GameManager: ResourceDisplay initialized.");
+            }
+
+            if (tickControlUI != null)
+            {
+                tickControlUI.Initialize(TickSystem);
+                Debug.Log("GameManager: TickControlUI initialized.");
+            }
 
             // Find the EndGameUI in the scene
             endGameUI = FindObjectOfType<EndGameUI>();
@@ -61,11 +94,12 @@ namespace Undermarch.Presentation.Managers
 
         public void StartCombat()
         {
-            if (CurrentState == GameState.Placement)
+            if (CurrentPhase == GamePhase.Placement)
             {
-                CurrentState = GameState.Combat;
-                Debug.Log("GameManager: StartCombat() - State: Combat");
-                TickSystem.OnTick += HandleTick;
+                CurrentPhase = GamePhase.Combat;
+                GameState.Phase = Simulation.Core.GamePhase.Combat;
+                TickSystem.Resume(); // Start ticking - waves will spawn automatically
+                Debug.Log("GameManager: StartCombat() - Phase: Combat, waves will spawn automatically");
             }
         }
 
@@ -98,42 +132,12 @@ namespace Undermarch.Presentation.Managers
 
         private void HandleTick(int tick)
         {
-            if (CurrentState != GameState.Combat) return;
+            if (CurrentPhase != GamePhase.Combat) return;
 
+            // TickSystem.Tick() is already called by TickDriver - this is just for win condition checks
             var characters = Board.GetAllCharacters().ToList();
-            Debug.Log($"HandleTick: Tick {tick}, Processing {characters.Count} characters. It is {(isHeroTurn ? "Hero" : "Monster")} turn.");
-
-            if (isHeroTurn)
-            {
-                foreach (var character in characters.Where(c => c.faction == Faction.Hero && !c.IsDead))
-                {
-                    character.Act(Board);
-                }
-            }
-            else
-            {
-                foreach (var character in characters.Where(c => c.faction == Faction.Defender && !c.IsDead))
-                {
-                    character.Act(Board);
-                }
-            }
-
-            foreach (var character in characters)
-            {
-                if (character.IsDead)
-                {
-                    var pos = Board.GetPositionOf(character);
-                    if (pos.IsValid())
-                    {
-                        Board.RemoveEntity(pos);
-                        Debug.Log($"Removed dead character at {pos.x},{pos.y}");
-                    }
-                }
-            }
-
-            var remainingCharacters = Board.GetAllCharacters().ToList();
-            bool dungeonMasterIsAlive = remainingCharacters.Any(c => c is DungeonMaster);
-            bool heroesAreAlive = remainingCharacters.Any(c => c.faction == Faction.Hero);
+            bool dungeonMasterIsAlive = characters.Any(c => c is DungeonMaster && !c.IsDead);
+            bool heroesAreAlive = characters.Any(c => c.faction == Faction.Hero && !c.IsDead);
 
             if (!dungeonMasterIsAlive)
             {
@@ -142,22 +146,21 @@ namespace Undermarch.Presentation.Managers
                 {
                     endGameUI.ShowEndGamePopup("You Lose!");
                 }
-                TickSystem.Stop();
+                TickSystem.Pause();
                 return;
             }
-            
-            if (!heroesAreAlive)
+
+            // Win condition: All waves spawned AND no living heroes
+            if (waveSpawner.AllWavesSpawned && !heroesAreAlive)
             {
-                Debug.Log("Game Over: All heroes have been defeated! YOU WIN!");
+                Debug.Log("Game Over: All waves defeated! YOU WIN!");
                 if (endGameUI != null)
                 {
                     endGameUI.ShowEndGamePopup("You Win!");
                 }
-                TickSystem.Stop();
+                TickSystem.Pause();
                 return;
             }
-
-            isHeroTurn = !isHeroTurn;
         }
     }
 }
