@@ -1,4 +1,5 @@
 using Undermarch.Simulation.Core;
+using Undermarch.Simulation.Interfaces;
 using UnityEngine;
 
 namespace Undermarch.Presentation.Bootstrap

@@ -39,7 +39,7 @@ namespace Undermarch.Tests
         [Test]
         public void Hero_PathsToChestWhenNoEnemies()
         {
-            IBoard board = new Board(20, 20);
+            Board board = new Board(20, 20);
             Hero hero = CharacterDatabase.peasant.Clone() as Hero;
 
             board.AddEntity(new TilePos(5, 5), hero);
@@ -61,7 +61,7 @@ namespace Undermarch.Tests
         [Test]
         public void Hero_LootsChestOnArrival()
         {
-            IBoard board = new Board(20, 20);
+            Board board = new Board(20, 20);
             Hero hero = CharacterDatabase.peasant.Clone() as Hero;
 
             Chest chest = new Chest(new TilePos(5, 5), 40);
@@ -75,9 +75,9 @@ namespace Undermarch.Tests
         }
 
         [Test]
-        public void Hero_FleesWith LowHealthAndGold()
+        public void Hero_FleesWith_LowHealthAndGold()
         {
-            IBoard board = new Board(20, 20);
+            Board board = new Board(20, 20);
             Hero hero = CharacterDatabase.peasant.Clone() as Hero;
             hero.FleeThreshold = 10; // Lower threshold for testing
 
@@ -111,7 +111,7 @@ namespace Undermarch.Tests
         [Test]
         public void Hero_DoesNotFleeWithHighHealth()
         {
-            IBoard board = new Board(20, 20);
+            Board board = new Board(20, 20);
             Hero hero = CharacterDatabase.peasant.Clone() as Hero;
             hero.FleeThreshold = 10;
 
@@ -129,7 +129,7 @@ namespace Undermarch.Tests
         [Test]
         public void Hero_PrioritizesCombatOverLooting()
         {
-            IBoard board = new Board(20, 20);
+            Board board = new Board(20, 20);
             Hero hero = CharacterDatabase.peasant.Clone() as Hero;
             hero.CombatRange = 5;
             Character monster = CharacterDatabase.slimeMonster.Clone();
