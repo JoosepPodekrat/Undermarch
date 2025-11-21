@@ -3,6 +3,8 @@ using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Interfaces;
+using Undermarch.Simulation.Combat;
+
 
 namespace Undermarch.Tests
 {
@@ -139,8 +141,8 @@ namespace Undermarch.Tests
             gameState.Phase = GamePhase.Combat;
 
             // Create a projectile
-            Combat.DamagePacket damage = new Combat.DamagePacket();
-            damage.Add(Combat.DamageType.Physical, 5);
+            DamagePacket damage = new DamagePacket();
+            damage.Add(DamageType.Physical, 5);
 
             Projectile projectile = new Projectile(
                 "TestArrow",
@@ -148,7 +150,7 @@ namespace Undermarch.Tests
                 new TilePos(1, 0),
                 speed: 2,
                 maxRange: 10,
-                Combat.Faction.ProjectileDefender,
+                Faction.ProjectileDefender,
                 damage
             );
 

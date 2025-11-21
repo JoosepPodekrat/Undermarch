@@ -1,12 +1,13 @@
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
+using Undermarch.Simulation.Interfaces;
 
 namespace Undermarch.Simulation.Entities.Characters.DungeonMaster
 {
     public class DungeonMaster : Character
     {
-        public override void Act(Board board)
+        public override void Act(IBoard board)
         {
             float damage = (charWeapon != null ? charWeapon.damage : 0) + effectiveIntelligence;
             SimulationLog.Log($"Dungeon Master Turn: HP={currentHP}/{maxHP}, Damage={damage}");

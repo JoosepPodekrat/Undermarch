@@ -2,12 +2,14 @@ using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Pathfinding;
+using Undermarch.Simulation.Interfaces;
+
 
 namespace Undermarch.Simulation.Entities.Characters.Monsters
 {
     public class Monster : Character
     {
-        public override void Act(Board board)
+        public override void Act(IBoard board)
         {
             if (this.Name == "Slime Monster")
             {

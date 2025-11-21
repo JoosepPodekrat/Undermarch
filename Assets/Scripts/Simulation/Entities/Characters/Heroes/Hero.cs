@@ -2,6 +2,7 @@ using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Pathfinding;
+using Undermarch.Simulation.Interfaces;
 
 namespace Undermarch.Simulation.Entities.Characters.Heroes
 {
@@ -10,7 +11,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
         public int FleeThreshold = 20; // gold / healthPercent > threshold triggers flee
         public int CombatRange = 5; // Distance within which to prioritize combat
 
-        public override void Act(Board board)
+        public override void Act(IBoard board)
         {
             TilePos currentPos = board.GetPositionOf(this);
 
@@ -55,7 +56,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             AttackDungeonMaster(board, currentPos);
         }
 
-        private Character FindNearbyEnemy(Board board, TilePos currentPos)
+        private Character FindNearbyEnemy(IBoard board, TilePos currentPos)
         {
             Character closest = board.FindClosestTarget(this, Faction.Defender);
             if (closest != null)
@@ -79,7 +80,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             return lootToHealthRatio > FleeThreshold;
         }
 
-        private void FleeToExit(Board board, TilePos currentPos)
+        private void FleeToExit(IBoard board, TilePos currentPos)
         {
             // Head to nearest board edge
             TilePos exitDirection = GetDirectionToNearestEdge(board, currentPos);
@@ -99,7 +100,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             }
         }
 
-        private TilePos GetDirectionToNearestEdge(Board board, TilePos pos)
+        private TilePos GetDirectionToNearestEdge(IBoard board, TilePos pos)
         {
             int distToLeft = pos.x;
             int distToRight = board.Width - 1 - pos.x;
@@ -115,7 +116,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             return new TilePos(0, 1);
         }
 
-        private Chest FindNearestUnlootedChest(Board board)
+        private Chest FindNearestUnlootedChest(IBoard board)
         {
             TilePos myPos = board.GetPositionOf(this);
             Chest nearestChest = null;
@@ -142,7 +143,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             return nearestChest;
         }
 
-        private void MoveTowardAndLoot(Board board, TilePos currentPos, Chest chest)
+        private void MoveTowardAndLoot(IBoard board, TilePos currentPos, Chest chest)
         {
             TilePos chestPos = chest.Position;
 
@@ -161,7 +162,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             }
         }
 
-        private void AttackDungeonMaster(Board board, TilePos currentPos)
+        private void AttackDungeonMaster(IBoard board, TilePos currentPos)
         {
             Character dungeonMaster = null;
             foreach (var character in board.GetAllCharacters())

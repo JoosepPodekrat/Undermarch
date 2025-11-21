@@ -15,7 +15,7 @@ namespace Undermarch.Simulation.Entities.Characters.Monsters
         public int ArrowSpeed = 3;
         public int ArrowRange = 10;
 
-        public override void Act(Board board)
+        public override void Act(IBoard board)
         {
             if (ShootCooldown > 0)
             {
@@ -68,7 +68,7 @@ namespace Undermarch.Simulation.Entities.Characters.Monsters
             }
         }
 
-        private void ShootArrow(Board board, TilePos targetPos)
+        private void ShootArrow(IBoard board, TilePos targetPos)
         {
             TilePos myPos = board.GetPositionOf(this);
 

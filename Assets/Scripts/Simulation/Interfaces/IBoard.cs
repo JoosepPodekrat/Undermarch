@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Grid;       // For TilePos
+using Undermarch.Simulation.Entities;   // For Character
+using Undermarch.Simulation.Combat; 
+
+
 using Undermarch.Simulation.Entities;
-using Undermarch.Simulation.Grid;
 
 namespace Undermarch.Simulation.Interfaces
 {
-    /// <summary>
-    /// Interface for board operations (grid, entities, walls, interactables).
-    /// </summary>
     public interface IBoard
     {
         int Width { get; }

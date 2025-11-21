@@ -7,6 +7,8 @@ using Undermarch.Simulation.Effects.Buffs;
 using Undermarch.Simulation.Effects.Debuffs;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Core;
+using Undermarch.Simulation.Interfaces;
+
 
 namespace Undermarch.Simulation.Entities
 {
@@ -199,7 +201,7 @@ namespace Undermarch.Simulation.Entities
 
         public bool IsDead => isDead;
 
-        public virtual void Act(Board board)
+        public virtual void Act(IBoard board)
         {
             // Base character does nothing.
         }
@@ -264,7 +266,7 @@ namespace Undermarch.Simulation.Entities
             //TODO: Death
         }
 
-        private void ApplyTileEffects(Board board, TilePos pos)
+        private void ApplyTileEffects(IBoard board, TilePos pos)
         {
             // Check for tile effects at position
             // Note: Board stores effects in a List at each position, but for now we'll check interactables
@@ -275,7 +277,7 @@ namespace Undermarch.Simulation.Entities
             }
         }
 
-        private void TriggerTraps(Board board, TilePos pos)
+        private void TriggerTraps(IBoard board, TilePos pos)
         {
             var interactable = board.GetInteractableAt(pos);
             if (interactable is Trap trap)
@@ -295,8 +297,7 @@ namespace Undermarch.Simulation.Entities
                 }
             }
         }
-
-        protected bool HandleMove(Board board, TilePos currentPos, TilePos nextPos)
+        public bool HandleMove(IBoard board, TilePos currentPos, TilePos nextPos)
         {
             if (!board.InBounds(nextPos) || board.HasWallAt(nextPos))
             {

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Undermarch.Simulation.Grid;
+using Undermarch.Simulation.Interfaces;
 
 namespace Undermarch.Simulation.Pathfinding
 {
     public static class Pathfinder
     {
-        public static List<TilePos> FindPath(Board board, TilePos startPos, TilePos endPos)
+        public static List<TilePos> FindPath(IBoard board, TilePos startPos, TilePos endPos)
         {
             var startNode = new Node(startPos);
             var endNode = new Node(endPos);
@@ -79,7 +80,7 @@ namespace Undermarch.Simulation.Pathfinding
             return path;
         }
 
-        private static IEnumerable<TilePos> GetNeighbours(Board board, TilePos pos)
+        private static IEnumerable<TilePos> GetNeighbours(IBoard board, TilePos pos)
         {
             var neighbours = new List<TilePos>();
             for (int x = -1; x <= 1; x++)
