@@ -4,6 +4,7 @@ using Undermarch.Simulation.Entities.Traps;
 using Undermarch.Simulation.Grid;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Undermarch.Simulation.Interfaces;
 
 namespace Undermarch.Presentation.Controllers
 {

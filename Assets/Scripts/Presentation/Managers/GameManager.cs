@@ -9,14 +9,10 @@ using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Levels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Undermarch.Simulation.Interfaces;
 
 namespace Undermarch.Presentation.Managers
 {
-    public enum GamePhase
-    {
-        Placement,
-        Combat
-    }
 
     public class GameManager : MonoBehaviour
     {
@@ -97,7 +93,7 @@ namespace Undermarch.Presentation.Managers
             if (CurrentPhase == GamePhase.Placement)
             {
                 CurrentPhase = GamePhase.Combat;
-                GameState.Phase = Simulation.Core.GamePhase.Combat;
+                GameState.Phase = GamePhase.Combat;
                 TickSystem.Resume(); // Start ticking - waves will spawn automatically
                 Debug.Log("GameManager: StartCombat() - Phase: Combat, waves will spawn automatically");
             }

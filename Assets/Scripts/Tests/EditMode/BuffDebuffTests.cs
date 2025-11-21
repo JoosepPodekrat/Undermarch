@@ -2,7 +2,6 @@ using NUnit.Framework;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Effects.Buffs;
 using Undermarch.Simulation.Effects.Debuffs;
-using Undermarch.Simulation.Equipment;
 
 namespace Undermarch.Tests
 {

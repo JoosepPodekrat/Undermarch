@@ -15,6 +15,9 @@ namespace Undermarch.Simulation.Core
         private IGameState gameState;
         private WaveSpawner waveSpawner;
 
+        public event System.Action<int> OnTick;
+
+
         public TickSystem(IBoard board, IGameState gameState, int ticksPerSecond = 2, WaveSpawner waveSpawner = null)
         {
             this.board = board;
@@ -49,40 +52,32 @@ namespace Undermarch.Simulation.Core
         public void Tick()
         {
             if (gameState.Phase != GamePhase.Combat)
-            {
-                return; // Only tick during combat
-            }
+                return;
 
             CurrentTick++;
             SimulationLog.Log($"=== Tick {CurrentTick} ===");
 
-            // Wave Spawning (before phases)
+            // Wave spawning
             if (waveSpawner != null && board is Board b)
-            {
                 waveSpawner.CheckSpawn(CurrentTick, b);
-            }
 
-            // Phase 1: Entities Phase
+            // Simulation phases
             EntitiesPhase();
-
-            // Phase 2: Projectiles Phase
             ProjectilesPhase();
-
-            // Phase 3: Effects Phase
             EffectsPhase();
-
-            // Phase 4: Cleanup Phase
             CleanupPhase();
 
-            // Check game over
+            // Game-over logic (internal)
             CheckGameOver();
 
-            // Auto-step to paused if in step mode
+            // Fire tick event for GameManager/UI/etc.
+            OnTick?.Invoke(CurrentTick);
+
+            // Step mode
             if (Mode == TickMode.Step)
-            {
                 Mode = TickMode.Paused;
-            }
         }
+
 
         private void EntitiesPhase()
         {

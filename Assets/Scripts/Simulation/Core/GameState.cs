@@ -8,6 +8,11 @@ namespace Undermarch.Simulation.Core
     {
         public GamePhase Phase { get; set; }
         public int CurrentGold { get; private set; }
+        public int CurrentWood { get; private set; }
+        public int CurrentSteel { get; private set; }
+        public int CurrentFood { get; private set; }
+        public int CurrentMana { get; private set; }
+
         public int Wave { get; private set; }
 
         public event Action OnResourcesChanged;
@@ -47,6 +52,78 @@ namespace Undermarch.Simulation.Core
             CurrentGold += amount;
             OnResourcesChanged?.Invoke();
         }
+
+        public int GetResource(ResourceType type)
+        {
+            return type switch
+            {
+                ResourceType.Gold => CurrentGold,
+                ResourceType.Wood => CurrentWood,
+                ResourceType.Steel => CurrentSteel,
+                ResourceType.Food => CurrentFood,
+                ResourceType.Mana => CurrentMana,
+                _ => throw new ArgumentOutOfRangeException(nameof(type), "Unknown resource type"),
+            };
+        }
+        public bool AddResource(ResourceType type, int amount)
+        {
+            if (amount < 0) return false;
+            switch (type)
+            {
+                case ResourceType.Gold:
+                    CurrentGold += amount;
+                    break;
+                case ResourceType.Wood:
+                    CurrentWood += amount;
+                    break;
+                case ResourceType.Steel:
+                    CurrentSteel += amount;
+                    break;
+                case ResourceType.Food:
+                    CurrentFood += amount;
+                    break;
+                case ResourceType.Mana:
+                    CurrentMana += amount;
+                    break;
+                default:
+                    return false;
+            }
+            OnResourcesChanged?.Invoke();
+            return true;
+        }
+
+        public bool SpendResource(ResourceType type, int amount)
+        {
+            if (amount < 0) return false;
+            switch (type)
+            {
+                case ResourceType.Gold:
+                    if (CurrentGold < amount) return false;
+                    CurrentGold -= amount;
+                    break;
+                case ResourceType.Wood:
+                    if (CurrentWood < amount) return false;
+                    CurrentWood -= amount;
+                    break;
+                case ResourceType.Steel:
+                    if (CurrentSteel < amount) return false;
+                    CurrentSteel -= amount;
+                    break;
+                case ResourceType.Food:
+                    if (CurrentFood < amount) return false;
+                    CurrentFood -= amount;
+                    break;
+                case ResourceType.Mana:
+                    if (CurrentMana < amount) return false;
+                    CurrentMana -= amount;
+                    break;
+                default:
+                    return false;
+            }
+            OnResourcesChanged?.Invoke();
+            return true;
+        }
+
 
         public void NextWave()
         {
