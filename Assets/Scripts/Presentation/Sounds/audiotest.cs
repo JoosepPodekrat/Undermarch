@@ -25,9 +25,9 @@ public class AudioTest : MonoBehaviour
         // Add an AudioSource component dynamically
         AudioSource source = gameObject.AddComponent<AudioSource>();
         source.clip = s.clip;
-        source.volume = 0.5f;
+        source.volume = 0.3f;
         source.pitch = s.pitch;
-        source.spatialBlend = 0f; // 2D sound
+        source.spatialBlend = 1f; // 2D sound
         source.playOnAwake = false;
 
         Debug.Log($"Playing sound: {s.name}");

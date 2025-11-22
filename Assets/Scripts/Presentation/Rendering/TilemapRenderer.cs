@@ -175,11 +175,11 @@ namespace Undermarch.Presentation.Rendering
                         tile = monsterTile;
                         break;
 
-                    case "Goblin1":
+                    case "Goblin":
                         tile = goblin1Tile;
                         break;
 
-                    case "Goblin2":
+                    case "GoblinShaman":
                         tile = goblin2Tile;
                         break;
 
