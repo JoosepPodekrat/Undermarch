@@ -20,14 +20,24 @@ namespace Undermarch.Presentation.Controllers
         {
             foreach (Sound s in sounds) 
             {
+
                 s.source = gameObject.AddComponent<AudioSource>();
                 s.source.clip = s.clip;
+                if (s.clip == null)
+                {
+                    Debug.LogWarning($"Sound '{s.name}' has no AudioClip assigned!");
+                    continue;
+                }
                 s.source.volume = s.volume;
                 s.source.pitch = s.pitch;
+                s.source.spatialBlend = 0f;
+                s.source.playOnAwake = false;
+                Debug.Log($"AudioSource for '{s.name}' initialized.");
             }
         }
         public void Play(string name)
         {
+
             if (string.IsNullOrEmpty(name))
             {
                 Debug.LogWarning("AudioController.Play called with null or empty name.");

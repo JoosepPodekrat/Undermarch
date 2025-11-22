@@ -23,7 +23,14 @@ namespace Undermarch.Presentation.Rendering
         public TileBase groundTile;
         public TileBase wallTile;
         public TileBase heroTile;
+        public TileBase peasantTile;
+        public TileBase sorceressTile;
+        public TileBase rogueTile;
         public TileBase monsterTile;
+        public TileBase goblin1Tile;
+        public TileBase goblin2Tile;
+        public TileBase slimeTile;
+        public TileBase archerTile;
         public TileBase dungeonMasterTile;
         public TileBase trapTile;
         public TileBase chestTile;
@@ -144,22 +151,67 @@ namespace Undermarch.Presentation.Rendering
                 effectsTilemap.SetTile(cellPos, null);
             }
 
-            // Entity Layer
             var entity = _board.GetEntityAt(pos);
-            if (entity != null)
+
+            if (entity is Character character)
             {
                 TileBase tile = null;
-                if (entity is Hero) tile = heroTile;
-                else if (entity is Monster) tile = monsterTile;
-                else if (entity is DungeonMaster) tile = dungeonMasterTile;
-                Debug.Log($"TilemapRenderer: Setting tile for {entity.GetType().Name} at {cellPos}");
+
+                switch (character.Name)  // or character.name
+                {
+                    case "Peasant":
+                        tile = peasantTile;
+                        break;
+
+                    case "Sorceress":
+                        tile = sorceressTile;
+                        break;
+
+                    case "Rogue":
+                        tile = rogueTile;
+                        break;
+
+                    case "Monster":
+                        tile = monsterTile;
+                        break;
+
+                    case "Goblin1":
+                        tile = goblin1Tile;
+                        break;
+
+                    case "Goblin2":
+                        tile = goblin2Tile;
+                        break;
+
+                    case "Slime":
+                        tile = slimeTile;
+                        break;
+
+                    case "Archer":
+                        tile = archerTile;
+                        break;
+
+                    case "DungeonMaster":
+                        tile = dungeonMasterTile;
+                        break;
+
+                    case "Hero":
+                        tile = heroTile;
+                        break;
+
+                    default:
+                        Debug.LogWarning("TilemapRenderer: No tile mapped for character name '" + character.Name + "'");
+                        break;
+                }
+
+                Debug.Log("TilemapRenderer: Setting tile for " + character.Name + " at " + cellPos);
                 entityTilemap.SetTile(cellPos, tile);
             }
             else
             {
-                // Debug.Log($"TilemapRenderer: Clearing entity tile at {cellPos}");
                 entityTilemap.SetTile(cellPos, null);
             }
+
         }
 
         /// <summary>

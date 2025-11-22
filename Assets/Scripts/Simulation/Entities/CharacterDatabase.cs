@@ -5,6 +5,8 @@ using Undermarch.Simulation.Entities.Characters.Monsters;
 
 namespace Undermarch.Simulation.Entities
 {
+
+    // sound values are spawnSound, attackSound, hurtSound, deathSound
     public static class CharacterDatabase
     {
         // ==========================
@@ -28,7 +30,7 @@ namespace Undermarch.Simulation.Entities
             deathSound = "humanmalehurt",
         };
 
-        public static readonly Hero apprenticeMage = new Hero
+        public static readonly Hero apprenticeMage = new Hero //female mage, 
         {
             faction = Faction.Hero,
             strength = 7,
@@ -39,10 +41,12 @@ namespace Undermarch.Simulation.Entities
             charWeapon = ItemDatabase.apprenticeStaff,
             charArmor = ItemDatabase.apprenticeRobe,
             charHelmet = ItemDatabase.mysticCowl,
-            charAccessory = ItemDatabase.charmOfFocus
+            charAccessory = ItemDatabase.charmOfFocus,
+
+            deathSound = "humanfemalehurt"
         };
 
-        public static readonly Hero rogue = new Hero
+        public static readonly Hero rogue = new Hero //female rogue (use deeper voicelines)
         {
             faction = Faction.Hero,
             strength = 9,
@@ -53,7 +57,9 @@ namespace Undermarch.Simulation.Entities
             charWeapon = ItemDatabase.ironDagger,
             charArmor = ItemDatabase.leatherArmor,
             charHelmet = ItemDatabase.leatherCap,
-            charAccessory = ItemDatabase.luckyPendant
+            charAccessory = ItemDatabase.luckyPendant,
+            deathSound = "humanfemalehurt",
+            attackSound = "largehumanfemalegrunt"
         };
 
         // ==========================
@@ -62,7 +68,7 @@ namespace Undermarch.Simulation.Entities
 
         public static readonly Monster slimeMonster = new Monster
         {
-            Name = "Slime Monster",
+            Name = "Slime",
             faction = Faction.Defender,
             strength = 9,
             stamina = 8,
@@ -75,6 +81,20 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.cursedTalisman,
             spawnSound = "slimeonspawn",
             hurtSound = "slimeonspawn"
+        };
+        public static readonly Monster goblin1 = new Monster
+        {
+            Name = "Goblin",
+            faction = Faction.Defender,
+            strength = 8,
+            stamina = 5,
+            agility = 12,
+            intelligence = 3,
+            spirit = 3,
+            charWeapon = ItemDatabase.ironDagger,
+            charArmor = ItemDatabase.tatteredArmor,
+            charHelmet = ItemDatabase.crackedHelm,
+            charAccessory = ItemDatabase.cursedTalisman,
         };
 
         public static readonly Monster troll = new Monster
@@ -126,6 +146,7 @@ namespace Undermarch.Simulation.Entities
 
         public static readonly DungeonMaster dungeonMaster = new DungeonMaster
         {
+            Name = "DungeonMaster",
             faction = Faction.Defender,
             strength = 15,
             stamina = 20,

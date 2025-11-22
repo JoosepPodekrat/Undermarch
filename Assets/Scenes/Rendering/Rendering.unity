@@ -755,9 +755,22 @@ MonoBehaviour:
   groundTile: {fileID: 11400000, guid: 38eb825decbb73ec683e5580516bdcbf, type: 2}
   wallTile: {fileID: 11400000, guid: e9e14f14ec74b242cb2f6a80bb8a9964, type: 2}
   heroTile: {fileID: 11400000, guid: efeb382b4fabe161894c062a51e9bd4a, type: 2}
+  peasantTile: {fileID: 11400000, guid: efeb382b4fabe161894c062a51e9bd4a, type: 2}
+  sorceressTile: {fileID: 11400000, guid: efeb382b4fabe161894c062a51e9bd4a, type: 2}
+  rogueTile: {fileID: 11400000, guid: efeb382b4fabe161894c062a51e9bd4a, type: 2}
   monsterTile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
+  goblin1Tile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
+  goblin2Tile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
+  slimeTile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
+  archerTile: {fileID: 0}
   dungeonMasterTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
   trapTile: {fileID: 11400000, guid: 39e0253dda1af4c2b911d7d3b041ab4e, type: 2}
+  chestTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
+  arrowTile: {fileID: 0}
+  poisonCloudTile: {fileID: 0}
+  slowZoneTile: {fileID: 0}
+  fireZoneTile: {fileID: 0}
+  fogZoneTile: {fileID: 0}
 --- !u!1 &1802145946
 GameObject:
   m_ObjectHideFlags: 0

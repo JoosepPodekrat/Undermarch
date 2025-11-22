@@ -201,7 +201,6 @@ namespace Undermarch.Simulation.Entities
             copy.currentHP = copy.maxHP;
             copy.currentMana = copy.maxMana;
             copy.currentMorale = copy.maxMorale;
-            CharacterEvents.RaiseSpawn(copy);
 
             return copy;
         }
@@ -269,11 +268,7 @@ namespace Undermarch.Simulation.Entities
             {
                 currentHP = 0;
                 isDead = true;
-                CharacterEvents.RaiseDeath(this);
-            } else
-            {
-                CharacterEvents.RaiseHurt(this);
-            }
+            } 
             
             //TODO: Death
         }

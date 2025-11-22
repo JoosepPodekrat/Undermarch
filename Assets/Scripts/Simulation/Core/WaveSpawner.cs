@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Undermarch.Simulation.Entities;
+using Undermarch.Simulation.Events;
 using Undermarch.Simulation.Grid;
 
 namespace Undermarch.Simulation.Core
@@ -56,6 +57,7 @@ namespace Undermarch.Simulation.Core
                     foreach (var hero in wave.Heroes)
                     {
                         board.AddEntity(wave.SpawnPosition, hero);
+                        CharacterEvents.RaiseSpawn(hero);
                         spawnedHeroes.Add(hero);
                     }
 
