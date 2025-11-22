@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Undermarch;
 using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Effects.Buffs;
 using Undermarch.Simulation.Effects.Debuffs;
+using Undermarch.Simulation.Events;
 using Undermarch.Simulation.Grid;
-using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Interfaces;
 
 
@@ -70,6 +71,11 @@ namespace Undermarch.Simulation.Entities
 
         //debuffs
         public List<Debuff> debuffs = new();
+
+        public string spawnSound;
+        public string hurtSound;
+        public string attackSound;
+        public string deathSound;
 
         public void TickBuffsAndDebuffs()
         {
@@ -195,6 +201,7 @@ namespace Undermarch.Simulation.Entities
             copy.currentHP = copy.maxHP;
             copy.currentMana = copy.maxMana;
             copy.currentMorale = copy.maxMorale;
+            CharacterEvents.RaiseSpawn(copy);
 
             return copy;
         }
@@ -255,12 +262,17 @@ namespace Undermarch.Simulation.Entities
 
             // Apply damage to HP
             currentHP -= totalDamageTaken;
+            
 
             // Clamp at 0
             if (currentHP <= 0)
             {
                 currentHP = 0;
                 isDead = true;
+                CharacterEvents.RaiseDeath(this);
+            } else
+            {
+                CharacterEvents.RaiseHurt(this);
             }
             
             //TODO: Death

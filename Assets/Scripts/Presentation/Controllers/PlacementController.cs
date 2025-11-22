@@ -5,6 +5,7 @@ using Undermarch.Simulation.Grid;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Undermarch.Simulation.Interfaces;
+using UnityEditor.Experimental.GraphView;
 
 namespace Undermarch.Presentation.Controllers
 {
@@ -19,6 +20,7 @@ namespace Undermarch.Presentation.Controllers
         }
 
         private PlacementType _selectedType = PlacementType.None;
+   
 
         public void SelectSlime()
         {
@@ -48,6 +50,7 @@ namespace Undermarch.Presentation.Controllers
                 Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
                 Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
                 TilePos tilePos = new TilePos(Mathf.FloorToInt(mouseWorldPos.x), Mathf.FloorToInt(mouseWorldPos.y));
+
 
                 if (GameManager.Instance.Board.InBounds(tilePos) &&
                     !GameManager.Instance.Board.HasWallAt(tilePos) &&
@@ -105,10 +108,9 @@ namespace Undermarch.Presentation.Controllers
                     }
 
                     // Deselect after successful placement
-                    if (placed)
-                    {
-                        _selectedType = PlacementType.None;
-                    }
+                    // I don't think we want this behavior, makes you rechoose every time if you want the same defense again. I'll disable it for now
+                    // Need to make it so clicking on the UI doesn't try to place one down behind the UI - couldn't get it working properly.
+                    if (placed) { _selectedType = PlacementType.None;}
                 }
             }
         }

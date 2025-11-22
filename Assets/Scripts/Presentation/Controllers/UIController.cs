@@ -12,6 +12,7 @@ namespace Undermarch.Presentation.Controllers
             if (placementController != null)
             {
                 placementController.SelectSlime();
+
             }
         }
 
@@ -20,6 +21,7 @@ namespace Undermarch.Presentation.Controllers
             if (placementController != null)
             {
                 placementController.SelectSpikeTrap();
+
             }
         }
 

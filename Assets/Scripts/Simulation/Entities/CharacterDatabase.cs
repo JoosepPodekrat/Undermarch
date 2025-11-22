@@ -23,7 +23,9 @@ namespace Undermarch.Simulation.Entities
             charWeapon = ItemDatabase.ironSword,
             charArmor = ItemDatabase.chainmailArmor,
             charHelmet = ItemDatabase.ironHelmet,
-            charAccessory = ItemDatabase.ironRing
+            charAccessory = ItemDatabase.ironRing,
+            spawnSound = "humanMaleGrunt",
+            deathSound = "humanMaleHurt",
         };
 
         public static readonly Hero apprenticeMage = new Hero
@@ -70,7 +72,9 @@ namespace Undermarch.Simulation.Entities
             charWeapon = ItemDatabase.ironDagger,
             charArmor = ItemDatabase.tatteredArmor,
             charHelmet = ItemDatabase.crackedHelm,
-            charAccessory = ItemDatabase.cursedTalisman
+            charAccessory = ItemDatabase.cursedTalisman,
+            spawnSound = "slimeonspawn",
+            hurtSound = "slimeonspawn"
         };
 
         public static readonly Monster troll = new Monster
