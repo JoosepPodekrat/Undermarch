@@ -10,6 +10,7 @@ using Undermarch.Simulation.Levels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Undermarch.Simulation.Interfaces;
+using Undermarch.Presentation.UI.TickCounter;
 
 namespace Undermarch.Presentation.Managers
 {
@@ -20,6 +21,8 @@ namespace Undermarch.Presentation.Managers
 
         public Board Board { get; private set; }
         public TickSystem TickSystem { get; private set; }
+        public TickCounter TickCounter { get; private set; }
+
         public Simulation.Core.GameState GameState { get; private set; }
         public GamePhase CurrentPhase { get; private set; }
         public EndGameUI endGameUI;
@@ -46,10 +49,22 @@ namespace Undermarch.Presentation.Managers
 
             Debug.Log("GameManager initialized. Board and GameState created.");
         }
-
+        /* possible fix to tickdriver mess
+        * var driver = FindObjectOfType<Undermarch.Presentation.Bootstrap.TickDriver>();
+           if (driver != null)
+           {
+               InitializeTickDriver(driver);
+               Debug.Log("GameManager: TickDriver connected.");
+           }
+           else
+           {
+               Debug.LogError("GameManager: No TickDriver found in scene!");
+           }
+        */
         private void Start()
         {
             Debug.Log("GameManager: Start()");
+            
 
             // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
             List<TilePos> entrances;
@@ -63,6 +78,7 @@ namespace Undermarch.Presentation.Managers
 
             // Initialize TickSystem with new constructor
             TickSystem = new TickSystem(Board, GameState, ticksPerSecond: 2, waveSpawner);
+            TickCounter.Initialize(TickSystem);
             TickSystem.OnTick += HandleTick;
             TickSystem.Pause(); // Start paused in placement phase
             Debug.Log("GameManager: TickSystem initialized (2 TPS, paused).");

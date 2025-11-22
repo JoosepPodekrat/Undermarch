@@ -139,5 +139,51 @@ namespace Undermarch.Simulation.Grid
 
             return closestTarget;
         }
+        public TilePos FindNearestFreeTile(TilePos origin, int maxRadius = 10)
+        {
+            if (!InBounds(origin))
+                return TilePos.Invalid;
+
+            // If the origin tile is free, use it
+            if (GetEntityAt(origin) == null && !HasWallAt(origin))
+                return origin;
+
+            // BFS search (expanding ring)
+            Queue<TilePos> queue = new Queue<TilePos>();
+            HashSet<int> visited = new HashSet<int>();
+            queue.Enqueue(origin);
+            visited.Add(IndexOf(origin));
+
+            int[] dx = { 1, -1, 0, 0 };
+            int[] dy = { 0, 0, 1, -1 };
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+
+                for (int i = 0; i < 4; i++)
+                {
+                    var next = new TilePos(current.x + dx[i], current.y + dy[i]);
+                    if (!InBounds(next))
+                        continue;
+
+                    int idx = IndexOf(next);
+                    if (visited.Contains(idx))
+                        continue;
+
+                    visited.Add(idx);
+
+                    // Free tile = no entity + no wall
+                    if (GetEntityAt(next) == null && !HasWallAt(next))
+                        return next;
+
+                    queue.Enqueue(next);
+                }
+            }
+
+            // No free space found
+            return TilePos.Invalid;
+        }
+
     }
 }

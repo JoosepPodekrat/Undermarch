@@ -56,6 +56,9 @@ namespace Undermarch.Simulation.Core
                     // Spawn this wave
                     foreach (var hero in wave.Heroes)
                     {
+                        var pos = board.FindNearestFreeTile(wave.SpawnPosition);
+                        board.AddEntity(pos, hero);
+
                         board.AddEntity(wave.SpawnPosition, hero);
                         CharacterEvents.RaiseSpawn(hero);
                         spawnedHeroes.Add(hero);
