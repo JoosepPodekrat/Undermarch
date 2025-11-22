@@ -42,7 +42,7 @@ namespace Undermarch.Simulation.Levels
                 "###            #####",
                 "####          ######",
                 "########  ##########",
-                "######## E ##########",  // Entrance - heroes spawn here
+                "#######X  E#########",  // Entrance - heroes spawn here
                 "####################",
             };
 

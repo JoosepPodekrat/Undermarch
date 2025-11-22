@@ -42,6 +42,8 @@ namespace Undermarch.Presentation.Controllers
 
         private void Update()
         {
+            if (GameManager.Instance == null || GameManager.Instance.Board == null || GameManager.Instance.GameState == null)
+                return;
             if (GameManager.Instance.CurrentPhase != GamePhase.Placement) return;
             if (_selectedType == PlacementType.None) return;
 

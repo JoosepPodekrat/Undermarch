@@ -24,8 +24,8 @@ namespace Undermarch.Simulation.Entities
             charArmor = ItemDatabase.chainmailArmor,
             charHelmet = ItemDatabase.ironHelmet,
             charAccessory = ItemDatabase.ironRing,
-            spawnSound = "humanMaleGrunt",
-            deathSound = "humanMaleHurt",
+            spawnSound = "humanmalegrunt",
+            deathSound = "humanmalehurt",
         };
 
         public static readonly Hero apprenticeMage = new Hero

@@ -26,10 +26,32 @@ namespace Undermarch.Presentation.Controllers
                 s.source.pitch = s.pitch;
             }
         }
-        public void Play(string name) {
+        public void Play(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                Debug.LogWarning("AudioController.Play called with null or empty name.");
+                return;
+            }
+
             Sound s = Array.Find(sounds, sound => sound.name == name);
-            s.source.Play(); 
+
+            if (s == null)
+            {
+                Debug.LogWarning($"AudioController: Sound with name '{name}' not found in the sounds array!");
+                return;
+            }
+
+            if (s.source == null)
+            {
+                Debug.LogWarning($"AudioController: AudioSource for sound '{name}' is not initialized!");
+                return;
+            }
+
+            s.source.Play();
+            Debug.Log($"AudioController: Playing sound '{name}'");
         }
+
         private void OnEnable()
         {
             CharacterEvents.OnCharacterSpawned += HandleSpawn;
