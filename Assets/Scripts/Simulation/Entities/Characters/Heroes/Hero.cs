@@ -1,8 +1,11 @@
 using Undermarch.Simulation.Combat;
+using System.Collections.Generic;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Pathfinding;
 using Undermarch.Simulation.Interfaces;
+using Undermarch.Simulation.Core;
+using ResourceType = Undermarch.Simulation.Interfaces.ResourceType;
 
 namespace Undermarch.Simulation.Entities.Characters.Heroes
 {
@@ -10,51 +13,61 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
     {
         public int FleeThreshold = 20; // gold / healthPercent > threshold triggers flee
         public int CombatRange = 5; // Distance within which to prioritize combat
+        public Dictionary<ResourceType, int> ResourcesGiven { get; set; } = new();
 
         public override void Act(IBoard board)
+{
+    TilePos currentPos = board.GetPositionOf(this);
+
+    // Priority 1: Combat if enemy nearby
+    Character nearbyEnemy = FindNearbyEnemy(board, currentPos);
+    if (nearbyEnemy != null)
+    {
+        TilePos enemyPos = board.GetPositionOf(nearbyEnemy);
+
+        if (TilePos.ManhattanDistance(currentPos, enemyPos) == 1)
         {
-            TilePos currentPos = board.GetPositionOf(this);
-
-            // Priority 1: Combat if enemy nearby
-            Character nearbyEnemy = FindNearbyEnemy(board, currentPos);
-            if (nearbyEnemy != null)
-            {
-                TilePos enemyPos = board.GetPositionOf(nearbyEnemy);
-
-                // If adjacent, attack
-                if (TilePos.ManhattanDistance(currentPos, enemyPos) == 1)
-                {
-                    Attack(nearbyEnemy);
-                    return;
-                }
-
-                // Move toward enemy
-                var path = Pathfinder.FindPath(board, currentPos, enemyPos);
-                if (path != null && path.Count > 1)
-                {
-                    HandleMove(board, currentPos, path[1]);
-                }
-                return;
-            }
-
-            // Check flee conditions
-            if (ShouldFlee())
-            {
-                FleeToExit(board, currentPos);
-                return;
-            }
-
-            // Priority 2: Loot chests
-            Chest nearestChest = FindNearestUnlootedChest(board);
-            if (nearestChest != null)
-            {
-                MoveTowardAndLoot(board, currentPos, nearestChest);
-                return;
-            }
-
-            // Priority 3: Attack Dungeon Master
-            AttackDungeonMaster(board, currentPos);
+            Attack(nearbyEnemy);
+            return;
         }
+
+        var path = Pathfinder.FindPath(board, currentPos, enemyPos);
+        if (path != null && path.Count > 1)
+        {
+            HandleMove(board, currentPos, path[1]);
+        }
+        return;
+    }
+
+    // Skip flee if FleeThreshold is max (final wave)
+    if (ShouldFlee())
+    {
+        FleeToExit(board, currentPos);
+        return;
+    }
+
+    // Priority 2: Loot chests
+    Chest nearestChest = FindNearestUnlootedChest(board);
+    if (nearestChest != null)
+    {
+        MoveTowardAndLoot(board, currentPos, nearestChest);
+        return;
+    }
+
+    // Priority 3: Attack Dungeon Master
+    AttackDungeonMaster(board, currentPos);
+}
+
+private bool ShouldFlee()
+{
+    if (FleeThreshold == int.MaxValue) return false; // never flee for final wave
+
+    float healthPercent = (float)currentHP / maxHP;
+    if (healthPercent <= 0) healthPercent = 0.01f;
+    float lootToHealthRatio = gold / healthPercent;
+    return lootToHealthRatio > FleeThreshold;
+}
+
 
         private Character FindNearbyEnemy(IBoard board, TilePos currentPos)
         {
@@ -71,14 +84,6 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             return null;
         }
 
-        private bool ShouldFlee()
-        {
-            float healthPercent = (float)currentHP / maxHP;
-            if (healthPercent <= 0) healthPercent = 0.01f; // Avoid division by zero
-
-            float lootToHealthRatio = gold / healthPercent;
-            return lootToHealthRatio > FleeThreshold;
-        }
 
         private void FleeToExit(IBoard board, TilePos currentPos)
         {

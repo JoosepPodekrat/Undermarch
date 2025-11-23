@@ -1,7 +1,16 @@
 using System.Collections.Generic;
+using System.Linq;
+
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Interfaces;
+using Undermarch.Simulation.Combat;
+using Undermarch.Simulation.Entities.Characters.DungeonMaster;
+using Undermarch.Simulation.Entities.Characters.Heroes;
+
+using Undermarch.Simulation.Core;
+
+
 
 namespace Undermarch.Simulation.Core
 {
@@ -167,59 +176,62 @@ namespace Undermarch.Simulation.Core
         }
 
         private void CleanupPhase()
+{
+    List<Character> deadCharacters = new List<Character>();
+
+    foreach (var character in board.GetAllCharacters())
+    {
+        if (character.IsDead || character.currentHP <= 0)
         {
-            // Remove dead characters
-            List<Character> deadCharacters = new List<Character>();
+            deadCharacters.Add(character);
 
-            foreach (var character in board.GetAllCharacters())
-            {
-                if (character.IsDead || character.currentHP <= 0)
-                {
-                    deadCharacters.Add(character);
-                }
-            }
+            // Give gold to Dungeon Master
+            if (character is Hero hero)
+{
+    foreach (var kvp in hero.ResourcesGiven)
+    {
+        gameState.AddResource(kvp.Key, kvp.Value);
+    }
+}
 
-            foreach (var dead in deadCharacters)
-            {
-                TilePos pos = board.GetPositionOf(dead);
-                if (pos.IsValid())
-                {
-                    board.RemoveEntity(pos);
-                    SimulationLog.Log($"{dead.Name} has been removed from the board.");
-                }
-            }
         }
+    }
+
+    foreach (var dead in deadCharacters)
+    {
+        TilePos pos = board.GetPositionOf(dead);
+        if (pos.IsValid())
+        {
+            board.RemoveEntity(pos);
+            SimulationLog.Log($"{dead.Name} has been removed from the board.");
+        }
+    }
+}
+
 
         private void CheckGameOver()
         {
-            bool anyHeroesAlive = false;
-            bool dungeonMasterAlive = false;
+            bool anyHeroesAlive = board.GetAllCharacters().Any(c => c.faction == Faction.Hero && !c.IsDead);
+            bool dungeonMasterAlive = board.GetAllCharacters().Any(c => c is DungeonMaster && !c.IsDead);
 
-            foreach (var character in board.GetAllCharacters())
-            {
-                if (character.faction == Combat.Faction.Hero)
-                {
-                    anyHeroesAlive = true;
-                }
-
-                if (character is Entities.Characters.DungeonMaster.DungeonMaster)
-                {
-                    dungeonMasterAlive = true;
-                }
-            }
-
-            if (!anyHeroesAlive)
-            {
-                gameState.Phase = GamePhase.GameOver;
-                Mode = TickMode.Paused;
-                SimulationLog.Log("Victory! All heroes defeated!");
-            }
-            else if (!dungeonMasterAlive)
+            // Defeat
+            if (!dungeonMasterAlive)
             {
                 gameState.Phase = GamePhase.GameOver;
                 Mode = TickMode.Paused;
                 SimulationLog.Log("Defeat! The Dungeon Master has fallen!");
+                return;
+            }
+
+            // Victory: all waves spawned AND no heroes alive
+            if (waveSpawner.AllWavesSpawned && !anyHeroesAlive)
+            {
+                gameState.Phase = GamePhase.GameOver;
+                Mode = TickMode.Paused;
+                SimulationLog.Log("Victory! All heroes defeated!");
+                return;
             }
         }
+
     }
 }

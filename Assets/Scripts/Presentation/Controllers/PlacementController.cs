@@ -44,7 +44,9 @@ namespace Undermarch.Presentation.Controllers
         {
             if (GameManager.Instance == null || GameManager.Instance.Board == null || GameManager.Instance.GameState == null)
                 return;
-            if (GameManager.Instance.CurrentPhase != GamePhase.Placement) return;
+            if (GameManager.Instance.CurrentPhase != GamePhase.Placement &&
+                GameManager.Instance.CurrentPhase != GamePhase.Combat) return;
+
             if (_selectedType == PlacementType.None) return;
 
             if (Mouse.current.leftButton.wasPressedThisFrame)

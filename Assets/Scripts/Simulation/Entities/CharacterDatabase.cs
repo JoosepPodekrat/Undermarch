@@ -1,7 +1,11 @@
+using System.Collections.Generic;
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Entities.Characters.DungeonMaster;
 using Undermarch.Simulation.Entities.Characters.Heroes;
 using Undermarch.Simulation.Entities.Characters.Monsters;
+using Undermarch.Simulation.Core;
+using ResourceType = Undermarch.Simulation.Interfaces.ResourceType;
+
 
 namespace Undermarch.Simulation.Entities
 {
@@ -28,6 +32,7 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.ironRing,
             spawnSound = "humanmalegrunt",
             deathSound = "humanmalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 30 } } // reward 5 gold
         };
 
         public static readonly Hero apprenticeMage = new Hero //female mage, 
@@ -43,7 +48,8 @@ namespace Undermarch.Simulation.Entities
             charHelmet = ItemDatabase.mysticCowl,
             charAccessory = ItemDatabase.charmOfFocus,
 
-            deathSound = "humanfemalehurt"
+            deathSound = "humanfemalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 50 } } // reward 15 gold
         };
 
         public static readonly Hero rogue = new Hero //female rogue (use deeper voicelines)
@@ -59,7 +65,8 @@ namespace Undermarch.Simulation.Entities
             charHelmet = ItemDatabase.leatherCap,
             charAccessory = ItemDatabase.luckyPendant,
             deathSound = "humanfemalehurt",
-            attackSound = "largehumanfemalegrunt"
+            attackSound = "largehumanfemalegrunt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 120 } } // reward 20 gold
         };
 
         // ==========================

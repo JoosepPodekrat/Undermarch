@@ -2,8 +2,14 @@ using System.Collections.Generic;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Events;
 using Undermarch.Simulation.Grid;
+using Undermarch.Simulation.Entities.Characters.Heroes;
+using Undermarch.Simulation.Core;
+using ResourceType = Undermarch.Simulation.Interfaces.ResourceType;
+
+
 
 namespace Undermarch.Simulation.Core
+
 {
     public class HeroParty
     {
@@ -43,44 +49,43 @@ namespace Undermarch.Simulation.Core
             scheduledWaves.Add(party);
         }
 
-        public List<Character> CheckSpawn(int currentTick, Board board)
+       public List<Character> CheckSpawn(int currentTick, Board board)
+{
+    List<Character> spawnedHeroes = new List<Character>();
+
+    while (currentWaveIndex < scheduledWaves.Count)
+    {
+        HeroParty wave = scheduledWaves[currentWaveIndex];
+
+        if (currentTick >= wave.SpawnTick)
         {
-            List<Character> spawnedHeroes = new List<Character>();
-
-            while (currentWaveIndex < scheduledWaves.Count)
+            foreach (var hero in wave.Heroes)
             {
-                HeroParty wave = scheduledWaves[currentWaveIndex];
-
-                if (currentTick >= wave.SpawnTick)
+                // Final wave heroes never flee
+                if (wave.IsFinalWave && hero is Hero h)
                 {
-                    // Spawn this wave
-                    foreach (var hero in wave.Heroes)
-                    {
-                        var pos = board.FindNearestFreeTile(wave.SpawnPosition);
-                        board.AddEntity(pos, hero);
-
-                        board.AddEntity(wave.SpawnPosition, hero);
-                        CharacterEvents.RaiseSpawn(hero);
-                        spawnedHeroes.Add(hero);
-                    }
-
-                    SimulationLog.Log($"Wave {currentWaveIndex + 1} spawned: {wave.Heroes.Count} heroes at {wave.SpawnPosition}");
-
-                    if (wave.IsFinalWave)
-                    {
-                        SimulationLog.Log("FINAL WAVE! These heroes will not flee!");
-                    }
-
-                    currentWaveIndex++;
+                    h.FleeThreshold = int.MaxValue;
                 }
-                else
-                {
-                    break; // Haven't reached this wave's spawn time yet
-                }
+
+                var pos = board.FindNearestFreeTile(wave.SpawnPosition);
+                board.AddEntity(pos, hero);
+                CharacterEvents.RaiseSpawn(hero);
+                spawnedHeroes.Add(hero);
             }
 
-            return spawnedHeroes;
+            SimulationLog.Log($"Wave {currentWaveIndex + 1} spawned: {wave.Heroes.Count} heroes at {wave.SpawnPosition}");
+
+            currentWaveIndex++;
         }
+        else
+        {
+            break;
+        }
+    }
+
+    return spawnedHeroes;
+}
+
 
         public void Reset()
         {

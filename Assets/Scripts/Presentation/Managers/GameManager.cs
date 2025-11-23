@@ -32,6 +32,8 @@ namespace Undermarch.Presentation.Managers
         public TickControlUI tickControlUI;
 
         private WaveSpawner waveSpawner;
+        public bool CanBuild => CurrentPhase == GamePhase.Placement || CurrentPhase == GamePhase.Combat;
+
 
         private void Awake()
         {
@@ -45,7 +47,7 @@ namespace Undermarch.Presentation.Managers
             Debug.Log("GameManager: Awake() - Phase: Placement");
 
             Board = new Board(20, 20);
-            GameState = new Simulation.Core.GameState(startingGold: 200);
+            GameState = new Simulation.Core.GameState(startingGold: 400);
 
             Debug.Log("GameManager initialized. Board and GameState created.");
         }
@@ -78,10 +80,28 @@ namespace Undermarch.Presentation.Managers
 
             // Initialize TickSystem with new constructor
             TickSystem = new TickSystem(Board, GameState, ticksPerSecond: 2, waveSpawner);
-            TickCounter.Initialize(TickSystem);
+            TickCounter = FindObjectOfType<TickCounter>();   // ← FIX
+            if (TickCounter == null)
+            {
+                Debug.LogError("GameManager: No TickCounter found in scene!");
+            }
+            else
+            {
+                TickCounter.Initialize(TickSystem);
+            }
             TickSystem.OnTick += HandleTick;
             TickSystem.Pause(); // Start paused in placement phase
             Debug.Log("GameManager: TickSystem initialized (2 TPS, paused).");
+            var driver = FindObjectOfType<Undermarch.Presentation.Bootstrap.TickDriver>();
+            if (driver != null)
+            {
+                InitializeTickDriver(driver);
+                Debug.Log("GameManager: TickDriver connected.");
+            }
+            else
+            {
+                Debug.LogError("GameManager: No TickDriver found in scene!");
+            }
 
             // Initialize UI components if assigned
             if (resourceDisplay != null)
@@ -105,15 +125,15 @@ namespace Undermarch.Presentation.Managers
         }
 
         public void StartCombat()
-        {
-            if (CurrentPhase == GamePhase.Placement)
-            {
-                CurrentPhase = GamePhase.Combat;
-                GameState.Phase = GamePhase.Combat;
-                TickSystem.Resume(); // Start ticking - waves will spawn automatically
-                Debug.Log("GameManager: StartCombat() - Phase: Combat, waves will spawn automatically");
-            }
-        }
+{
+    if (CurrentPhase == GamePhase.Placement)
+    {
+        CurrentPhase = GamePhase.Combat;
+        GameState.Phase = GamePhase.Combat;
+        TickSystem.Resume();
+        Debug.Log("Combat started. You can now build during combat.");
+    }
+}
 
         public void RestartGame()
         {

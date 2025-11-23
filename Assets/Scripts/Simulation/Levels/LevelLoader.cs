@@ -85,51 +85,48 @@ namespace Undermarch.Simulation.Levels
         /// Creates a wave schedule with spawn events triggered after placement.
         /// </summary>
         public static WaveSpawner CreateWaveSchedule(List<TilePos> entrances)
+{
+    WaveSpawner spawner = new WaveSpawner();
+    TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+
+    void ScheduleHeroWave(List<Character> heroes, int spawnTick)
+    {
+        var clonedHeroes = new List<Character>();
+        foreach (var hero in heroes)
         {
-            WaveSpawner spawner = new WaveSpawner();
-            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-
-            void ScheduleHeroWave(List<Character> heroes, int spawnTick)
-            {
-                // Clone heroes and raise spawn after placement
-                var clonedHeroes = new List<Character>();
-                foreach (var hero in heroes)
-                {
-                    var c = hero.Clone();
-                    clonedHeroes.Add(c);
-                }
-
-                var party = new HeroParty(clonedHeroes, spawnTick, entrance);
-                spawner.ScheduleWave(party);
-
-                // Spawn event will be raised when the wave actually spawns in-game
-            }
-
-            // Schedule waves
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant }, 0);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant }, 60);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue }, 120);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.peasant }, 180);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, 240);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage }, 300);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 360);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 420);
-
-            // Final wave: set FleeThreshold
-            var finalHeroes = new List<Character> {
-                CharacterDatabase.rogue.Clone(),
-                CharacterDatabase.rogue.Clone(),
-                CharacterDatabase.apprenticeMage.Clone(),
-                CharacterDatabase.peasant.Clone()
-            };
-            foreach (var hero in finalHeroes)
-            {
-                if (hero is Entities.Characters.Heroes.Hero h)
-                    h.FleeThreshold = 999999;
-            }
-            ScheduleHeroWave(finalHeroes, 480);
-
-            return spawner;
+            clonedHeroes.Add(hero.Clone());
         }
+        var party = new HeroParty(clonedHeroes, spawnTick, entrance);
+        spawner.ScheduleWave(party);
+    }
+
+    // 9 waves, spaced ~65 ticks apart (~32.5 seconds per wave)
+    int tickInterval = 65;
+
+    ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant }, 0);
+ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant }, 120); // was 60
+ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue }, 240); // was 120
+ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.peasant }, 360); // was 180
+ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, 480); // was 240
+ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage }, 600); // was 300
+ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 720); // was 360
+ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 840); // was 420
+
+var finalHeroes = new List<Character> {
+    CharacterDatabase.rogue.Clone(),
+    CharacterDatabase.rogue.Clone(),
+    CharacterDatabase.apprenticeMage.Clone(),
+    CharacterDatabase.peasant.Clone()
+};
+foreach (var hero in finalHeroes)
+{
+    if (hero is Entities.Characters.Heroes.Hero h)
+        h.FleeThreshold = 999999;
+}
+ScheduleHeroWave(finalHeroes, 960); // was 480
+
+    return spawner;
+}
+
     }
 }
