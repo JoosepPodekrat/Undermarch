@@ -9,56 +9,179 @@ using ResourceType = Undermarch.Simulation.Interfaces.ResourceType;
 
 namespace Undermarch.Simulation.Entities.Characters.Heroes
 {
+    public enum HeroState
+    {
+        Idle,
+        MovingToChest,
+        LootingChest,
+        MovingToDungeonMaster,
+        Fighting
+    }
+
+
     public class Hero : Character
     {
+        private HeroState state = HeroState.Idle;
+        private TilePos? currentTarget = null;
+        private List<TilePos> currentPath = null;
+
+
         public int FleeThreshold = 20; // gold / healthPercent > threshold triggers flee
         public int CombatRange = 5; // Distance within which to prioritize combat
         public Dictionary<ResourceType, int> ResourcesGiven { get; set; } = new();
 
         public override void Act(IBoard board)
-{
-    TilePos currentPos = board.GetPositionOf(this);
-
-    // Priority 1: Combat if enemy nearby
-    Character nearbyEnemy = FindNearbyEnemy(board, currentPos);
-    if (nearbyEnemy != null)
-    {
-        TilePos enemyPos = board.GetPositionOf(nearbyEnemy);
-
-        if (TilePos.ManhattanDistance(currentPos, enemyPos) == 1)
         {
-            Attack(nearbyEnemy);
-            return;
+            TilePos currentPos = board.GetPositionOf(this);
+
+            // 1. Combat interrupt (always highest priority)
+            Character nearbyEnemy = FindNearbyEnemy(board, currentPos);
+            if (nearbyEnemy != null)
+            {
+                state = HeroState.Fighting;
+
+                TilePos enemyPos = board.GetPositionOf(nearbyEnemy);
+
+                if (TilePos.ManhattanDistance(currentPos, enemyPos) == 1)
+                {
+                    Attack(nearbyEnemy);
+                    return;
+                }
+
+                var path = Pathfinder.FindPath(board, currentPos, enemyPos);
+                if (path != null && path.Count > 1)
+                    HandleMove(board, currentPos, path[1]);
+
+                return;
+            }
+
+            // If we were fighting but combat is over, resume previous task
+            if (state == HeroState.Fighting)
+            {
+                state = HeroState.Idle;
+                currentPath = null;
+                currentTarget = null;
+            }
+
+            // 2. Flee if needed
+            if (ShouldFlee())
+            {
+                FleeToExit(board, currentPos);
+                return;
+            }
+
+            // 3. Handle chest or dungeon master depending on state
+            switch (state)
+            {
+                case HeroState.Idle:
+                    SelectNewTask(board, currentPos);
+                    break;
+
+                case HeroState.MovingToChest:
+                    ContinueChestMovement(board, currentPos);
+                    break;
+
+                case HeroState.MovingToDungeonMaster:
+                    ContinueDungeonMasterMovement(board, currentPos);
+                    break;
+            }
+        }
+        private void SelectNewTask(IBoard board, TilePos currentPos)
+        {
+            Chest chest = FindNearestUnlootedChest(board);
+            if (chest != null)
+            {
+                state = HeroState.MovingToChest;
+                currentTarget = chest.Position;
+                currentPath = Pathfinder.FindPath(board, currentPos, chest.Position);
+                return;
+            }
+
+            // No chests? Go DM.
+            Character dm = FindDungeonMaster(board);
+            if (dm != null)
+            {
+                state = HeroState.MovingToDungeonMaster;
+                currentTarget = board.GetPositionOf(dm);
+                currentPath = Pathfinder.FindPath(board, currentPos, (TilePos)currentTarget);
+            }
+        }
+        private void ContinueChestMovement(IBoard board, TilePos currentPos)
+        {
+            if (currentTarget == null)
+            {
+                state = HeroState.Idle;
+                return;
+            }
+
+            // Already at chest?
+            if (currentPos.Equals(currentTarget.Value))
+            {
+                Chest chest = board.GetInteractableAt(currentTarget.Value) as Chest;
+                if (chest != null && !chest.Looted)
+                    chest.Interact(this);
+
+                state = HeroState.Idle;
+                currentPath = null;
+                currentTarget = null;
+                return;
+            }
+
+            // Need new path?
+            if (currentPath == null || currentPath.Count < 2)
+            {
+                currentPath = Pathfinder.FindPath(board, currentPos, currentTarget.Value);
+                if (currentPath == null)
+                {
+                    state = HeroState.Idle;
+                    return;
+                }
+            }
+
+            HandleMove(board, currentPos, currentPath[1]);
+            currentPath.RemoveAt(0);
+        }
+        private DungeonMaster.DungeonMaster FindDungeonMaster(IBoard board)
+        {
+            foreach (var character in board.GetAllCharacters())
+            {
+                if (character is DungeonMaster.DungeonMaster dm)
+                    return dm;
+            }
+            return null;
         }
 
-        var path = Pathfinder.FindPath(board, currentPos, enemyPos);
-        if (path != null && path.Count > 1)
+        private void ContinueDungeonMasterMovement(IBoard board, TilePos currentPos)
         {
-            HandleMove(board, currentPos, path[1]);
+            if (currentTarget == null)
+            {
+                state = HeroState.Idle;
+                return;
+            }
+
+            if (currentPos.Equals(currentTarget.Value))
+            {
+                state = HeroState.Idle;
+                return;
+            }
+
+            if (currentPath == null || currentPath.Count < 2)
+                currentPath = Pathfinder.FindPath(board, currentPos, currentTarget.Value);
+
+            if (currentPath == null)
+            {
+                state = HeroState.Idle;
+                return;
+            }
+
+            HandleMove(board, currentPos, currentPath[1]);
+            currentPath.RemoveAt(0);
         }
-        return;
-    }
 
-    // Skip flee if FleeThreshold is max (final wave)
-    if (ShouldFlee())
-    {
-        FleeToExit(board, currentPos);
-        return;
-    }
 
-    // Priority 2: Loot chests
-    Chest nearestChest = FindNearestUnlootedChest(board);
-    if (nearestChest != null)
-    {
-        MoveTowardAndLoot(board, currentPos, nearestChest);
-        return;
-    }
 
-    // Priority 3: Attack Dungeon Master
-    AttackDungeonMaster(board, currentPos);
-}
 
-private bool ShouldFlee()
+        private bool ShouldFlee()
 {
     if (FleeThreshold == int.MaxValue) return false; // never flee for final wave
 
