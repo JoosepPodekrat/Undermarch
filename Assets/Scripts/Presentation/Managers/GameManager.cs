@@ -93,6 +93,16 @@ namespace Undermarch.Presentation.Managers
             // Setup Camera
             AdjustAllCameras();
 
+            // Add Camera Controller to GameManager (persistent object)
+            if (gameObject.GetComponent<CameraController>() == null)
+            {
+                gameObject.AddComponent<CameraController>();
+                Debug.Log("GameManager: CameraController added to GameManager.");
+            }
+
+            // Create Background
+            CreateBackground();
+
             // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
             List<TilePos> entrances;
             List<TilePos> chestPositions;
@@ -149,10 +159,25 @@ namespace Undermarch.Presentation.Managers
             }
         }
 
+        private void CreateBackground()
+        {
+             GameObject bg = new GameObject("Background");
+             bg.transform.position = new Vector3(0, 0, 10); // Behind board
+             var sr = bg.AddComponent<SpriteRenderer>();
+             
+             // Create a simple texture
+             Texture2D tex = new Texture2D(1, 1);
+             tex.SetPixel(0, 0, new Color(0.15f, 0.15f, 0.2f)); // Dark Blue/Grey
+             tex.Apply();
+             
+             sr.sprite = Sprite.Create(tex, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f));
+             bg.transform.localScale = new Vector3(100, 100, 1);
+        }
+
         private void LateUpdate()
         {
             // Continuously adjust camera to handle screen resize or scene loads
-            AdjustAllCameras();
+            // AdjustAllCameras(); // Disabled to allow manual camera control
         }
 
         private void AdjustAllCameras()

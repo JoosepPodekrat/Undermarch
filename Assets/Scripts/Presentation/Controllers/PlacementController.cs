@@ -69,93 +69,98 @@ namespace Undermarch.Presentation.Controllers
 
             if (_selectedType == PlacementType.None) return;
 
+            if (Camera.main == null) return;
+
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
-                
-                // Adjust for visual offset (centered board)
-                int boardWidth = GameManager.Instance.Board.Width;
-                int boardHeight = GameManager.Instance.Board.Height;
-                TilePos tilePos = new TilePos(
-                    Mathf.FloorToInt(mouseWorldPos.x + boardWidth / 2f), 
-                    Mathf.FloorToInt(mouseWorldPos.y + boardHeight / 2f)
-                );
+                // Use Plane Raycast for robust world position finding regardless of Camera Z/Rotation
+                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                Plane boardPlane = new Plane(Vector3.back, Vector3.zero); // Plane at Z=0 facing Camera
 
-                Debug.Log($"PlacementController: Click at Screen {mouseScreenPos}, World {mouseWorldPos}, Tile {tilePos}");
-
-                if (GameManager.Instance.Board.InBounds(tilePos))
+                if (boardPlane.Raycast(ray, out float enter))
                 {
-                    bool hasWall = GameManager.Instance.Board.HasWallAt(tilePos);
-                    var entity = GameManager.Instance.Board.GetEntityAt(tilePos);
-                    var interactable = GameManager.Instance.Board.GetInteractableAt(tilePos);
+                    Vector3 mouseWorldPos = ray.GetPoint(enter);
 
-                    if (!hasWall && entity == null && interactable == null)
+                    // Adjust for visual offset (centered board)
+                    int boardWidth = GameManager.Instance.Board.Width;
+                    int boardHeight = GameManager.Instance.Board.Height;
+                    TilePos tilePos = new TilePos(
+                        Mathf.FloorToInt(mouseWorldPos.x + boardWidth / 2f), 
+                        Mathf.FloorToInt(mouseWorldPos.y + boardHeight / 2f)
+                    );
+
+                    Debug.Log($"PlacementController: Click at World {mouseWorldPos}, Tile {tilePos}");
+
+                    if (GameManager.Instance.Board.InBounds(tilePos))
                     {
-                        Debug.Log($"PlacementController: Valid tile {tilePos}. Attempting to place {_selectedType}");
-                        // Check cost and place entity
-                        bool placed = false;
+                        bool hasWall = GameManager.Instance.Board.HasWallAt(tilePos);
+                        var entity = GameManager.Instance.Board.GetEntityAt(tilePos);
+                        var interactable = GameManager.Instance.Board.GetInteractableAt(tilePos);
 
-                        switch (_selectedType)
-                    {
-                        case PlacementType.Slime:
-                            if (GameManager.Instance.GameState.CanAfford(50))
-                            {
-                                var slime = CharacterDatabase.slimeMonster.Clone();
-                                GameManager.Instance.Board.AddEntity(tilePos, slime);
-                                GameManager.Instance.GameState.SpendGold(50);
-                                Debug.Log($"Placed Slime at {tilePos.x},{tilePos.y} for 50 gold");
-                                placed = true;
-                            }
-                            else
-                            {
-                                Debug.Log("Not enough gold to place Slime (need 50)!");
-                            }
-                            break;
+                        if (!hasWall && entity == null && interactable == null)
+                        {
+                            Debug.Log($"PlacementController: Valid tile {tilePos}. Attempting to place {_selectedType}");
+                            // Check cost and place entity
+                            bool placed = false;
 
-                        case PlacementType.Archer:
-                            if (GameManager.Instance.GameState.CanAfford(80))
+                            switch (_selectedType)
                             {
-                                var archer = CharacterDatabase.archerMonster.Clone();
-                                GameManager.Instance.Board.AddEntity(tilePos, archer);
-                                GameManager.Instance.GameState.SpendGold(80);
-                                Debug.Log($"Placed Archer at {tilePos.x},{tilePos.y} for 80 gold");
-                                placed = true;
-                            }
-                            else
-                            {
-                                Debug.Log("Not enough gold to place Archer (need 80)!");
-                            }
-                            break;
+                                case PlacementType.Slime:
+                                    if (GameManager.Instance.GameState.CanAfford(50))
+                                    {
+                                        var slime = CharacterDatabase.slimeMonster.Clone();
+                                        GameManager.Instance.Board.AddEntity(tilePos, slime);
+                                        GameManager.Instance.GameState.SpendGold(50);
+                                        Debug.Log($"Placed Slime at {tilePos.x},{tilePos.y} for 50 gold");
+                                        placed = true;
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("Not enough gold to place Slime (need 50)!");
+                                    }
+                                    break;
 
-                        case PlacementType.SpikeTrap:
-                            if (GameManager.Instance.GameState.CanAfford(30))
-                            {
-                                GameManager.Instance.Board.AddInteractable(tilePos, new SpikeTrap());
-                                GameManager.Instance.GameState.SpendGold(30);
-                                Debug.Log($"Placed Spike Trap at {tilePos.x},{tilePos.y} for 30 gold");
-                                placed = true;
-                            }
-                            else
-                            {
-                                Debug.Log("Not enough gold to place Spike Trap (need 30)!");
-                            }
-                            break;
-                    }
+                                case PlacementType.Archer:
+                                    if (GameManager.Instance.GameState.CanAfford(80))
+                                    {
+                                        var archer = CharacterDatabase.archerMonster.Clone();
+                                        GameManager.Instance.Board.AddEntity(tilePos, archer);
+                                        GameManager.Instance.GameState.SpendGold(80);
+                                        Debug.Log($"Placed Archer at {tilePos.x},{tilePos.y} for 80 gold");
+                                        placed = true;
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("Not enough gold to place Archer (need 80)!");
+                                    }
+                                    break;
 
-                    // Deselect after successful placement
-                    // I don't think we want this behavior, makes you rechoose every time if you want the same defense again. I'll disable it for now
-                    // Need to make it so clicking on the UI doesn't try to place one down behind the UI - couldn't get it working properly.
-                    if (placed) { _selectedType = PlacementType.None;}
+                                case PlacementType.SpikeTrap:
+                                    if (GameManager.Instance.GameState.CanAfford(30))
+                                    {
+                                        GameManager.Instance.Board.AddInteractable(tilePos, new SpikeTrap());
+                                        GameManager.Instance.GameState.SpendGold(30);
+                                        Debug.Log($"Placed Spike Trap at {tilePos.x},{tilePos.y} for 30 gold");
+                                        placed = true;
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("Not enough gold to place Spike Trap (need 30)!");
+                                    }
+                                    break;
+                            }
+
+                            if (placed) { _selectedType = PlacementType.None; }
+                        }
+                        else
+                        {
+                            Debug.Log($"PlacementController: Invalid tile {tilePos}. Wall: {hasWall}, Entity: {entity}, Interactable: {interactable}");
+                        }
                     }
                     else
                     {
-                         Debug.Log($"PlacementController: Invalid tile {tilePos}. Wall: {hasWall}, Entity: {entity}, Interactable: {interactable}");
+                        Debug.Log($"PlacementController: Click out of bounds {tilePos}");
                     }
-                }
-                else
-                {
-                    Debug.Log($"PlacementController: Click out of bounds {tilePos}");
                 }
             }
         }

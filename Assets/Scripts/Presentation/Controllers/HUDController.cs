@@ -481,6 +481,8 @@ namespace Undermarch.Presentation.Controllers
             obj.transform.SetParent(parent, false);
             
             TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
+            // FIX: Assign a default font to prevent exceptions if no default is set in the project.
+            tmp.font = Resources.GetBuiltinResource<TMP_FontAsset>("LegacyRuntime.ttf");
             tmp.text = content;
             tmp.fontSize = fontSize;
             tmp.color = color;
