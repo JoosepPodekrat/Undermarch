@@ -14,7 +14,7 @@ namespace Undermarch.Presentation.Controllers
         [Header("Top HUD")]
         public TextMeshProUGUI coinText;
         public TextMeshProUGUI turnIndicatorText;
-        public Image turnIndicatorImage; // Optional: Change color
+        public Image turnIndicatorImage;
         public Button settingsButton;
         public Button levelSelectButton;
         public Button startCombatButton;
@@ -31,76 +31,200 @@ namespace Undermarch.Presentation.Controllers
 
         private void Awake()
         {
-            // Ensure EventSystem exists
-            if (FindObjectOfType<EventSystem>() == null)
+            Debug.Log("HUDController: Awake started.");
+
+            // 1. EventSystem Check
+            var eventSystem = FindObjectOfType<EventSystem>();
+            if (eventSystem == null)
             {
-                var eventSystem = new GameObject("EventSystem");
-                eventSystem.AddComponent<EventSystem>();
-                eventSystem.AddComponent<InputSystemUIInputModule>();
+                Debug.Log("HUDController: No EventSystem found. Creating one.");
+                var eventSystemObj = new GameObject("EventSystem");
+                eventSystemObj.AddComponent<EventSystem>();
+                eventSystemObj.AddComponent<InputSystemUIInputModule>();
+            }
+            else
+            {
+                Debug.Log($"HUDController: Found existing EventSystem on {eventSystem.gameObject.name}");
             }
 
-            // Ensure HUD exists
-            if (transform.Find("TopHUD") == null || transform.Find("BottomHUD") == null)
+            // 2. HUD Structure Check
+            // Ensure GraphicRaycaster exists regardless of rebuild state
+            if (GetComponent<GraphicRaycaster>() == null)
             {
+                Debug.Log("HUDController: GraphicRaycaster missing. Adding one.");
+                gameObject.AddComponent<GraphicRaycaster>();
+            }
+
+            bool rebuildNeeded = false;
+            if (transform.Find("TopHUD") == null)
+            {
+                Debug.Log("HUDController: TopHUD missing.");
+                rebuildNeeded = true;
+            }
+            if (transform.Find("BottomHUD") == null)
+            {
+                Debug.Log("HUDController: BottomHUD missing.");
+                rebuildNeeded = true;
+            }
+            
+            // Check deep children if parents exist
+            if (!rebuildNeeded)
+            {
+                if (transform.Find("BottomHUD/PlaceSlimeButton") == null)
+                {
+                    Debug.Log("HUDController: PlaceSlimeButton missing.");
+                    rebuildNeeded = true;
+                }
+                if (transform.Find("BottomHUD/PlaceTrapButton") == null)
+                {
+                    Debug.Log("HUDController: PlaceTrapButton missing.");
+                    rebuildNeeded = true;
+                }
+            }
+
+            if (rebuildNeeded)
+            {
+                Debug.Log("HUDController: Rebuilding HUD structure...");
                 BuildHUD();
             }
+            else
+            {
+                Debug.Log("HUDController: Existing HUD structure seems valid.");
+            }
 
-            // Auto-find references if missing
-            // Top HUD
-            if (coinText == null) coinText = transform.Find("TopHUD/InfoPanel/CoinText")?.GetComponent<TextMeshProUGUI>();
-            if (turnIndicatorText == null) turnIndicatorText = transform.Find("TopHUD/InfoPanel/TurnIndicatorText")?.GetComponent<TextMeshProUGUI>();
-            if (settingsButton == null) settingsButton = transform.Find("TopHUD/SettingsButton")?.GetComponent<Button>();
-            if (levelSelectButton == null) levelSelectButton = transform.Find("TopHUD/LevelSelectButton")?.GetComponent<Button>();
-            if (startCombatButton == null) startCombatButton = transform.Find("TopHUD/StartWaveButton")?.GetComponent<Button>();
-            if (pauseButton == null) pauseButton = transform.Find("TopHUD/PauseButton")?.GetComponent<Button>();
-            
-            // Bottom HUD
-            if (buildSlimeButton == null) buildSlimeButton = transform.Find("BottomHUD/PlaceSlimeButton")?.GetComponent<Button>();
-            if (slimePriceText == null && buildSlimeButton != null) slimePriceText = buildSlimeButton.transform.Find("SlimePriceText")?.GetComponent<TextMeshProUGUI>();
-            
-            if (buildTrapButton == null) buildTrapButton = transform.Find("BottomHUD/PlaceTrapButton")?.GetComponent<Button>();
-            if (trapPriceText == null && buildTrapButton != null) trapPriceText = buildTrapButton.transform.Find("TrapPriceText")?.GetComponent<TextMeshProUGUI>();
+            // 3. Reference Assignment
+            RefreshReferences();
+        }
 
-            if (placementController == null) placementController = FindObjectOfType<PlacementController>();
+        private void RefreshReferences()
+        {
+            Debug.Log("HUDController: Refreshing references...");
+
+            // Helper closure for logging
+            T FindAndLog<T>(string path, ref T field, string fieldName) where T : Component
+            {
+                if (field != null) 
+                {
+                    Debug.Log($"HUDController: {fieldName} was already assigned.");
+                    return field;
+                }
+                
+                var found = transform.Find(path)?.GetComponent<T>();
+                if (found != null) Debug.Log($"HUDController: Found {fieldName} at '{path}'.");
+                else Debug.LogError($"HUDController: FAILED to find {fieldName} at '{path}'!");
+                
+                field = found;
+                return found;
+            }
+
+            FindAndLog("TopHUD/InfoPanel/CoinText", ref coinText, "coinText");
+            FindAndLog("TopHUD/InfoPanel/TurnIndicatorText", ref turnIndicatorText, "turnIndicatorText");
+            FindAndLog("TopHUD/SettingsButton", ref settingsButton, "settingsButton");
+            FindAndLog("TopHUD/LevelSelectButton", ref levelSelectButton, "levelSelectButton");
+            FindAndLog("TopHUD/StartWaveButton", ref startCombatButton, "startCombatButton");
+            FindAndLog("TopHUD/PauseButton", ref pauseButton, "pauseButton");
+
+            FindAndLog("BottomHUD/PlaceSlimeButton", ref buildSlimeButton, "buildSlimeButton");
+            FindAndLog("BottomHUD/PlaceTrapButton", ref buildTrapButton, "buildTrapButton");
+
+            if (buildSlimeButton != null && slimePriceText == null)
+            {
+                slimePriceText = buildSlimeButton.transform.Find("SlimePriceText")?.GetComponent<TextMeshProUGUI>();
+                if(slimePriceText == null) Debug.LogError("HUDController: Could not find SlimePriceText child!");
+            }
+
+            if (buildTrapButton != null && trapPriceText == null)
+            {
+                trapPriceText = buildTrapButton.transform.Find("TrapPriceText")?.GetComponent<TextMeshProUGUI>();
+                if(trapPriceText == null) Debug.LogError("HUDController: Could not find TrapPriceText child!");
+            }
+
+            if (placementController == null)
+            {
+                placementController = FindObjectOfType<PlacementController>();
+                Debug.Log($"HUDController: PlacementController found: {placementController != null}");
+            }
         }
 
         private void Start()
         {
-            Debug.Log("HUDController: Start()");
+            Debug.Log("HUDController: Start() called.");
 
-            // Initialize Buttons
-            if (settingsButton) { settingsButton.onClick.AddListener(OnSettingsClicked); Debug.Log("HUD: Settings Button Bound"); }
-            if (levelSelectButton) { levelSelectButton.onClick.AddListener(OnLevelSelectClicked); Debug.Log("HUD: Level Select Button Bound"); }
-            if (startCombatButton) { startCombatButton.onClick.AddListener(OnStartCombatClicked); Debug.Log("HUD: Start Combat Button Bound"); }
-            if (pauseButton) { pauseButton.onClick.AddListener(OnPauseClicked); Debug.Log("HUD: Pause Button Bound"); }
-            
-            if (buildSlimeButton) { buildSlimeButton.onClick.AddListener(OnBuildSlimeClicked); Debug.Log("HUD: Build Slime Button Bound"); }
-            else Debug.LogError("HUD: Build Slime Button NOT FOUND");
+            // 4. Listener Binding
+            BindButton(settingsButton, OnSettingsClicked, "SettingsButton");
+            BindButton(levelSelectButton, OnLevelSelectClicked, "LevelSelectButton");
+            BindButton(startCombatButton, OnStartCombatClicked, "StartCombatButton");
+            BindButton(pauseButton, OnPauseClicked, "PauseButton");
+            BindButton(buildSlimeButton, OnBuildSlimeClicked, "BuildSlimeButton");
+            BindButton(buildTrapButton, OnBuildTrapClicked, "BuildTrapButton");
 
-            if (buildTrapButton) { buildTrapButton.onClick.AddListener(OnBuildTrapClicked); Debug.Log("HUD: Build Trap Button Bound"); }
-            else Debug.LogError("HUD: Build Trap Button NOT FOUND");
-
-            // Initialize Prices
+            // 5. Logic Init
             if (GameManager.Instance != null && GameManager.Instance.GameState != null)
             {
                 var gameState = GameManager.Instance.GameState as GameState;
-                
                 if (gameState != null)
                 {
+                    Debug.Log("HUDController: Connecting to GameState events.");
                     if (slimePriceText) slimePriceText.text = $"{gameState.PlacementCosts["SlimeMonster"]} G";
                     if (trapPriceText) trapPriceText.text = $"{gameState.PlacementCosts["SpikeTrap"]} G";
+                    GameManager.Instance.GameState.OnResourcesChanged += UpdateResourceDisplay;
                 }
-                
-                GameManager.Instance.GameState.OnResourcesChanged += UpdateResourceDisplay;
+            }
+            else
+            {
+                Debug.LogWarning("HUDController: GameManager or GameState is null in Start.");
             }
 
             UpdateResourceDisplay();
             UpdateTurnIndicator();
         }
 
+        private void BindButton(Button btn, UnityEngine.Events.UnityAction action, string debugName)
+        {
+            if (btn == null)
+            {
+                Debug.LogError($"HUDController: Cannot bind {debugName} - Button reference is NULL!");
+                return;
+            }
+
+            // Check if interactable
+            Debug.Log($"HUDController: Binding {debugName}... (Interactable: {btn.interactable}, Active: {btn.gameObject.activeInHierarchy})");
+
+            btn.onClick.RemoveListener(action);
+            btn.onClick.AddListener(action);
+            
+            // Verify (We can't easily check listener count via API, but we can assume success if no exception)
+            Debug.Log($"HUDController: Successfully added listener to {debugName}.");
+        }
+
         private void Update()
         {
             UpdateTurnIndicator();
+
+            // DEBUG: Check for clicks and UI hits
+            if (UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                bool isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+                Debug.Log($"DEBUG_INPUT: Click detected. Pointer over UI: {isPointerOverUI}");
+                
+                if (isPointerOverUI)
+                {
+                    var selected = EventSystem.current.currentSelectedGameObject;
+                    Debug.Log($"DEBUG_INPUT: Current Selected GameObject: {(selected != null ? selected.name : "null")}");
+                    
+                    // Raycast check manually to see what we are hitting
+                    var pointerData = new PointerEventData(EventSystem.current)
+                    {
+                        position = UnityEngine.InputSystem.Mouse.current.position.ReadValue()
+                    };
+                    var results = new System.Collections.Generic.List<RaycastResult>();
+                    EventSystem.current.RaycastAll(pointerData, results);
+                    foreach(var result in results)
+                    {
+                        Debug.Log($"DEBUG_INPUT: Raycast Hit: {result.gameObject.name} (Layer: {LayerMask.LayerToName(result.gameObject.layer)})");
+                    }
+                }
+            }
         }
 
         private void OnDestroy()
@@ -110,6 +234,8 @@ namespace Undermarch.Presentation.Controllers
                 GameManager.Instance.GameState.OnResourcesChanged -= UpdateResourceDisplay;
             }
         }
+
+        // ... [Rest of the methods with added logs] ...
 
         private void UpdateResourceDisplay()
         {
@@ -149,55 +275,57 @@ namespace Undermarch.Presentation.Controllers
             if (turnIndicatorImage) turnIndicatorImage.color = statusColor;
         }
 
-        // Button Handlers
-        private void OnSettingsClicked()
-        {
-            Debug.Log("HUD: Settings Clicked");
+        private void OnSettingsClicked() { Debug.Log("HUD_CLICK: Settings Clicked"); }
+        private void OnLevelSelectClicked() { Debug.Log("HUD_CLICK: Level Select Clicked"); }
+        
+        private void OnStartCombatClicked() 
+        { 
+            Debug.Log("HUD_CLICK: Start Combat Clicked");
+            if (GameManager.Instance) GameManager.Instance.StartCombat();
         }
 
-        private void OnLevelSelectClicked()
-        {
-            Debug.Log("HUD: Level Select Clicked");
-        }
-
-        private void OnStartCombatClicked()
-        {
-            Debug.Log("HUD: Start Combat Clicked");
-            GameManager.Instance.StartCombat();
-        }
-
-        private void OnPauseClicked()
-        {
-            Debug.Log("HUD: Pause Clicked");
+        private void OnPauseClicked() 
+        { 
+            Debug.Log("HUD_CLICK: Pause Clicked");
             var tickSystem = GameManager.Instance.TickSystem;
             if (tickSystem != null)
             {
-                if (tickSystem.Mode == TickMode.Paused)
-                    tickSystem.Resume();
-                else
-                    tickSystem.Pause();
+                if (tickSystem.Mode == TickMode.Paused) tickSystem.Resume();
+                else tickSystem.Pause();
             }
         }
 
         private void OnBuildSlimeClicked()
         {
-            Debug.Log("HUD: Build Slime Clicked");
-            if (placementController) placementController.SelectSlime();
+            Debug.Log("HUD_CLICK: Build Slime Clicked");
+            if (placementController) 
+            {
+                placementController.SelectSlime();
+                Debug.Log("HUD_CLICK: Called SelectSlime on PlacementController");
+            }
+            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
         }
 
         private void OnBuildTrapClicked()
         {
-            Debug.Log("HUD: Build Trap Clicked");
-            if (placementController) placementController.SelectSpikeTrap();
+            Debug.Log("HUD_CLICK: Build Trap Clicked");
+            if (placementController) 
+            {
+                placementController.SelectSpikeTrap();
+                Debug.Log("HUD_CLICK: Called SelectSpikeTrap on PlacementController");
+            }
+            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
         }
 
         public void BuildHUD()
         {
+            Debug.Log("HUDController: Building HUD elements from scratch...");
+            
             // Ensure Canvas settings
             Canvas canvas = GetComponent<Canvas>();
             if (canvas == null) canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 100; // Ensure on top
+            canvas.sortingOrder = 100; 
 
             CanvasScaler scaler = GetComponent<CanvasScaler>();
             if (scaler == null) scaler = gameObject.AddComponent<CanvasScaler>();
@@ -205,16 +333,31 @@ namespace Undermarch.Presentation.Controllers
             scaler.referenceResolution = new Vector2(1920, 1080);
             scaler.matchWidthOrHeight = 0.5f;
 
-            // Add GraphicRaycaster
             if (GetComponent<GraphicRaycaster>() == null) gameObject.AddComponent<GraphicRaycaster>();
 
-            // Clear existing if partial
+            // Clear existing
             Transform top = transform.Find("TopHUD");
-            if (top != null) Destroy(top.gameObject);
+            if (top != null) DestroyImmediate(top.gameObject); // Immediate for cleaner rebuild logic
             Transform bottom = transform.Find("BottomHUD");
-            if (bottom != null) Destroy(bottom.gameObject);
+            if (bottom != null) DestroyImmediate(bottom.gameObject);
 
             SetupHUD(gameObject);
+
+            // Reset references to ensure they are re-acquired from the new objects
+            coinText = null;
+            turnIndicatorText = null;
+            settingsButton = null;
+            levelSelectButton = null;
+            startCombatButton = null;
+            pauseButton = null;
+            buildSlimeButton = null;
+            buildTrapButton = null;
+            slimePriceText = null;
+            trapPriceText = null;
+
+            RefreshReferences();
+
+            Debug.Log("HUDController: BuildHUD complete.");
         }
 
         void SetupHUD(GameObject canvasObj)
@@ -227,7 +370,7 @@ namespace Undermarch.Presentation.Controllers
             CreateButton(topPanel.transform, "SettingsButton", "Set", new Vector2(60, 60));
             CreateButton(topPanel.transform, "LevelSelectButton", "Lvl", new Vector2(60, 60));
             
-            CreateSpacer(topPanel.transform); // Spacer Left
+            CreateSpacer(topPanel.transform); 
 
             GameObject infoPanel = CreateContainer(topPanel.transform, "InfoPanel");
             var infoLayout = infoPanel.AddComponent<VerticalLayoutGroup>();
@@ -238,11 +381,10 @@ namespace Undermarch.Presentation.Controllers
             CreateText(infoPanel.transform, "TurnIndicatorText", "BUILD PHASE", 24, Color.white, true);
             CreateText(infoPanel.transform, "CoinText", "Coins: 0", 20, Color.yellow, false);
 
-            CreateSpacer(topPanel.transform); // Spacer Right
+            CreateSpacer(topPanel.transform); 
 
             CreateButton(topPanel.transform, "StartWaveButton", "START", new Vector2(120, 60), new Color(0.3f, 0.7f, 0.3f));
             CreateButton(topPanel.transform, "PauseButton", "||", new Vector2(60, 60));
-
 
             // 3. Bottom HUD
             GameObject bottomPanel = CreatePanel(canvasObj.transform, "BottomHUD", new Color(0.18f, 0.18f, 0.18f, 1f), 140, false);
@@ -329,6 +471,8 @@ namespace Undermarch.Presentation.Controllers
 
             CreateText(obj.transform, "NameText", label, 18, Color.white, false);
             CreateText(obj.transform, name == "PlaceSlimeButton" ? "SlimePriceText" : "TrapPriceText", price, 16, Color.yellow, false);
+            
+            Debug.Log($"HUDController: Created BuildButton '{name}' under {parent.name}");
         }
 
         void CreateText(Transform parent, string name, string content, float fontSize, Color color, bool bold)

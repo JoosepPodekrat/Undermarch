@@ -25,19 +25,19 @@ namespace Undermarch.Presentation.Controllers
         public void SelectSlime()
         {
             _selectedType = PlacementType.Slime;
-            Debug.Log("Selected: Slime (Cost: 50 gold)");
+            Debug.Log("PlacementController: Selected: Slime (Cost: 50 gold)");
         }
 
         public void SelectArcher()
         {
             _selectedType = PlacementType.Archer;
-            Debug.Log("Selected: Archer (Cost: 80 gold)");
+            Debug.Log("PlacementController: Selected: Archer (Cost: 80 gold)");
         }
 
         public void SelectSpikeTrap()
         {
             _selectedType = PlacementType.SpikeTrap;
-            Debug.Log("Selected: Spike Trap (Cost: 30 gold)");
+            Debug.Log("PlacementController: Selected: Spike Trap (Cost: 30 gold)");
         }
 
         private void Start()
@@ -49,17 +49,18 @@ namespace Undermarch.Presentation.Controllers
         {
             if (GameManager.Instance == null)
             {
-                Debug.LogWarning("PlacementController: GameManager is null");
+                // Reduced spam: only log warning once or rarely? For now, commenting out spam
+                // Debug.LogWarning("PlacementController: GameManager is null");
                 return;
             }
             if (GameManager.Instance.Board == null)
             {
-                Debug.LogWarning("PlacementController: Board is null");
+               // Debug.LogWarning("PlacementController: Board is null");
                 return;
             }
             if (GameManager.Instance.GameState == null)
             {
-                Debug.LogWarning("PlacementController: GameState is null");
+               // Debug.LogWarning("PlacementController: GameState is null");
                 return;
             }
 
@@ -147,6 +148,14 @@ namespace Undermarch.Presentation.Controllers
                     // Need to make it so clicking on the UI doesn't try to place one down behind the UI - couldn't get it working properly.
                     if (placed) { _selectedType = PlacementType.None;}
                     }
+                    else
+                    {
+                         Debug.Log($"PlacementController: Invalid tile {tilePos}. Wall: {hasWall}, Entity: {entity}, Interactable: {interactable}");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"PlacementController: Click out of bounds {tilePos}");
                 }
             }
         }
