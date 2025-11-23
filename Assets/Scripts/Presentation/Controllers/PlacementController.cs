@@ -40,10 +40,29 @@ namespace Undermarch.Presentation.Controllers
             Debug.Log("Selected: Spike Trap (Cost: 30 gold)");
         }
 
+        private void Start()
+        {
+            Debug.Log("PlacementController: Start()");
+        }
+
         private void Update()
         {
-            if (GameManager.Instance == null || GameManager.Instance.Board == null || GameManager.Instance.GameState == null)
+            if (GameManager.Instance == null)
+            {
+                Debug.LogWarning("PlacementController: GameManager is null");
                 return;
+            }
+            if (GameManager.Instance.Board == null)
+            {
+                Debug.LogWarning("PlacementController: Board is null");
+                return;
+            }
+            if (GameManager.Instance.GameState == null)
+            {
+                Debug.LogWarning("PlacementController: GameState is null");
+                return;
+            }
+
             if (GameManager.Instance.CurrentPhase != GamePhase.Placement &&
                 GameManager.Instance.CurrentPhase != GamePhase.Combat) return;
 
@@ -53,18 +72,30 @@ namespace Undermarch.Presentation.Controllers
             {
                 Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
                 Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
-                TilePos tilePos = new TilePos(Mathf.FloorToInt(mouseWorldPos.x), Mathf.FloorToInt(mouseWorldPos.y));
+                
+                // Adjust for visual offset (centered board)
+                int boardWidth = GameManager.Instance.Board.Width;
+                int boardHeight = GameManager.Instance.Board.Height;
+                TilePos tilePos = new TilePos(
+                    Mathf.FloorToInt(mouseWorldPos.x + boardWidth / 2f), 
+                    Mathf.FloorToInt(mouseWorldPos.y + boardHeight / 2f)
+                );
 
+                Debug.Log($"PlacementController: Click at Screen {mouseScreenPos}, World {mouseWorldPos}, Tile {tilePos}");
 
-                if (GameManager.Instance.Board.InBounds(tilePos) &&
-                    !GameManager.Instance.Board.HasWallAt(tilePos) &&
-                    GameManager.Instance.Board.GetEntityAt(tilePos) == null &&
-                    GameManager.Instance.Board.GetInteractableAt(tilePos) == null)
+                if (GameManager.Instance.Board.InBounds(tilePos))
                 {
-                    // Check cost and place entity
-                    bool placed = false;
+                    bool hasWall = GameManager.Instance.Board.HasWallAt(tilePos);
+                    var entity = GameManager.Instance.Board.GetEntityAt(tilePos);
+                    var interactable = GameManager.Instance.Board.GetInteractableAt(tilePos);
 
-                    switch (_selectedType)
+                    if (!hasWall && entity == null && interactable == null)
+                    {
+                        Debug.Log($"PlacementController: Valid tile {tilePos}. Attempting to place {_selectedType}");
+                        // Check cost and place entity
+                        bool placed = false;
+
+                        switch (_selectedType)
                     {
                         case PlacementType.Slime:
                             if (GameManager.Instance.GameState.CanAfford(50))
@@ -115,6 +146,7 @@ namespace Undermarch.Presentation.Controllers
                     // I don't think we want this behavior, makes you rechoose every time if you want the same defense again. I'll disable it for now
                     // Need to make it so clicking on the UI doesn't try to place one down behind the UI - couldn't get it working properly.
                     if (placed) { _selectedType = PlacementType.None;}
+                    }
                 }
             }
         }

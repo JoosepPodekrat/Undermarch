@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Undermarch.Simulation.Interfaces;
 using Undermarch.Presentation.UI.TickCounter;
+using Undermarch.Presentation.Controllers;
 
 namespace Undermarch.Presentation.Managers
 {
@@ -67,6 +68,30 @@ namespace Undermarch.Presentation.Managers
         {
             Debug.Log("GameManager: Start()");
             
+            // Ensure PlacementController exists
+            if (FindObjectOfType<PlacementController>() == null)
+            {
+                 var pcObj = new GameObject("PlacementController");
+                 pcObj.AddComponent<PlacementController>();
+            }
+
+            // Ensure UI exists
+            var hud = FindObjectOfType<HUDController>();
+            if (hud == null)
+            {
+                Debug.Log("GameManager: Creating HUDController...");
+                var hudObj = new GameObject("HUDController");
+                hudObj.AddComponent<HUDController>();
+            }
+            else
+            {
+                // Force rebuild if it exists but might be empty/broken
+                Debug.Log("GameManager: HUDController found. Ensuring HUD...");
+                hud.SendMessage("BuildHUD", SendMessageOptions.DontRequireReceiver);
+            }
+
+            // Setup Camera
+            AdjustAllCameras();
 
             // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
             List<TilePos> entrances;
@@ -121,6 +146,43 @@ namespace Undermarch.Presentation.Managers
             if (endGameUI == null)
             {
                 Debug.LogWarning("GameManager: Could not find an EndGameUI component in the scene.");
+            }
+        }
+
+        private void LateUpdate()
+        {
+            // Continuously adjust camera to handle screen resize or scene loads
+            AdjustAllCameras();
+        }
+
+        private void AdjustAllCameras()
+        {
+            var cameras = FindObjectsOfType<Camera>();
+            if (cameras.Length == 0) return;
+
+            float boardHeight = Board.Height;
+            float boardWidth = Board.Width;
+            
+            // Reserve ~30% vertical space for UI (Top+Bottom)
+            float targetSizeY = boardHeight / 1.4f;
+            
+            // Check aspect ratio for width
+            float screenRatio = (float)Screen.width / Screen.height;
+            float targetSizeX = (boardWidth + 2) / (2 * screenRatio);
+            
+            float orthoSize = Mathf.Max(targetSizeY, targetSizeX);
+
+            foreach (var cam in cameras)
+            {
+                // Skip if it's a specific camera we shouldn't touch? 
+                // User said "literally all".
+                
+                if (cam.transform.position.z != -10 || cam.orthographicSize != orthoSize)
+                {
+                    cam.transform.position = new Vector3(0, 0, -10);
+                    cam.orthographic = true;
+                    cam.orthographicSize = orthoSize;
+                }
             }
         }
 

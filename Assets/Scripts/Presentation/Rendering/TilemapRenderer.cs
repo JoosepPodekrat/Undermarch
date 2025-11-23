@@ -90,7 +90,7 @@ namespace Undermarch.Presentation.Rendering
         private void UpdateTile(TilePos pos)
         {
             if (_board == null) return;
-            var cellPos = new Vector3Int(pos.x, pos.y, 0);
+            var cellPos = new Vector3Int(pos.x - _board.Width / 2, pos.y - _board.Height / 2, 0);
 
             // Ground Layer (always drawn)
             groundTilemap.SetTile(cellPos, groundTile);
