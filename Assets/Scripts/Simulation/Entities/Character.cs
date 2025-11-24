@@ -214,6 +214,8 @@ namespace Undermarch.Simulation.Entities
 
         public void Attack(Character target)
         {
+            CharacterEvents.RaiseAttack(this);
+
             float damage = charWeapon.damage;
             if (charWeapon.damageType == DamageType.Physical)
                 damage += effectiveStrength;
@@ -231,47 +233,34 @@ namespace Undermarch.Simulation.Entities
             target.TakeDamage(damagePacket);
         }
 
-        public void TakeDamage (DamagePacket damagePacket)
-        {
-            int totalDamageTaken = 0;
+        public void TakeDamage(DamagePacket damagePacket)
+{
+    int totalDamageTaken = 0;
 
-            foreach (var (type, rawAmount) in damagePacket.amounts)
-            {
-                float reduced = 0;
+    foreach (var (type, rawAmount) in damagePacket.amounts)
+    {
+        float reduced = 0;
+        if (type == DamageType.Physical) { reduced = rawAmount / damageReduction - armor; }
+        else if (type == DamageType.Bleed) { reduced = rawAmount / damageReduction; }
+        else { reduced = rawAmount / magicDamageReduction - magicresist; }
 
-                if (type == DamageType.Physical)
-                {
-                    reduced = rawAmount / damageReduction;
-                    reduced -= armor;
-                    if (reduced < 0)
-                        reduced = 0;
-                }
-                else if (type == DamageType.Bleed)
-                {
-                    reduced = rawAmount / damageReduction;
-                } else
-                {
-                    reduced = rawAmount / magicDamageReduction;
-                    reduced -= magicresist;
-                }
+        if (reduced < 0) reduced = 0;
+        totalDamageTaken += (int)Math.Round(reduced);
+    }
 
-                int finalDamage = (int)Math.Round(reduced);
-                totalDamageTaken += finalDamage;
-            }
+    currentHP -= totalDamageTaken;
 
-            // Apply damage to HP
-            currentHP -= totalDamageTaken;
-            
+    // Raise audio/event
+    CharacterEvents.RaiseHurt(this);
 
-            // Clamp at 0
-            if (currentHP <= 0)
-            {
-                currentHP = 0;
-                isDead = true;
-            } 
-            
-            //TODO: Death
-        }
+    if (currentHP <= 0)
+    {
+        currentHP = 0;
+        isDead = true;
+        CharacterEvents.RaiseDeath(this);
+    }
+}
+
 
         private void ApplyTileEffects(IBoard board, TilePos pos)
         {

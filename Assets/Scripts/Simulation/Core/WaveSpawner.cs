@@ -18,6 +18,7 @@ namespace Undermarch.Simulation.Core
         public TilePos SpawnPosition { get; set; }
         public bool IsFinalWave { get; set; }
 
+
         public HeroParty(List<Character> heroes, int spawnTick, TilePos spawnPos, bool isFinal = false)
         {
             Heroes = heroes;
@@ -66,11 +67,18 @@ namespace Undermarch.Simulation.Core
                 {
                     h.FleeThreshold = int.MaxValue;
                 }
+                 hero.spawnSound = "humanmalegrunt";
+                        hero.hurtSound = "humanMaleHurt";
+                        hero.attackSound = "humanMaleGrunt";
+                        hero.deathSound = "humanMaleHurt";
 
-                var pos = board.FindNearestFreeTile(wave.SpawnPosition);
-                board.AddEntity(pos, hero);
-                CharacterEvents.RaiseSpawn(hero);
-                spawnedHeroes.Add(hero);
+                        var pos = board.FindNearestFreeTile(wave.SpawnPosition);
+                        board.AddEntity(pos, hero);
+
+                        // Raise spawn event (audio handled by AudioController)
+                        CharacterEvents.RaiseSpawn(hero);
+
+                        spawnedHeroes.Add(hero);
             }
 
             SimulationLog.Log($"Wave {currentWaveIndex + 1} spawned: {wave.Heroes.Count} heroes at {wave.SpawnPosition}");

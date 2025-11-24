@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
+  m_Name: Slime_Animated
+  m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AnimatedTile
+  m_AnimatedSprites:
+  - {fileID: -6547896288290708835, guid: 1cb4cf5a04eecac40920359cd740547e, type: 3}
+  - {fileID: 1618185110837684384, guid: 328a5405b9b424d4e9ac4747dcea369b, type: 3}
+  - {fileID: -379935657828565217, guid: 328a5405b9b424d4e9ac4747dcea369b, type: 3}
+  - {fileID: 7961362974256884671, guid: 328a5405b9b424d4e9ac4747dcea369b, type: 3}
+  - {fileID: -3607888842448822257, guid: 328a5405b9b424d4e9ac4747dcea369b, type: 3}
+  - {fileID: 4593568250741143324, guid: 328a5405b9b424d4e9ac4747dcea369b, type: 3}
+  - {fileID: 8769339193113792372, guid: 76e3e72aad1413547bac9acfda924b97, type: 3}
+  - {fileID: -8718068603340582171, guid: 76e3e72aad1413547bac9acfda924b97, type: 3}
+  - {fileID: 5487445420638461289, guid: 76e3e72aad1413547bac9acfda924b97, type: 3}
+  - {fileID: 552165441339613264, guid: 76e3e72aad1413547bac9acfda924b97, type: 3}
+  - {fileID: -7616659179368546986, guid: 76e3e72aad1413547bac9acfda924b97, type: 3}
+  - {fileID: -7377153609105838001, guid: 7f07cd61fe5e9a946a928b816e514c0c, type: 3}
+  - {fileID: 8103759417398486482, guid: 7f07cd61fe5e9a946a928b816e514c0c, type: 3}
+  - {fileID: -822294439341482929, guid: 7f07cd61fe5e9a946a928b816e514c0c, type: 3}
+  - {fileID: 775961440259190869, guid: 7f07cd61fe5e9a946a928b816e514c0c, type: 3}
+  - {fileID: 8373471702286915353, guid: 7f07cd61fe5e9a946a928b816e514c0c, type: 3}
+  - {fileID: 7893624861783956641, guid: 0274d1fc769b30d47ab6541e75dffc9d, type: 3}
+  m_MinSpeed: 1
+  m_MaxSpeed: 1
+  m_AnimationStartTime: 0
+  m_AnimationStartFrame: 0
+  m_TileColliderType: 0
+  m_TileAnimationFlags: 0
