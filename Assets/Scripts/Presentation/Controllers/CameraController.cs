@@ -81,7 +81,7 @@ namespace Undermarch.Presentation.Controllers
 
             if (Mathf.Abs(scroll) > 0.01f)
             {
-                float newSize = _cam.orthographicSize - (scroll * zoomSpeed * 0.01f);
+                float newSize = _cam.orthographicSize - (scroll * zoomSpeed * 0.25f);
                 _cam.orthographicSize = Mathf.Clamp(newSize, minZoom, maxZoom);
             }
         }

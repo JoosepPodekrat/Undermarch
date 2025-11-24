@@ -128,5 +128,45 @@ ScheduleHeroWave(finalHeroes, 960); // was 480
     return spawner;
 }
 
+        public static WaveSpawner CreateWaveSchedule2(List<TilePos> entrances)
+        {
+            WaveSpawner spawner = new WaveSpawner();
+            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+
+            void ScheduleHeroWave(List<Character> heroes, int spawnTick)
+            {
+                var clonedHeroes = new List<Character>();
+                foreach (var hero in heroes)
+                {
+                    clonedHeroes.Add(hero.Clone());
+                }
+                var party = new HeroParty(clonedHeroes, spawnTick, entrance);
+                spawner.ScheduleWave(party);
+            }
+
+            // Harder waves
+            ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, 0);
+            ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 120);
+            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 240);
+            ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.apprenticeMage, CharacterDatabase.rogue }, 360);
+            
+            var finalHeroes = new List<Character> {
+                CharacterDatabase.rogue.Clone(),
+                CharacterDatabase.rogue.Clone(),
+                CharacterDatabase.apprenticeMage.Clone(),
+                CharacterDatabase.apprenticeMage.Clone(),
+                CharacterDatabase.peasant.Clone(),
+                CharacterDatabase.peasant.Clone()
+            };
+            foreach (var hero in finalHeroes)
+            {
+                if (hero is Entities.Characters.Heroes.Hero h)
+                    h.FleeThreshold = 999999;
+            }
+            ScheduleHeroWave(finalHeroes, 480);
+
+            return spawner;
+        }
+
     }
 }

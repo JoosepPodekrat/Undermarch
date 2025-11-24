@@ -25,6 +25,10 @@ namespace Undermarch.Presentation.Controllers
         public TextMeshProUGUI slimePriceText;
         public Button buildTrapButton;
         public TextMeshProUGUI trapPriceText;
+        public Button buildGoblinButton;
+        public TextMeshProUGUI goblinPriceText;
+        public Button buildBearTrapButton;
+        public TextMeshProUGUI bearTrapPriceText;
 
         [Header("References")]
         public PlacementController placementController;
@@ -126,6 +130,8 @@ namespace Undermarch.Presentation.Controllers
 
             FindAndLog("BottomHUD/PlaceSlimeButton", ref buildSlimeButton, "buildSlimeButton");
             FindAndLog("BottomHUD/PlaceTrapButton", ref buildTrapButton, "buildTrapButton");
+            FindAndLog("BottomHUD/PlaceGoblinButton", ref buildGoblinButton, "buildGoblinButton");
+            FindAndLog("BottomHUD/PlaceBearTrapButton", ref buildBearTrapButton, "buildBearTrapButton");
 
             if (buildSlimeButton != null && slimePriceText == null)
             {
@@ -137,6 +143,18 @@ namespace Undermarch.Presentation.Controllers
             {
                 trapPriceText = buildTrapButton.transform.Find("TrapPriceText")?.GetComponent<TextMeshProUGUI>();
                 if(trapPriceText == null) Debug.LogError("HUDController: Could not find TrapPriceText child!");
+            }
+
+            if (buildGoblinButton != null && goblinPriceText == null)
+            {
+                goblinPriceText = buildGoblinButton.transform.Find("GoblinPriceText")?.GetComponent<TextMeshProUGUI>();
+                if(goblinPriceText == null) Debug.LogError("HUDController: Could not find GoblinPriceText child!");
+            }
+
+            if (buildBearTrapButton != null && bearTrapPriceText == null)
+            {
+                bearTrapPriceText = buildBearTrapButton.transform.Find("BearTrapPriceText")?.GetComponent<TextMeshProUGUI>();
+                if(bearTrapPriceText == null) Debug.LogError("HUDController: Could not find BearTrapPriceText child!");
             }
 
             if (placementController == null)
@@ -157,6 +175,8 @@ namespace Undermarch.Presentation.Controllers
             BindButton(pauseButton, OnPauseClicked, "PauseButton");
             BindButton(buildSlimeButton, OnBuildSlimeClicked, "BuildSlimeButton");
             BindButton(buildTrapButton, OnBuildTrapClicked, "BuildTrapButton");
+            BindButton(buildGoblinButton, OnBuildGoblinClicked, "BuildGoblinButton");
+            BindButton(buildBearTrapButton, OnBuildBearTrapClicked, "BuildBearTrapButton");
 
             // 5. Logic Init
             if (GameManager.Instance != null && GameManager.Instance.GameState != null)
@@ -167,6 +187,8 @@ namespace Undermarch.Presentation.Controllers
                     Debug.Log("HUDController: Connecting to GameState events.");
                     if (slimePriceText) slimePriceText.text = $"{gameState.PlacementCosts["SlimeMonster"]} G";
                     if (trapPriceText) trapPriceText.text = $"{gameState.PlacementCosts["SpikeTrap"]} G";
+                    if (goblinPriceText) goblinPriceText.text = $"{gameState.PlacementCosts["Goblin"]} G";
+                    if (bearTrapPriceText) bearTrapPriceText.text = $"{gameState.PlacementCosts["BearTrap"]} G";
                     GameManager.Instance.GameState.OnResourcesChanged += UpdateResourceDisplay;
                 }
             }
@@ -201,6 +223,14 @@ namespace Undermarch.Presentation.Controllers
         {
             UpdateTurnIndicator();
 
+            if (GameManager.Instance != null)
+            {
+                bool isPhase2 = GameManager.Instance.CurrentPhase == GamePhase.BuildingPhase2 || GameManager.Instance.IsSecondStage;
+                
+                UpdateButtonState(buildGoblinButton, isPhase2, "Goblin", goblinPriceText);
+                UpdateButtonState(buildBearTrapButton, isPhase2, "Bear Trap", bearTrapPriceText);
+            }
+
             // DEBUG: Check for clicks and UI hits
             if (UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame)
             {
@@ -224,6 +254,26 @@ namespace Undermarch.Presentation.Controllers
                         Debug.Log($"DEBUG_INPUT: Raycast Hit: {result.gameObject.name} (Layer: {LayerMask.LayerToName(result.gameObject.layer)})");
                     }
                 }
+            }
+        }
+
+        private void UpdateButtonState(Button btn, bool unlocked, string name, TextMeshProUGUI priceText)
+        {
+            if (btn == null) return;
+            
+            btn.gameObject.SetActive(true);
+            btn.interactable = unlocked;
+
+            var nameText = btn.transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
+            if (nameText != null)
+            {
+                nameText.text = unlocked ? name : "LOCKED";
+                nameText.color = unlocked ? Color.white : Color.gray;
+            }
+            
+            if (priceText != null)
+            {
+                priceText.gameObject.SetActive(unlocked);
             }
         }
 
@@ -265,6 +315,11 @@ namespace Undermarch.Presentation.Controllers
                     statusColor = Color.red;
                     if (startCombatButton) startCombatButton.interactable = false;
                     break;
+                case GamePhase.BuildingPhase2:
+                    statusText = "BUILDING PHASE 2";
+                    statusColor = Color.cyan;
+                    if (startCombatButton) startCombatButton.interactable = true;
+                    break;
                 case GamePhase.GameOver:
                     statusText = "GAME OVER";
                     statusColor = Color.gray;
@@ -281,7 +336,17 @@ namespace Undermarch.Presentation.Controllers
         private void OnStartCombatClicked() 
         { 
             Debug.Log("HUD_CLICK: Start Combat Clicked");
-            if (GameManager.Instance) GameManager.Instance.StartCombat();
+            if (GameManager.Instance) 
+            {
+                if (GameManager.Instance.CurrentPhase == GamePhase.BuildingPhase2)
+                {
+                    GameManager.Instance.StartSecondWave();
+                }
+                else
+                {
+                    GameManager.Instance.StartCombat();
+                }
+            }
         }
 
         private void OnPauseClicked() 
@@ -313,6 +378,28 @@ namespace Undermarch.Presentation.Controllers
             {
                 placementController.SelectSpikeTrap();
                 Debug.Log("HUD_CLICK: Called SelectSpikeTrap on PlacementController");
+            }
+            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
+        }
+
+        private void OnBuildGoblinClicked()
+        {
+            Debug.Log("HUD_CLICK: Build Goblin Clicked");
+            if (placementController) 
+            {
+                placementController.SelectGoblin();
+                Debug.Log("HUD_CLICK: Called SelectGoblin on PlacementController");
+            }
+            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
+        }
+
+        private void OnBuildBearTrapClicked()
+        {
+            Debug.Log("HUD_CLICK: Build Bear Trap Clicked");
+            if (placementController) 
+            {
+                placementController.SelectBearTrap();
+                Debug.Log("HUD_CLICK: Called SelectBearTrap on PlacementController");
             }
             else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
         }
@@ -393,6 +480,8 @@ namespace Undermarch.Presentation.Controllers
             // Bottom Elements
             CreateBuildButton(bottomPanel.transform, "PlaceSlimeButton", "Slime", "50 G");
             CreateBuildButton(bottomPanel.transform, "PlaceTrapButton", "Trap", "30 G");
+            CreateBuildButton(bottomPanel.transform, "PlaceGoblinButton", "Goblin", "50 G");
+            CreateBuildButton(bottomPanel.transform, "PlaceBearTrapButton", "Bear Trap", "50 G");
         }
 
         GameObject CreatePanel(Transform parent, string name, Color color, float height, bool isTop)
@@ -470,7 +559,14 @@ namespace Undermarch.Presentation.Controllers
             vGroup.padding = new RectOffset(5, 5, 5, 5);
 
             CreateText(obj.transform, "NameText", label, 18, Color.white, false);
-            CreateText(obj.transform, name == "PlaceSlimeButton" ? "SlimePriceText" : "TrapPriceText", price, 16, Color.yellow, false);
+            
+            string priceTextName = "PriceText";
+            if (name == "PlaceSlimeButton") priceTextName = "SlimePriceText";
+            else if (name == "PlaceTrapButton") priceTextName = "TrapPriceText";
+            else if (name == "PlaceGoblinButton") priceTextName = "GoblinPriceText";
+            else if (name == "PlaceBearTrapButton") priceTextName = "BearTrapPriceText";
+
+            CreateText(obj.transform, priceTextName, price, 16, Color.yellow, false);
             
             Debug.Log($"HUDController: Created BuildButton '{name}' under {parent.name}");
         }

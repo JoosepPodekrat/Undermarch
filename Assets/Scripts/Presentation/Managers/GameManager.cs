@@ -33,7 +33,9 @@ namespace Undermarch.Presentation.Managers
         public TickControlUI tickControlUI;
 
         private WaveSpawner waveSpawner;
-        public bool CanBuild => CurrentPhase == GamePhase.Placement || CurrentPhase == GamePhase.Combat;
+        private List<TilePos> _entrances;
+        public bool IsSecondStage { get; private set; }
+        public bool CanBuild => CurrentPhase == GamePhase.Placement || CurrentPhase == GamePhase.Combat || CurrentPhase == GamePhase.BuildingPhase2;
 
 
         private void Awake()
@@ -104,13 +106,12 @@ namespace Undermarch.Presentation.Managers
             CreateBackground();
 
             // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
-            List<TilePos> entrances;
             List<TilePos> chestPositions;
-            LevelLoader.LoadDungeon(Board, out entrances, out chestPositions);
-            Debug.Log($"GameManager: Dungeon loaded. {chestPositions.Count} chests, {entrances.Count} entrance(s).");
+            LevelLoader.LoadDungeon(Board, out _entrances, out chestPositions);
+            Debug.Log($"GameManager: Dungeon loaded. {chestPositions.Count} chests, {_entrances.Count} entrance(s).");
 
             // Create wave spawner with 9-wave schedule
-            waveSpawner = LevelLoader.CreateWaveSchedule(entrances);
+            waveSpawner = LevelLoader.CreateWaveSchedule(_entrances);
             Debug.Log($"GameManager: Wave schedule created. {waveSpawner.TotalWaves} waves scheduled.");
 
             // Initialize TickSystem with new constructor
@@ -272,13 +273,39 @@ namespace Undermarch.Presentation.Managers
             // Win condition: All waves spawned AND no living heroes
             if (waveSpawner.AllWavesSpawned && !heroesAreAlive)
             {
-                Debug.Log("Game Over: All waves defeated! YOU WIN!");
-                if (endGameUI != null)
+                if (!IsSecondStage)
                 {
-                    endGameUI.ShowEndGamePopup("You Win!");
+                    Debug.Log("First stage cleared! Entering Building Phase 2.");
+                    CurrentPhase = GamePhase.BuildingPhase2;
+                    GameState.Phase = GamePhase.BuildingPhase2;
+                    TickSystem.Pause();
+                    IsSecondStage = true;
+                    TickSystem.Reset();
                 }
-                TickSystem.Pause();
+                else
+                {
+                    Debug.Log("Game Over: All waves defeated! YOU WIN!");
+                    if (endGameUI != null)
+                    {
+                        endGameUI.ShowEndGamePopup("You Win!");
+                    }
+                    TickSystem.Pause();
+                }
                 return;
+            }
+        }
+
+        public void StartSecondWave()
+        {
+            if (CurrentPhase == GamePhase.BuildingPhase2)
+            {
+                waveSpawner = LevelLoader.CreateWaveSchedule2(_entrances);
+                TickSystem.SetWaveSpawner(waveSpawner);
+
+                CurrentPhase = GamePhase.Combat;
+                GameState.Phase = GamePhase.Combat;
+                TickSystem.Resume();
+                Debug.Log("Second Wave Combat started.");
             }
         }
     }

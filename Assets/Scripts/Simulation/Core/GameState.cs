@@ -21,7 +21,9 @@ namespace Undermarch.Simulation.Core
         {
             { "SlimeMonster", 50 },
             { "ArcherMonster", 80 },
-            { "SpikeTrap", 30 }
+            { "SpikeTrap", 30 },
+            { "BearTrap", 50 },
+            { "Goblin", 50 }
         };
 
         public GameState(int startingGold = 200, int startingWave = 1)

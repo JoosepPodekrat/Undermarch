@@ -137,15 +137,32 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             if (currentPath == null || currentPath.Count < 2)
             {
                 currentPath = Pathfinder.FindPath(board, currentPos, currentTarget.Value);
-                if (currentPath == null)
+                if (currentPath == null || currentPath.Count < 2)
                 {
                     state = HeroState.Idle;
                     return;
                 }
             }
 
-            HandleMove(board, currentPos, currentPath[1]);
-            currentPath.RemoveAt(0);
+            TilePos nextStep = currentPath[1];
+            if (HandleMove(board, currentPos, nextStep))
+            {
+                // Only advance path if we actually moved to the next step
+                if (board.GetPositionOf(this).Equals(nextStep))
+                {
+                    currentPath.RemoveAt(0);
+                }
+                else
+                {
+                    // We attacked or stayed put; invalidate path to re-evaluate next tick
+                    currentPath = null;
+                }
+            }
+            else
+            {
+                // Blocked (e.g. by ally), force repath
+                currentPath = null;
+            }
         }
         private DungeonMaster.DungeonMaster FindDungeonMaster(IBoard board)
         {
@@ -174,14 +191,28 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             if (currentPath == null || currentPath.Count < 2)
                 currentPath = Pathfinder.FindPath(board, currentPos, currentTarget.Value);
 
-            if (currentPath == null)
+            if (currentPath == null || currentPath.Count < 2)
             {
                 state = HeroState.Idle;
                 return;
             }
 
-            HandleMove(board, currentPos, currentPath[1]);
-            currentPath.RemoveAt(0);
+            TilePos nextStep = currentPath[1];
+            if (HandleMove(board, currentPos, nextStep))
+            {
+                if (board.GetPositionOf(this).Equals(nextStep))
+                {
+                    currentPath.RemoveAt(0);
+                }
+                else
+                {
+                    currentPath = null;
+                }
+            }
+            else
+            {
+                currentPath = null;
+            }
         }
 
 

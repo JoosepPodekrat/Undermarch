@@ -17,7 +17,8 @@ namespace Undermarch.Presentation.Controllers
             Slime,
             Archer,
             Goblin,
-            SpikeTrap
+            SpikeTrap,
+            BearTrap
         }
         AudioController audioController = new AudioController();
 
@@ -36,10 +37,22 @@ namespace Undermarch.Presentation.Controllers
             Debug.Log("PlacementController: Selected: Archer (Cost: 80 gold)");
         }
 
+        public void SelectGoblin()
+        {
+            _selectedType = PlacementType.Goblin;
+            Debug.Log("PlacementController: Selected: Goblin (Cost: 50 gold)");
+        }
+
         public void SelectSpikeTrap()
         {
             _selectedType = PlacementType.SpikeTrap;
             Debug.Log("PlacementController: Selected: Spike Trap (Cost: 30 gold)");
+        }
+
+        public void SelectBearTrap()
+        {
+            _selectedType = PlacementType.BearTrap;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
         }
 
         private void Start()
@@ -163,8 +176,22 @@ namespace Undermarch.Presentation.Controllers
                                     }
                                     else
                                     {
-                                        Debug.Log("Not enough gold to place Spike Trap (need 30)!");
+                                        Debug.Log("Not enough gold to place Goblin (need 50)!");
                                     } break;
+
+                                case PlacementType.BearTrap:
+                                    if (GameManager.Instance.GameState.CanAfford(50))
+                                    {
+                                        GameManager.Instance.Board.AddInteractable(tilePos, new BearTrap());
+                                        GameManager.Instance.GameState.SpendGold(50);
+                                        Debug.Log($"Placed Bear Trap at {tilePos.x},{tilePos.y} for 50 gold");
+                                        placed = true;
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("Not enough gold to place Bear Trap (need 50)!");
+                                    }
+                                    break;
 
                             }
 
