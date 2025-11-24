@@ -207,7 +207,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 4ef7bc9f26997f842b8946aa5b83397a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.164
+  m_Volume: 0.115
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -458,31 +458,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   slimeSound:
-    name: slimesound
+    name: slimeSound
     volume: 1
     pitch: 0.1
     clip: {fileID: 8300000, guid: 6d223630c88074841977ac28e446cc7d, type: 3}
     source: {fileID: 0}
-  humanMaleGrunt:
-    name: 
+  humanmalegrunt:
+    name: humanmalegrunt
     volume: 1
     pitch: 0.1
     clip: {fileID: 8300000, guid: a8332f81507cf884e89afabaf67130b1, type: 3}
     source: {fileID: 0}
   humanMaleHurt:
-    name: 
+    name: humanMaleHurt
     volume: 1
     pitch: 0.1
     clip: {fileID: 8300000, guid: e23638e4282b0924795aa0d9c5a4e8d8, type: 3}
     source: {fileID: 0}
   femaleGrunt:
-    name: 
+    name: femaleGrunt
     volume: 1
     pitch: 0.1
     clip: {fileID: 8300000, guid: fee3e541314b21d4797277e06a7eb793, type: 3}
     source: {fileID: 0}
   femaleHurt:
-    name: 
+    name: femaleHurt
     volume: 1
     pitch: 0.1
     clip: {fileID: 8300000, guid: dbd1e372bbe4ecb4d912f9660496b7eb, type: 3}
