@@ -80,7 +80,8 @@ namespace Undermarch.Presentation.Controllers
             }
 
             if (GameManager.Instance.CurrentPhase != GamePhase.Placement &&
-                GameManager.Instance.CurrentPhase != GamePhase.Combat) return;
+                GameManager.Instance.CurrentPhase != GamePhase.Combat &&
+                GameManager.Instance.CurrentPhase != GamePhase.BuildingPhase2) return;
 
             if (_selectedType == PlacementType.None) return;
 
