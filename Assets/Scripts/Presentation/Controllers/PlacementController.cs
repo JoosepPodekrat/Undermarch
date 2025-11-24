@@ -21,9 +21,7 @@ namespace Undermarch.Presentation.Controllers
         }
 
         private PlacementType _selectedType = PlacementType.None;
-<<<<<<< HEAD
         private AudioController audioController;
-=======
    
 
         public void SelectSlime()
@@ -49,7 +47,6 @@ namespace Undermarch.Presentation.Controllers
             _selectedType = PlacementType.SpikeTrap;
             Debug.Log("PlacementController: Selected: Spike Trap (Cost: 30 gold)");
         }
->>>>>>> c54416afb943afa5c431f1d059090e6ae483a72d
 
         public void SelectBearTrap()
         {
@@ -64,10 +61,7 @@ namespace Undermarch.Presentation.Controllers
                 Debug.LogError("PlacementController: No AudioController found in scene!");
         }
 
-        public void SelectSlime() => _selectedType = PlacementType.Slime;
-        public void SelectArcher() => _selectedType = PlacementType.Archer;
-        public void SelectGoblin() => _selectedType = PlacementType.Goblin;
-        public void SelectSpikeTrap() => _selectedType = PlacementType.SpikeTrap;
+    
 
         private void Update()
         {
@@ -104,141 +98,76 @@ namespace Undermarch.Presentation.Controllers
 
                 bool placed = false;
 
-                switch (_selectedType)
-                {
-                    case PlacementType.Slime:
-                        if (GameManager.Instance.GameState.CanAfford(50))
-                        {
-<<<<<<< HEAD
-                            var slime = CharacterDatabase.slimeMonster.Clone();
-                            slime.spawnSound = "slimeSound";
-                            slime.hurtSound = "slimeSound";
-                            slime.attackSound = "slimeSound";
-                            slime.deathSound = "slimeSound";
-                            GameManager.Instance.Board.AddEntity(tilePos, slime);
-                            GameManager.Instance.GameState.SpendGold(50);
-                            audioController.PlaySlimeSound();
-                            placed = true;
-=======
-                            Debug.Log($"PlacementController: Valid tile {tilePos}. Attempting to place {_selectedType}");
-                            // Check cost and place entity
-                            bool placed = false;
+switch (_selectedType)
+{
+    case PlacementType.Slime:
+        if (GameManager.Instance.GameState.CanAfford(50))
+        {
+            var slime = CharacterDatabase.slimeMonster.Clone();
+            slime.spawnSound = "slimeSound";
+            slime.hurtSound = "slimeSound";
+            slime.attackSound = "slimeSound";
+            slime.deathSound = "slimeSound";
 
-                            switch (_selectedType)
-                            {
-                                case PlacementType.Slime:
-                                    if (GameManager.Instance.GameState.CanAfford(50))
-                                    {
-                                        var slime = CharacterDatabase.slimeMonster.Clone();
-                                        GameManager.Instance.Board.AddEntity(tilePos, slime);
-                                        GameManager.Instance.GameState.SpendGold(50);
-                                        Debug.Log($"Placed Slime at {tilePos.x},{tilePos.y} for 50 gold");
-                                        placed = true;
-                                        audioController.PlaySlimeSound();
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("Not enough gold to place Slime (need 50)!");
-                                    }
-                                    break;
+            GameManager.Instance.Board.AddEntity(tilePos, slime);
+            GameManager.Instance.GameState.SpendGold(50);
+            audioController.PlaySlimeSound();
+            placed = true;
+            Debug.Log($"Placed Slime at {tilePos.x},{tilePos.y} for 50 gold");
+        }
+        else
+        {
+            Debug.Log("Not enough gold to place Slime (need 50)!");
+        }
+        break;
 
-                                case PlacementType.Archer:
-                                    if (GameManager.Instance.GameState.CanAfford(80))
-                                    {
-                                        var archer = CharacterDatabase.archerMonster.Clone();
-                                        GameManager.Instance.Board.AddEntity(tilePos, archer);
-                                        GameManager.Instance.GameState.SpendGold(80);
-                                        Debug.Log($"Placed Archer at {tilePos.x},{tilePos.y} for 80 gold");
-                                        placed = true;
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("Not enough gold to place Archer (need 80)!");
-                                    }
-                                    break;
+    case PlacementType.Archer:
+        if (GameManager.Instance.GameState.CanAfford(80))
+        {
+            var archer = CharacterDatabase.archerMonster.Clone();
+            GameManager.Instance.Board.AddEntity(tilePos, archer);
+            GameManager.Instance.GameState.SpendGold(80);
+            placed = true;
+            Debug.Log($"Placed Archer at {tilePos.x},{tilePos.y} for 80 gold");
+        }
+        break;
 
-                                case PlacementType.SpikeTrap:
-                                    if (GameManager.Instance.GameState.CanAfford(30))
-                                    {
-                                        GameManager.Instance.Board.AddInteractable(tilePos, new SpikeTrap());
-                                        GameManager.Instance.GameState.SpendGold(30);
-                                        Debug.Log($"Placed Spike Trap at {tilePos.x},{tilePos.y} for 30 gold");
-                                        placed = true;
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("Not enough gold to place Spike Trap (need 30)!");
-                                    }
-                                    break;
-                                case PlacementType.Goblin:
-                                    if (GameManager.Instance.GameState.CanAfford(50))
-                                    {
-                                        var goblin = CharacterDatabase.goblin1.Clone();
-                                        GameManager.Instance.GameState.SpendGold(50);
-                                        GameManager.Instance.Board.AddEntity(tilePos, goblin);
-                                        Debug.Log($"Placed Goblin {tilePos.x},{tilePos.y} for 50 gold");
-                                        placed = true;
-                                       
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("Not enough gold to place Goblin (need 50)!");
-                                    } break;
+    case PlacementType.Goblin:
+        if (GameManager.Instance.GameState.CanAfford(50))
+        {
+            var goblin = CharacterDatabase.goblin1.Clone();
+            GameManager.Instance.Board.AddEntity(tilePos, goblin);
+            GameManager.Instance.GameState.SpendGold(50);
+            placed = true;
+            Debug.Log($"Placed Goblin at {tilePos.x},{tilePos.y} for 50 gold");
+        }
+        break;
 
-                                case PlacementType.BearTrap:
-                                    if (GameManager.Instance.GameState.CanAfford(50))
-                                    {
-                                        GameManager.Instance.Board.AddInteractable(tilePos, new BearTrap());
-                                        GameManager.Instance.GameState.SpendGold(50);
-                                        Debug.Log($"Placed Bear Trap at {tilePos.x},{tilePos.y} for 50 gold");
-                                        placed = true;
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("Not enough gold to place Bear Trap (need 50)!");
-                                    }
-                                    break;
+    case PlacementType.SpikeTrap:
+        if (GameManager.Instance.GameState.CanAfford(30))
+        {
+            GameManager.Instance.Board.AddInteractable(tilePos, new SpikeTrap());
+            GameManager.Instance.GameState.SpendGold(30);
+            placed = true;
+            Debug.Log($"Placed Spike Trap at {tilePos.x},{tilePos.y} for 30 gold");
+        }
+        break;
 
-                            }
+    case PlacementType.BearTrap:
+        if (GameManager.Instance.GameState.CanAfford(50))
+        {
+            GameManager.Instance.Board.AddInteractable(tilePos, new BearTrap());
+            GameManager.Instance.GameState.SpendGold(50);
+            placed = true;
+            Debug.Log($"Placed Bear Trap at {tilePos.x},{tilePos.y} for 50 gold");
+        }
+        break;
+}
 
-                            if (placed) { _selectedType = PlacementType.None; }
->>>>>>> c54416afb943afa5c431f1d059090e6ae483a72d
-                        }
-                        break;
+if (placed)
+    _selectedType = PlacementType.None;
 
-                    case PlacementType.Archer:
-                        if (GameManager.Instance.GameState.CanAfford(80))
-                        {
-                            var archer = CharacterDatabase.archerMonster.Clone();
-                            GameManager.Instance.Board.AddEntity(tilePos, archer);
-                            GameManager.Instance.GameState.SpendGold(80);
-                            placed = true;
-                        }
-                        break;
-
-                    case PlacementType.Goblin:
-                        if (GameManager.Instance.GameState.CanAfford(50))
-                        {
-                            var goblin = CharacterDatabase.goblin1.Clone();
-                            GameManager.Instance.Board.AddEntity(tilePos, goblin);
-                            GameManager.Instance.GameState.SpendGold(50);
-                            placed = true;
-                        }
-                        break;
-
-                    case PlacementType.SpikeTrap:
-                        if (GameManager.Instance.GameState.CanAfford(30))
-                        {
-                            GameManager.Instance.Board.AddInteractable(tilePos, new SpikeTrap());
-                            GameManager.Instance.GameState.SpendGold(30);
-                            placed = true;
-                        }
-                        break;
-                }
-
-                if (placed)
-                    _selectedType = PlacementType.None;
-            }
         }
     }
-}
+    }
+    }
