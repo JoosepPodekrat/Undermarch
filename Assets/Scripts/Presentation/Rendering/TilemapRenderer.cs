@@ -33,6 +33,7 @@ namespace Undermarch.Presentation.Rendering
         public TileBase archerTile;
         public TileBase dungeonMasterTile;
         public TileBase trapTile;
+        public TileBase bearTrapTile;
         public TileBase chestTile;
         public TileBase arrowTile;
         public TileBase poisonCloudTile;
@@ -107,7 +108,11 @@ namespace Undermarch.Presentation.Rendering
 
             // Interactable Layer (Traps, Chests)
             var interactable = _board.GetInteractableAt(pos);
-            if (interactable is Trap)
+            if (interactable is Undermarch.Simulation.Entities.Traps.BearTrap)
+            {
+                interactableTilemap.SetTile(cellPos, bearTrapTile);
+            }
+            else if (interactable is Trap)
             {
                 interactableTilemap.SetTile(cellPos, trapTile);
             }
@@ -163,7 +168,7 @@ namespace Undermarch.Presentation.Rendering
                         tile = peasantTile;
                         break;
 
-                    case "Sorceress":
+                    case "Apprentice Mage":
                         tile = sorceressTile;
                         break;
 

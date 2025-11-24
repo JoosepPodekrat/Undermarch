@@ -765,6 +765,7 @@ MonoBehaviour:
   archerTile: {fileID: 0}
   dungeonMasterTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
   trapTile: {fileID: 11400000, guid: 39e0253dda1af4c2b911d7d3b041ab4e, type: 2}
+  bearTrapTile: {fileID: 11400000, guid: 21ddd92406e7bd24e8bfcdafb1f2e527, type: 2}
   chestTile: {fileID: 11400000, guid: 5d7234bf14281984e86d422c1d730e03, type: 2}
   arrowTile: {fileID: 0}
   poisonCloudTile: {fileID: 0}

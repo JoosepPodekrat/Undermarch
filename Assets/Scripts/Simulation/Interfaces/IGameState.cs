@@ -6,6 +6,7 @@ namespace Undermarch.Simulation.Interfaces
     {
         Placement,
         Combat,
+        BuildingPhase2,
         GameOver
     }
     public enum ResourceType

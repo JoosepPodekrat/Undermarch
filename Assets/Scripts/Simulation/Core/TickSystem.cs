@@ -58,6 +58,12 @@ namespace Undermarch.Simulation.Core
             Mode = TickMode.Paused;
         }
 
+        public void Reset()
+        {
+            CurrentTick = 0;
+            Mode = TickMode.Paused;
+        }
+
         public void Tick()
         {
             if (gameState.Phase != GamePhase.Combat)

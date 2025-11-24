@@ -37,6 +37,7 @@ namespace Undermarch.Simulation.Entities
 
         public static readonly Hero apprenticeMage = new Hero //female mage, 
         {
+            Name = "Apprentice Mage",
             faction = Faction.Hero,
             strength = 7,
             stamina = 9,
@@ -54,6 +55,7 @@ namespace Undermarch.Simulation.Entities
 
         public static readonly Hero rogue = new Hero //female rogue (use deeper voicelines)
         {
+            Name = "Rogue",
             faction = Faction.Hero,
             strength = 9,
             stamina = 10,
@@ -134,7 +136,7 @@ namespace Undermarch.Simulation.Entities
 
         public static readonly ArcherMonster archerMonster = new ArcherMonster
         {
-            Name = "Archer Monster",
+            Name = "Archer",
             faction = Faction.Defender,
             strength = 7,
             stamina = 9,
