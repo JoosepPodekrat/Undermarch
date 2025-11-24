@@ -761,7 +761,7 @@ MonoBehaviour:
   monsterTile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
   goblin1Tile: {fileID: 11400000, guid: 4547850f36cce2048973979181a81841, type: 2}
   goblin2Tile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
-  slimeTile: {fileID: 11400000, guid: 76de80396e60d2d4a8324e99e197ee60, type: 2}
+  slimeTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
   archerTile: {fileID: 0}
   dungeonMasterTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
   trapTile: {fileID: 11400000, guid: 39e0253dda1af4c2b911d7d3b041ab4e, type: 2}
