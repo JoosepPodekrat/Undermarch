@@ -16,8 +16,10 @@ namespace Undermarch.Presentation.Controllers
             None,
             Slime,
             Archer,
+            Goblin,
             SpikeTrap
         }
+        AudioController audioController = new AudioController();
 
         private PlacementType _selectedType = PlacementType.None;
    
@@ -113,6 +115,7 @@ namespace Undermarch.Presentation.Controllers
                                         GameManager.Instance.GameState.SpendGold(50);
                                         Debug.Log($"Placed Slime at {tilePos.x},{tilePos.y} for 50 gold");
                                         placed = true;
+                                        audioController.PlaySlimeSound();
                                     }
                                     else
                                     {
@@ -148,6 +151,21 @@ namespace Undermarch.Presentation.Controllers
                                         Debug.Log("Not enough gold to place Spike Trap (need 30)!");
                                     }
                                     break;
+                                case PlacementType.Goblin:
+                                    if (GameManager.Instance.GameState.CanAfford(50))
+                                    {
+                                        var goblin = CharacterDatabase.goblin1.Clone();
+                                        GameManager.Instance.GameState.SpendGold(50);
+                                        GameManager.Instance.Board.AddEntity(tilePos, goblin);
+                                        Debug.Log($"Placed Goblin {tilePos.x},{tilePos.y} for 50 gold");
+                                        placed = true;
+                                       
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("Not enough gold to place Spike Trap (need 30)!");
+                                    } break;
+
                             }
 
                             if (placed) { _selectedType = PlacementType.None; }

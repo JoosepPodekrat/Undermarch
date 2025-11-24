@@ -93,7 +93,7 @@ namespace Undermarch.Simulation.Entities
         {
             Name = "Goblin",
             faction = Faction.Defender,
-            strength = 8,
+            strength = 12,
             stamina = 5,
             agility = 12,
             intelligence = 3,

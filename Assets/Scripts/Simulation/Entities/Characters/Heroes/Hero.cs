@@ -115,17 +115,23 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             }
 
             // Already at chest?
+            // Already at chest?
             if (currentPos.Equals(currentTarget.Value))
             {
                 Chest chest = board.GetInteractableAt(currentTarget.Value) as Chest;
                 if (chest != null && !chest.Looted)
                     chest.Interact(this);
 
-                state = HeroState.Idle;
+                // Reset current task
                 currentPath = null;
                 currentTarget = null;
+
+                // Immediately select a new task (DON'T stop)
+                state = HeroState.Idle;
+                SelectNewTask(board, currentPos);
                 return;
             }
+
 
             // Need new path?
             if (currentPath == null || currentPath.Count < 2)
@@ -182,14 +188,18 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
 
 
         private bool ShouldFlee()
-{
-    if (FleeThreshold == int.MaxValue) return false; // never flee for final wave
+        {
+            if (FleeThreshold == int.MaxValue) return false; // never flee for final wave
 
-    float healthPercent = (float)currentHP / maxHP;
-    if (healthPercent <= 0) healthPercent = 0.01f;
-    float lootToHealthRatio = gold / healthPercent;
-    return lootToHealthRatio > FleeThreshold;
-}
+            float healthPercent = (float)currentHP / maxHP;
+            if (gold / healthPercent > FleeThreshold)
+            {
+                return true;
+            }
+            return healthPercent < 0.2f; // e.g., flee if below 20% HP  
+
+        }
+
 
 
         private Character FindNearbyEnemy(IBoard board, TilePos currentPos)
@@ -210,39 +220,42 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
 
         private void FleeToExit(IBoard board, TilePos currentPos)
         {
-            // Head to nearest board edge
-            TilePos exitDirection = GetDirectionToNearestEdge(board, currentPos);
-            TilePos nextPos = new TilePos(currentPos.x + exitDirection.x, currentPos.y + exitDirection.y);
+            TilePos exitPos = FindExit(board);
 
-            if (board.InBounds(nextPos))
-            {
-                HandleMove(board, currentPos, nextPos);
-            }
-
-            // Check if reached edge - remove from board (escaped)
-            if (currentPos.x == 0 || currentPos.x == board.Width - 1 ||
-                currentPos.y == 0 || currentPos.y == board.Height - 1)
+            // Already at the exit? Remove hero from board
+            if (currentPos.Equals(exitPos))
             {
                 board.RemoveEntity(currentPos);
                 SimulationLog.Log($"{Name} escaped with {gold} gold!");
+                return;
+            }
+
+            // Pathfind toward exit
+            var path = Pathfinder.FindPath(board, currentPos, exitPos);
+            if (path == null || path.Count == 0)
+            {
+                // blocked or no path, will try again next tick
+                return;
+            }
+
+            // Move up to 2 steps along the path
+            int steps = System.Math.Min(2, path.Count);
+            for (int i = 0; i < steps; i++)
+            {
+                HandleMove(board, currentPos, path[i]);
+                currentPos = path[i]; // update currentPos for next step
+                                      // Check if reached exit
+                if (currentPos.Equals(exitPos))
+                {
+                    board.RemoveEntity(currentPos);
+                    SimulationLog.Log($"{Name} escaped with {gold} gold!");
+                    return;
+                }
             }
         }
 
-        private TilePos GetDirectionToNearestEdge(IBoard board, TilePos pos)
-        {
-            int distToLeft = pos.x;
-            int distToRight = board.Width - 1 - pos.x;
-            int distToTop = pos.y;
-            int distToBottom = board.Height - 1 - pos.y;
 
-            int minDist = System.Math.Min(System.Math.Min(distToLeft, distToRight),
-                                         System.Math.Min(distToTop, distToBottom));
 
-            if (minDist == distToLeft) return new TilePos(-1, 0);
-            if (minDist == distToRight) return new TilePos(1, 0);
-            if (minDist == distToTop) return new TilePos(0, -1);
-            return new TilePos(0, 1);
-        }
 
         private Chest FindNearestUnlootedChest(IBoard board)
         {
@@ -256,7 +269,7 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
                 {
                     TilePos pos = new TilePos(x, y);
                     object interactable = board.GetInteractableAt(pos);
-                    if (interactable is Chest chest && !chest.Looted)
+                    if (interactable is Chest chest && !chest.Looted && chest.IsActive)
                     {
                         float distSq = TilePos.DistanceSq(myPos, pos);
                         if (distSq < minDistanceSq)
@@ -320,5 +333,24 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
                 HandleMove(board, currentPos, path[1]);
             }
         }
+        private TilePos FindExit(IBoard board)
+        {
+            for (int y = 0; y < board.Height; y++)
+            {
+                for (int x = 0; x < board.Width; x++)
+                {
+                    var pos = new TilePos(x, y);
+                    if (board.GetInteractableAt(pos) is Door door && door.IsExit)
+                    {
+                        return pos;
+                    }
+                }
+            }
+
+            // fallback if no exit found
+            return new TilePos(0, 0);
+        }
+
+
     }
 }

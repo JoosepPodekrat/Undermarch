@@ -11,7 +11,7 @@ namespace Undermarch.Simulation.Entities.Traps
         private static DamagePacket CreateDamagePacket()
         {
             var packet = new DamagePacket();
-            packet.Add(DamageType.Physical, 10); // Deals 10 physical damage
+            packet.Add(DamageType.Physical, 30); // Deals 10 physical damage
             return packet;
         }
     }
