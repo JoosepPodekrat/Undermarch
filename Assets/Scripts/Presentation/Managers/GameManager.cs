@@ -103,7 +103,7 @@ namespace Undermarch.Presentation.Managers
             }
 
             // Create Background
-            CreateBackground();
+            // CreateBackground();
 
             // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
             List<TilePos> chestPositions;
