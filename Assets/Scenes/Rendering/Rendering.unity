@@ -755,15 +755,6 @@ MonoBehaviour:
   groundTile: {fileID: 11400000, guid: 38eb825decbb73ec683e5580516bdcbf, type: 2}
   wallTile: {fileID: 11400000, guid: e9e14f14ec74b242cb2f6a80bb8a9964, type: 2}
   heroTile: {fileID: 11400000, guid: efeb382b4fabe161894c062a51e9bd4a, type: 2}
-  peasantTile: {fileID: 11400000, guid: 92dbffb8f3689974fa83cfe84af009de, type: 2}
-  sorceressTile: {fileID: 11400000, guid: 785bafd5fa0f8454a8183b721ab52926, type: 2}
-  rogueTile: {fileID: 11400000, guid: 1b49ac090b12a2b4194918dfb31f64f7, type: 2}
-  monsterTile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
-  goblin1Tile: {fileID: 11400000, guid: 4547850f36cce2048973979181a81841, type: 2}
-  goblin2Tile: {fileID: 11400000, guid: e30b00b00b26a28e9ad38cc43d92b943, type: 2}
-  slimeTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
-  archerTile: {fileID: 0}
-  dungeonMasterTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
   trapTile: {fileID: 11400000, guid: 39e0253dda1af4c2b911d7d3b041ab4e, type: 2}
   bearTrapTile: {fileID: 11400000, guid: 21ddd92406e7bd24e8bfcdafb1f2e527, type: 2}
   chestTile: {fileID: 11400000, guid: 5d7234bf14281984e86d422c1d730e03, type: 2}
@@ -772,6 +763,30 @@ MonoBehaviour:
   slowZoneTile: {fileID: 0}
   fireZoneTile: {fileID: 0}
   fogZoneTile: {fileID: 0}
+  orangeKnightTile: {fileID: 11400000, guid: 785bafd5fa0f8454a8183b721ab52926, type: 2}
+  orangeKnightFightingTile: {fileID: 0}
+  purpleKnightTile: {fileID: 11400000, guid: 92dbffb8f3689974fa83cfe84af009de, type: 2}
+  purpleKnightFightingTile: {fileID: 0}
+  blueKnightTile: {fileID: 11400000, guid: 1b49ac090b12a2b4194918dfb31f64f7, type: 2}
+  blueKnightFightingTile: {fileID: 0}
+  peasantTile: {fileID: 11400000, guid: 92dbffb8f3689974fa83cfe84af009de, type: 2}
+  peasantFightingTile: {fileID: 11400000, guid: 1b49ac090b12a2b4194918dfb31f64f7, type: 2}
+  wizardTile: {fileID: 0}
+  wizardFightingTile: {fileID: 0}
+  priestessTile: {fileID: 0}
+  priestessFightingTile: {fileID: 0}
+  goblinTile: {fileID: 11400000, guid: 4547850f36cce2048973979181a81841, type: 2}
+  goblinFightingTile: {fileID: 0}
+  skeletonTile: {fileID: 0}
+  skeletonFightingTile: {fileID: 0}
+  slimeTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
+  slimeFightingTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
+  dungeonMasterTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
+  dungeonMasterFightingTile: {fileID: 0}
+  woodenSpikeTrapTile: {fileID: 11400000, guid: 39e0253dda1af4c2b911d7d3b041ab4e, type: 2}
+  ironSpikeTrapTile: {fileID: 11400000, guid: 21ddd92406e7bd24e8bfcdafb1f2e527, type: 2}
+  gasTrapTile: {fileID: 0}
+  pressurePlateTile: {fileID: 0}
 --- !u!1 &1802145946
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,15 +23,6 @@ namespace Undermarch.Presentation.Rendering
         public TileBase groundTile;
         public TileBase wallTile;
         public TileBase heroTile;
-        public TileBase peasantTile;
-        public TileBase sorceressTile;
-        public TileBase rogueTile;
-        public TileBase monsterTile;
-        public TileBase goblin1Tile;
-        public TileBase goblin2Tile;
-        public TileBase slimeTile;
-        public TileBase archerTile;
-        public TileBase dungeonMasterTile;
         public TileBase trapTile;
         public TileBase bearTrapTile;
         public TileBase chestTile;
@@ -40,6 +31,45 @@ namespace Undermarch.Presentation.Rendering
         public TileBase slowZoneTile;
         public TileBase fireZoneTile;
         public TileBase fogZoneTile;
+        [Header("Knights")]
+        public TileBase orangeKnightTile;
+        public TileBase orangeKnightFightingTile;
+
+        public TileBase purpleKnightTile;
+        public TileBase purpleKnightFightingTile;
+
+        public TileBase blueKnightTile;
+        public TileBase blueKnightFightingTile;
+
+        [Header("Humanoids")]
+        public TileBase peasantTile;
+        public TileBase peasantFightingTile;
+
+        public TileBase wizardTile;
+        public TileBase wizardFightingTile;
+
+        public TileBase priestessTile;
+        public TileBase priestessFightingTile;
+
+        [Header("Monsters")]
+        public TileBase goblinTile;
+        public TileBase goblinFightingTile;
+
+        public TileBase skeletonTile;
+        public TileBase skeletonFightingTile;
+
+        public TileBase slimeTile;
+        public TileBase slimeFightingTile;
+
+        [Header("Dungeon Master")]
+        public TileBase dungeonMasterTile;
+        public TileBase dungeonMasterFightingTile;
+
+        [Header("Traps")]
+        public TileBase woodenSpikeTrapTile;
+        public TileBase ironSpikeTrapTile;
+        public TileBase gasTrapTile;
+        public TileBase pressurePlateTile;
 
         private Board _board;
 
@@ -162,52 +192,74 @@ namespace Undermarch.Presentation.Rendering
             {
                 TileBase tile = null;
 
-                switch (character.Name)  // or character.name
+                switch (character.Name)
                 {
                     case "Peasant":
                         tile = peasantTile;
                         break;
 
-                    case "Apprentice Mage":
-                        tile = sorceressTile;
+                    case "Wizard":
+                        tile = wizardTile;
                         break;
 
-                    case "Rogue":
-                        tile = rogueTile;
+                    case "Priestess":
+                        tile = priestessTile;
                         break;
 
-                    case "Monster":
-                        tile = monsterTile;
+                    case "OrangeKnight":
+                        tile = orangeKnightTile;
+                        break;
+
+                    case "PurpleKnight":
+                        tile = purpleKnightTile;
+                        break;
+
+                    case "BlueKnight":
+                        tile = blueKnightTile;
                         break;
 
                     case "Goblin":
-                        tile = goblin1Tile;
+                        tile = goblinTile;
                         break;
 
-                    case "GoblinShaman":
-                        tile = goblin2Tile;
+                    case "Skeleton":
+                        tile = skeletonTile;
                         break;
 
                     case "Slime":
                         tile = slimeTile;
                         break;
 
-                    case "Archer":
-                        tile = archerTile;
-                        break;
-
                     case "DungeonMaster":
                         tile = dungeonMasterTile;
                         break;
 
-                    case "Hero":
-                        tile = heroTile;
+                    case "WoodenSpikeTrap":
+                        tile = woodenSpikeTrapTile;
+                        break;
+
+                    case "IronSpikeTrap":
+                        tile = ironSpikeTrapTile;
+                        break;
+
+                    case "GasTrap":
+                        tile = gasTrapTile;
+                        break;
+
+                    case "PressurePlate":
+                        tile = pressurePlateTile;
                         break;
 
                     default:
-                        Debug.LogWarning("TilemapRenderer: No tile mapped for character name '" + character.Name + "'");
+                        Debug.LogWarning(
+                            "TilemapRenderer: No tile mapped for character name '" + character.Name + "'"
+                        );
                         break;
                 }
+
+                Debug.Log("TilemapRenderer: Setting tile for " + character.Name + " at " + cellPos);
+                entityTilemap.SetTile(cellPos, tile);
+
 
                 Debug.Log("TilemapRenderer: Setting tile for " + character.Name + " at " + cellPos);
                 entityTilemap.SetTile(cellPos, tile);
