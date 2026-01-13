@@ -5,6 +5,7 @@ using Undermarch.Simulation.Grid;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Undermarch.Simulation.Interfaces;
+using Undermarch.Presentation.Rendering;
 
 namespace Undermarch.Presentation.Controllers
 {
@@ -22,6 +23,7 @@ namespace Undermarch.Presentation.Controllers
 
         private PlacementType _selectedType = PlacementType.None;
         private AudioController audioController;
+        private TilemapRenderer _tilemapRenderer;
    
 
         public void SelectSlime()
@@ -59,42 +61,70 @@ namespace Undermarch.Presentation.Controllers
             audioController = FindObjectOfType<AudioController>();
             if (audioController == null)
                 Debug.LogError("PlacementController: No AudioController found in scene!");
+
+            _tilemapRenderer = FindObjectOfType<TilemapRenderer>();
         }
 
     
 
         private void Update()
         {
-            if (_selectedType == PlacementType.None) return;
+            if (_selectedType == PlacementType.None)
+            {
+                if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
+                return;
+            }
+            
             if (Camera.main == null) return;
             if (GameManager.Instance?.Board == null || GameManager.Instance.GameState == null) return;
             if (GameManager.Instance.CurrentPhase != GamePhase.Placement &&
                 GameManager.Instance.CurrentPhase != GamePhase.Combat &&
-                GameManager.Instance.CurrentPhase != GamePhase.BuildingPhase2) return;
+                GameManager.Instance.CurrentPhase != GamePhase.BuildingPhase2)
+            {
+                if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
+                return;
+            }
+
+            // Raycast for Ghost & Input
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Plane boardPlane = new Plane(Vector3.back, Vector3.zero);
+
+            if (!boardPlane.Raycast(ray, out float enter))
+            {
+                if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
+                return;
+            }
+
+            Vector3 mouseWorldPos = ray.GetPoint(enter);
+            int boardWidth = GameManager.Instance.Board.Width;
+            int boardHeight = GameManager.Instance.Board.Height;
+
+            TilePos tilePos = new TilePos(
+                Mathf.FloorToInt(mouseWorldPos.x + boardWidth / 2f),
+                Mathf.FloorToInt(mouseWorldPos.y + boardHeight / 2f)
+            );
+
+            bool inBounds = GameManager.Instance.Board.InBounds(tilePos);
+            bool isValid = false;
+
+            if (inBounds)
+            {
+                 bool hasWall = GameManager.Instance.Board.HasWallAt(tilePos);
+                 var entity = GameManager.Instance.Board.GetEntityAt(tilePos);
+                 var interactable = GameManager.Instance.Board.GetInteractableAt(tilePos);
+                 isValid = !hasWall && entity == null && interactable == null;
+            }
+
+            // Update Preview
+            if (_tilemapRenderer != null)
+            {
+                if (inBounds) _tilemapRenderer.DrawPreview(tilePos, _selectedType, isValid);
+                else _tilemapRenderer.ClearPreview();
+            }
 
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                Plane boardPlane = new Plane(Vector3.back, Vector3.zero);
-
-                if (!boardPlane.Raycast(ray, out float enter)) return;
-
-                Vector3 mouseWorldPos = ray.GetPoint(enter);
-                int boardWidth = GameManager.Instance.Board.Width;
-                int boardHeight = GameManager.Instance.Board.Height;
-
-                TilePos tilePos = new TilePos(
-                    Mathf.FloorToInt(mouseWorldPos.x + boardWidth / 2f),
-                    Mathf.FloorToInt(mouseWorldPos.y + boardHeight / 2f)
-                );
-
-                if (!GameManager.Instance.Board.InBounds(tilePos)) return;
-
-                bool hasWall = GameManager.Instance.Board.HasWallAt(tilePos);
-                var entity = GameManager.Instance.Board.GetEntityAt(tilePos);
-                var interactable = GameManager.Instance.Board.GetInteractableAt(tilePos);
-
-                if (hasWall || entity != null || interactable != null) return;
+                if (!inBounds || !isValid) return;
 
                 bool placed = false;
 
@@ -169,5 +199,6 @@ if (placed)
 
         }
     }
-    }
-    }
+}
+}
+

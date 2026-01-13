@@ -1,4 +1,5 @@
 using Undermarch;
+using Undermarch.Presentation.Controllers;
 using Undermarch.Presentation.Managers;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Entities.Characters.DungeonMaster;
@@ -18,6 +19,7 @@ namespace Undermarch.Presentation.Rendering
         public Tilemap interactableTilemap;
         public Tilemap entityTilemap;
         public Tilemap effectsTilemap;
+        public Tilemap previewTilemap;
 
         [Header("Tile Assets")]
         public TileBase groundTile;
@@ -60,6 +62,7 @@ namespace Undermarch.Presentation.Rendering
 
         public TileBase slimeTile;
         public TileBase slimeFightingTile;
+        public TileBase archerTile;
 
         [Header("Dungeon Master")]
         public TileBase dungeonMasterTile;
@@ -72,6 +75,7 @@ namespace Undermarch.Presentation.Rendering
         public TileBase pressurePlateTile;
 
         private Board _board;
+        private TilePos? _lastPreviewPos;
 
         void Start()
         {
@@ -281,6 +285,63 @@ namespace Undermarch.Presentation.Rendering
             interactableTilemap.ClearAllTiles();
             entityTilemap.ClearAllTiles();
             effectsTilemap.ClearAllTiles();
+            if (previewTilemap != null) previewTilemap.ClearAllTiles();
+        }
+
+        public void ClearPreview()
+        {
+            if (previewTilemap == null) return;
+            previewTilemap.ClearAllTiles();
+            _lastPreviewPos = null;
+        }
+
+        public void DrawPreview(TilePos pos, PlacementController.PlacementType type, bool isValid)
+        {
+            if (previewTilemap == null) return;
+
+            // Only update if position changed to avoid spamming SetTile (optimization)
+            // However, type or validity might change at same pos, so we should check those too?
+            // For now, simpler to just redraw if anything could be different or just always redraw (it's per frame).
+            // Let's clear previous if different position.
+            if (_lastPreviewPos.HasValue && _lastPreviewPos.Value != pos)
+            {
+                var oldCellPos = new Vector3Int(_lastPreviewPos.Value.x - _board.Width / 2, _lastPreviewPos.Value.y - _board.Height / 2, 0);
+                previewTilemap.SetTile(oldCellPos, null);
+            }
+
+            TileBase tile = null;
+            switch (type)
+            {
+                case PlacementController.PlacementType.Slime:
+                    tile = slimeTile;
+                    break;
+                case PlacementController.PlacementType.Archer:
+                    tile = archerTile ?? peasantTile; // Fallback if archerTile is missing
+                    break;
+                case PlacementController.PlacementType.Goblin:
+                    tile = goblinTile;
+                    break;
+                case PlacementController.PlacementType.SpikeTrap:
+                    tile = woodenSpikeTrapTile; // Assumption based on context
+                    break;
+                case PlacementController.PlacementType.BearTrap:
+                    tile = bearTrapTile;
+                    break;
+            }
+
+            if (tile != null)
+            {
+                var cellPos = new Vector3Int(pos.x - _board.Width / 2, pos.y - _board.Height / 2, 0);
+                previewTilemap.SetTile(cellPos, tile);
+                
+                // Color
+                previewTilemap.SetTileFlags(cellPos, TileFlags.None);
+                Color color = isValid ? Color.cyan : Color.red;
+                color.a = 0.5f;
+                previewTilemap.SetColor(cellPos, color);
+                
+                _lastPreviewPos = pos;
+            }
         }
     }
 }
