@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Undermarch;
 using Undermarch.Presentation.Controllers;
 using Undermarch.Presentation.Managers;
@@ -5,6 +7,7 @@ using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Entities.Characters.DungeonMaster;
 using Undermarch.Simulation.Entities.Characters.Heroes;
 using Undermarch.Simulation.Entities.Characters.Monsters;
+using Undermarch.Simulation.Events;
 using Undermarch.Simulation.Grid;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -76,6 +79,8 @@ namespace Undermarch.Presentation.Rendering
 
         private Board _board;
         private TilePos? _lastPreviewPos;
+        private Dictionary<Character, TileBase> _overrideTiles = new Dictionary<Character, TileBase>();
+        private Dictionary<Character, Color> _overrideColors = new Dictionary<Character, Color>();
 
         void Start()
         {
@@ -89,6 +94,10 @@ namespace Undermarch.Presentation.Rendering
 
             // Subscribe to board changes and do an initial full redraw
             _board.OnBoardChanged += UpdateTile;
+
+            CharacterEvents.OnCharacterAttacked += HandleAttack;
+            CharacterEvents.OnCharacterHurt += HandleHurt;
+
             RedrawAll();
         }
 
@@ -99,6 +108,9 @@ namespace Undermarch.Presentation.Rendering
             {
                 _board.OnBoardChanged -= UpdateTile;
             }
+
+            CharacterEvents.OnCharacterAttacked -= HandleAttack;
+            CharacterEvents.OnCharacterHurt -= HandleHurt;
         }
 
         /// <summary>
@@ -194,79 +206,88 @@ namespace Undermarch.Presentation.Rendering
 
             if (entity is Character character)
             {
-                TileBase tile = null;
+                TileBase tile = _overrideTiles.ContainsKey(character) ? _overrideTiles[character] : null;
 
-                switch (character.Name)
+                if (tile == null)
                 {
-                    case "Peasant":
-                        tile = peasantTile;
-                        break;
+                    switch (character.Name)
+                    {
+                        case "Peasant":
+                            tile = peasantTile;
+                            break;
 
-                    case "Wizard":
-                        tile = wizardTile;
-                        break;
+                        case "Wizard":
+                            tile = wizardTile;
+                            break;
 
-                    case "Priestess":
-                        tile = priestessTile;
-                        break;
+                        case "Priestess":
+                            tile = priestessTile;
+                            break;
 
-                    case "OrangeKnight":
-                        tile = orangeKnightTile;
-                        break;
+                        case "OrangeKnight":
+                            tile = orangeKnightTile;
+                            break;
 
-                    case "PurpleKnight":
-                        tile = purpleKnightTile;
-                        break;
+                        case "PurpleKnight":
+                            tile = purpleKnightTile;
+                            break;
 
-                    case "BlueKnight":
-                        tile = blueKnightTile;
-                        break;
+                        case "BlueKnight":
+                            tile = blueKnightTile;
+                            break;
 
-                    case "Goblin":
-                        tile = goblinTile;
-                        break;
+                        case "Goblin":
+                            tile = goblinTile;
+                            break;
 
-                    case "Skeleton":
-                        tile = skeletonTile;
-                        break;
+                        case "Skeleton":
+                            tile = skeletonTile;
+                            break;
 
-                    case "Slime":
-                        tile = slimeTile;
-                        break;
+                        case "Slime":
+                            tile = slimeTile;
+                            break;
 
-                    case "DungeonMaster":
-                        tile = dungeonMasterTile;
-                        break;
+                        case "DungeonMaster":
+                            tile = dungeonMasterTile;
+                            break;
 
-                    case "WoodenSpikeTrap":
-                        tile = woodenSpikeTrapTile;
-                        break;
+                        case "WoodenSpikeTrap":
+                            tile = woodenSpikeTrapTile;
+                            break;
 
-                    case "IronSpikeTrap":
-                        tile = ironSpikeTrapTile;
-                        break;
+                        case "IronSpikeTrap":
+                            tile = ironSpikeTrapTile;
+                            break;
 
-                    case "GasTrap":
-                        tile = gasTrapTile;
-                        break;
+                        case "GasTrap":
+                            tile = gasTrapTile;
+                            break;
 
-                    case "PressurePlate":
-                        tile = pressurePlateTile;
-                        break;
+                        case "PressurePlate":
+                            tile = pressurePlateTile;
+                            break;
 
-                    default:
-                        Debug.LogWarning(
-                            "TilemapRenderer: No tile mapped for character name '" + character.Name + "'"
-                        );
-                        break;
+                        default:
+                            Debug.LogWarning(
+                                "TilemapRenderer: No tile mapped for character name '" + character.Name + "'"
+                            );
+                            break;
+                    }
                 }
 
-                Debug.Log("TilemapRenderer: Setting tile for " + character.Name + " at " + cellPos);
                 entityTilemap.SetTile(cellPos, tile);
 
-
-                Debug.Log("TilemapRenderer: Setting tile for " + character.Name + " at " + cellPos);
-                entityTilemap.SetTile(cellPos, tile);
+                if (_overrideColors.ContainsKey(character))
+                {
+                    entityTilemap.SetTileFlags(cellPos, TileFlags.None);
+                    entityTilemap.SetColor(cellPos, _overrideColors[character]);
+                }
+                else
+                {
+                    entityTilemap.SetTileFlags(cellPos, TileFlags.None);
+                    entityTilemap.SetColor(cellPos, Color.white);
+                }
             }
             else
             {
@@ -342,6 +363,66 @@ namespace Undermarch.Presentation.Rendering
                 
                 _lastPreviewPos = pos;
             }
+        }
+
+        private void HandleAttack(Character character)
+        {
+            StartCoroutine(AnimateAttack(character));
+        }
+
+        private void HandleHurt(Character character)
+        {
+            StartCoroutine(AnimateHurt(character));
+        }
+
+        private IEnumerator AnimateAttack(Character character)
+        {
+            TileBase fightTile = GetFightingTile(character.Name);
+            if (fightTile != null)
+            {
+                _overrideTiles[character] = fightTile;
+                RefreshCharacterTile(character);
+                yield return new WaitForSeconds(0.2f);
+                _overrideTiles.Remove(character);
+                RefreshCharacterTile(character);
+            }
+        }
+
+        private IEnumerator AnimateHurt(Character character)
+        {
+            _overrideColors[character] = Color.red;
+            RefreshCharacterTile(character);
+            yield return new WaitForSeconds(0.1f);
+            _overrideColors.Remove(character);
+            RefreshCharacterTile(character);
+        }
+
+        private void RefreshCharacterTile(Character character)
+        {
+            if (_board == null) return;
+            TilePos pos = _board.GetPositionOf(character);
+            if (_board.InBounds(pos))
+            {
+                UpdateTile(pos);
+            }
+        }
+
+        private TileBase GetFightingTile(string charName)
+        {
+            return charName switch
+            {
+                "Peasant" => peasantFightingTile,
+                "Wizard" => wizardFightingTile,
+                "Priestess" => priestessFightingTile,
+                "OrangeKnight" => orangeKnightFightingTile,
+                "PurpleKnight" => purpleKnightFightingTile,
+                "BlueKnight" => blueKnightFightingTile,
+                "Goblin" => goblinFightingTile,
+                "Skeleton" => skeletonFightingTile,
+                "Slime" => slimeFightingTile,
+                "DungeonMaster" => dungeonMasterFightingTile,
+                _ => null
+            };
         }
     }
 }
