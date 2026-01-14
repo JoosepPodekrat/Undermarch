@@ -5,8 +5,11 @@ using System.Linq;
 using Undermarch.Presentation.Managers;
 using Undermarch.Simulation.Interfaces;
 using Undermarch.Simulation.Core;
+using Undermarch.Simulation.Entities;
+using Undermarch.Simulation.Grid;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem;
 
 namespace Undermarch.Presentation.Controllers
 {
@@ -36,6 +39,15 @@ namespace Undermarch.Presentation.Controllers
         [Header("References")]
         public PlacementController placementController;
 
+        [Header("Character Info Panel")]
+        private GameObject characterInfoPanel;
+        private TextMeshProUGUI charNameText;
+        private TextMeshProUGUI charHPText;
+        private TextMeshProUGUI charDamageText;
+        private TextMeshProUGUI charAgilityText;
+        private TextMeshProUGUI charFactionText;
+        private Undermarch.Simulation.Entities.Character selectedCharacter;
+
         private void Awake()
         {
             Debug.Log("HUDController: Awake started.");
@@ -62,42 +74,9 @@ namespace Undermarch.Presentation.Controllers
                 gameObject.AddComponent<GraphicRaycaster>();
             }
 
-            bool rebuildNeeded = false;
-            if (transform.Find("TopHUD") == null)
-            {
-                Debug.Log("HUDController: TopHUD missing.");
-                rebuildNeeded = true;
-            }
-            if (transform.Find("BottomHUD") == null)
-            {
-                Debug.Log("HUDController: BottomHUD missing.");
-                rebuildNeeded = true;
-            }
-            
-            // Check deep children if parents exist
-            if (!rebuildNeeded)
-            {
-                if (transform.Find("BottomHUD/PlaceSlimeButton") == null)
-                {
-                    Debug.Log("HUDController: PlaceSlimeButton missing.");
-                    rebuildNeeded = true;
-                }
-                if (transform.Find("BottomHUD/PlaceTrapButton") == null)
-                {
-                    Debug.Log("HUDController: PlaceTrapButton missing.");
-                    rebuildNeeded = true;
-                }
-            }
-
-            if (rebuildNeeded)
-            {
-                Debug.Log("HUDController: Rebuilding HUD structure...");
-                BuildHUD();
-            }
-            else
-            {
-                Debug.Log("HUDController: Existing HUD structure seems valid.");
-            }
+            // Always rebuild HUD to ensure proper raycastTarget settings on background images
+            Debug.Log("HUDController: Rebuilding HUD structure...");
+            BuildHUD();
 
             // 3. Reference Assignment
             RefreshReferences();
@@ -237,30 +216,34 @@ namespace Undermarch.Presentation.Controllers
                 UpdateButtonState(buildBearTrapButton, isPhase2, "Bear Trap", bearTrapPriceText);
             }
 
-            // DEBUG: Check for clicks and UI hits
-            if (UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                bool isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
-                Debug.Log($"DEBUG_INPUT: Click detected. Pointer over UI: {isPointerOverUI}");
-                
-                if (isPointerOverUI)
-                {
-                    var selected = EventSystem.current.currentSelectedGameObject;
-                    Debug.Log($"DEBUG_INPUT: Current Selected GameObject: {(selected != null ? selected.name : "null")}");
-                    
-                    // Raycast check manually to see what we are hitting
-                    var pointerData = new PointerEventData(EventSystem.current)
-                    {
-                        position = UnityEngine.InputSystem.Mouse.current.position.ReadValue()
-                    };
-                    var results = new System.Collections.Generic.List<RaycastResult>();
-                    EventSystem.current.RaycastAll(pointerData, results);
-                    foreach(var result in results)
-                    {
-                        Debug.Log($"DEBUG_INPUT: Raycast Hit: {result.gameObject.name} (Layer: {LayerMask.LayerToName(result.gameObject.layer)})");
-                    }
-                }
-            }
+            // NOTE: Old debug code commented out - it was interfering with click detection
+            // // DEBUG: Check for clicks and UI hits
+            // if (UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame)
+            // {
+            //     bool isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+            //     Debug.Log($"DEBUG_INPUT: Click detected. Pointer over UI: {isPointerOverUI}");
+            //
+            //     if (isPointerOverUI)
+            //     {
+            //         var selected = EventSystem.current.currentSelectedGameObject;
+            //         Debug.Log($"DEBUG_INPUT: Current Selected GameObject: {(selected != null ? selected.name : "null")}");
+            //
+            //         // Raycast check manually to see what we are hitting
+            //         var pointerData = new PointerEventData(EventSystem.current)
+            //         {
+            //             position = UnityEngine.InputSystem.Mouse.current.position.ReadValue()
+            //         };
+            //         var results = new System.Collections.Generic.List<RaycastResult>();
+            //         EventSystem.current.RaycastAll(pointerData, results);
+            //         foreach(var result in results)
+            //         {
+            //             Debug.Log($"DEBUG_INPUT: Raycast Hit: {result.gameObject.name} (Layer: {LayerMask.LayerToName(result.gameObject.layer)})");
+            //         }
+            //     }
+            // }
+
+            // Character info panel handling
+            HandleCharacterInfoPanel();
         }
 
         private void UpdateButtonState(Button btn, bool unlocked, string name, TextMeshProUGUI priceText)
@@ -566,15 +549,19 @@ namespace Undermarch.Presentation.Controllers
             CreateBuildButton(bottomPanel.transform, "PlaceTrapButton", "Trap", "30 G");
             CreateBuildButton(bottomPanel.transform, "PlaceGoblinButton", "Goblin", "50 G");
             CreateBuildButton(bottomPanel.transform, "PlaceBearTrapButton", "Bear Trap", "50 G");
+
+            // 4. Character Info Panel (right side, initially hidden)
+            CreateCharacterInfoPanel(canvasObj.transform);
         }
 
         GameObject CreatePanel(Transform parent, string name, Color color, float height, bool isTop)
         {
             GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Image));
             obj.transform.SetParent(parent, false);
-            
+
             Image img = obj.GetComponent<Image>();
             img.color = color;
+            img.raycastTarget = false; // Don't block clicks to game world
 
             RectTransform rt = obj.GetComponent<RectTransform>();
             rt.anchorMin = isTop ? new Vector2(0, 1) : new Vector2(0, 0);
@@ -602,9 +589,10 @@ namespace Undermarch.Presentation.Controllers
         {
             GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
             obj.transform.SetParent(parent, false);
-            
+
             Image img = obj.GetComponent<Image>();
             img.color = color ?? new Color(0.1f, 0.1f, 0.1f);
+            img.raycastTarget = true; // Ensure buttons are clickable
 
             RectTransform rt = obj.GetComponent<RectTransform>();
             rt.sizeDelta = size;
@@ -631,9 +619,10 @@ namespace Undermarch.Presentation.Controllers
         {
             GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
             obj.transform.SetParent(parent, false);
-            
+
             Image img = obj.GetComponent<Image>();
             img.color = new Color(0.1f, 0.1f, 0.1f);
+            img.raycastTarget = true; // Ensure buttons are clickable
 
             RectTransform rt = obj.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(100, 100);
@@ -684,5 +673,169 @@ namespace Undermarch.Presentation.Controllers
             obj.transform.SetParent(parent, false);
             return obj;
         }
+
+        #region Character Info Panel
+
+        void CreateCharacterInfoPanel(Transform canvasTransform)
+        {
+            // Create panel background
+            characterInfoPanel = new GameObject("CharacterInfoPanel", typeof(RectTransform), typeof(Image));
+            characterInfoPanel.transform.SetParent(canvasTransform, false);
+
+            RectTransform panelRect = characterInfoPanel.GetComponent<RectTransform>();
+            panelRect.anchorMin = new Vector2(1, 0.5f);  // Right-center anchor
+            panelRect.anchorMax = new Vector2(1, 0.5f);
+            panelRect.pivot = new Vector2(1, 0.5f);
+            panelRect.anchoredPosition = new Vector2(-10, 0);  // 10px from right edge
+            panelRect.sizeDelta = new Vector2(250, 200);
+
+            Image panelImage = characterInfoPanel.GetComponent<Image>();
+            panelImage.color = new Color(0.1f, 0.1f, 0.1f, 0.95f);
+            panelImage.raycastTarget = true; // Allow detecting clicks inside panel
+
+            // Add vertical layout for content
+            var layoutGroup = characterInfoPanel.AddComponent<VerticalLayoutGroup>();
+            layoutGroup.padding = new RectOffset(10, 10, 10, 10);
+            layoutGroup.spacing = 5;
+            layoutGroup.childAlignment = TextAnchor.UpperLeft;
+            layoutGroup.childControlWidth = true;
+            layoutGroup.childControlHeight = true;
+
+            // Create text elements
+            charNameText = CreateInfoText(characterInfoPanel.transform, "NameText", "Name", 18, Color.white, true);
+            charHPText = CreateInfoText(characterInfoPanel.transform, "HPText", "HP: 0/0", 14, Color.red, false);
+            charDamageText = CreateInfoText(characterInfoPanel.transform, "DamageText", "Damage: 0", 14, Color.yellow, false);
+            charAgilityText = CreateInfoText(characterInfoPanel.transform, "AgilityText", "Agility: 0", 14, Color.cyan, false);
+            charFactionText = CreateInfoText(characterInfoPanel.transform, "FactionText", "Faction: None", 14, Color.gray, false);
+
+            // Start hidden
+            characterInfoPanel.SetActive(false);
+
+            Debug.Log("HUDController: Created character info panel.");
+        }
+
+        TextMeshProUGUI CreateInfoText(Transform parent, string name, string content, float fontSize, Color color, bool bold)
+        {
+            GameObject textObj = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI));
+            textObj.transform.SetParent(parent, false);
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.sizeDelta = new Vector2(230, 25);
+
+            TextMeshProUGUI tmp = textObj.GetComponent<TextMeshProUGUI>();
+            tmp.text = content;
+            tmp.fontSize = fontSize;
+            tmp.color = color;
+            tmp.alignment = TextAlignmentOptions.Left;
+            if (bold) tmp.fontStyle = FontStyles.Bold;
+
+            return tmp;
+        }
+
+        void HandleCharacterInfoPanel()
+        {
+            // Escape to close
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                Debug.Log("CharacterInfo: Escape pressed, closing panel");
+                CloseCharacterInfo();
+                return;
+            }
+
+            // Left click handling
+            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                // Check if click is inside our own panel (close it if so)
+                if (characterInfoPanel != null && characterInfoPanel.activeSelf)
+                {
+                    RectTransform panelRect = characterInfoPanel.GetComponent<RectTransform>();
+                    Vector2 mousePos = Mouse.current.position.ReadValue();
+                    if (RectTransformUtility.RectangleContainsScreenPoint(panelRect, mousePos))
+                    {
+                        Debug.Log("CharacterInfo: Click inside panel, closing");
+                        CloseCharacterInfo();
+                        return;
+                    }
+                }
+
+                // Try to select character at mouse position
+                // Do this regardless of UI - Unity's button onClick will handle button clicks separately
+                Character clicked = GetEntityAtMousePosition();
+                Debug.Log($"CharacterInfo: Click resulted in entity: {clicked?.Name ?? "null"}");
+
+                if (clicked != null)
+                {
+                    ShowCharacterInfo(clicked);
+                }
+                else
+                {
+                    // Clicked on empty space - close panel
+                    CloseCharacterInfo();
+                }
+            }
+        }
+
+        void ShowCharacterInfo(Character character)
+        {
+            if (character == null || characterInfoPanel == null) return;
+
+            selectedCharacter = character;
+            characterInfoPanel.SetActive(true);
+
+            if (charNameText != null)
+                charNameText.text = character.Name;
+
+            if (charHPText != null)
+                charHPText.text = $"HP: {character.currentHP}/{character.maxHP}";
+
+            if (charDamageText != null)
+                charDamageText.text = $"Damage: {character.effectiveStrength}";
+
+            if (charAgilityText != null)
+                charAgilityText.text = $"Agility: {character.effectiveAgility}";
+
+            if (charFactionText != null)
+                charFactionText.text = $"Faction: {character.faction}";
+        }
+
+        void CloseCharacterInfo()
+        {
+            selectedCharacter = null;
+            if (characterInfoPanel != null)
+            {
+                characterInfoPanel.SetActive(false);
+            }
+        }
+
+        Character GetEntityAtMousePosition()
+        {
+            if (GameManager.Instance?.Board == null || Camera.main == null)
+            {
+                Debug.Log("CharacterInfo: Board or Camera is null!");
+                return null;
+            }
+
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+            // Add board centering offset to match TilemapRenderer coordinate system
+            // TilemapRenderer renders at (pos.x - Width/2, pos.y - Height/2)
+            // So we need to add those offsets back to get logical coordinates
+            mouseWorldPos.x += GameManager.Instance.Board.Width / 2;
+            mouseWorldPos.y += GameManager.Instance.Board.Height / 2;
+
+            TilePos tilePos = new TilePos(
+                Mathf.RoundToInt(mouseWorldPos.x),
+                Mathf.RoundToInt(mouseWorldPos.y)
+            );
+
+            Debug.Log($"CharacterInfo: Mouse screen={mousePos}, world={mouseWorldPos}, tile={tilePos.x},{tilePos.y}");
+
+            Character entity = GameManager.Instance.Board.GetEntityAt(tilePos);
+            Debug.Log($"CharacterInfo: Entity at tile: {entity?.Name ?? "null"}");
+            return entity;
+        }
+
+        #endregion
     }
 }
