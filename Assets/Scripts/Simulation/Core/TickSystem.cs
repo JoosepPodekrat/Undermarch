@@ -19,6 +19,7 @@ namespace Undermarch.Simulation.Core
         public TickMode Mode { get; set; }
         public int TicksPerSecond { get; set; }
         public int CurrentTick { get; private set; }
+        public WaveSpawner WaveSpawner => waveSpawner;
 
         private IBoard board;
         private IGameState gameState;

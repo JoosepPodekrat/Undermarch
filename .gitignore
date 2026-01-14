@@ -103,3 +103,4 @@ InitTestScene*.unity*
 /TempCompile/
 dotnet-install.sh
 simulation_files.txt
+CLAUDE.md

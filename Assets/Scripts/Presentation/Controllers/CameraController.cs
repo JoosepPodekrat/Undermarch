@@ -13,6 +13,11 @@ namespace Undermarch.Presentation.Controllers
         [Header("Pan Settings")]
         public float panSpeed = 1f; // Multiplier for drag speed
 
+        [Header("Board Bounds")]
+        public int boardWidth = 20;  // Board width in tiles
+        public int boardHeight = 20; // Board height in tiles
+        public float boundsMargin = 2f; // Extra margin beyond board edge
+
         private Camera _cam;
         private Vector3 _dragOrigin;
         private bool _isDragging = false;
@@ -66,6 +71,7 @@ namespace Undermarch.Presentation.Controllers
 
             HandleZoom();
             HandlePan();
+            ClampCameraPosition();
 
             if (!_hasLoggedMove && (posBefore != _cam.transform.position || sizeBefore != _cam.orthographicSize))
             {
@@ -127,6 +133,32 @@ namespace Undermarch.Presentation.Controllers
                     _isDragging = false;
                 }
             }
+        }
+
+        private void ClampCameraPosition()
+        {
+            if (_cam == null) return;
+
+            // Get the visible bounds based on camera's orthographic size
+            float verticalSize = _cam.orthographicSize;
+            float horizontalSize = verticalSize * _cam.aspect;
+
+            // Calculate min/max bounds (board is centered at 0,0,0)
+            // Board extends from -width/2 to width/2, -height/2 to height/2
+            float minX = -(boardWidth / 2f) - boundsMargin + horizontalSize;
+            float maxX = (boardWidth / 2f) + boundsMargin - horizontalSize;
+            float minY = -(boardHeight / 2f) - boundsMargin + verticalSize;
+            float maxY = (boardHeight / 2f) + boundsMargin - verticalSize;
+
+            // Ensure min < max (for very small zoom levels)
+            if (minX > maxX) minX = maxX = (minX + maxX) / 2f;
+            if (minY > maxY) minY = maxY = (minY + maxY) / 2f;
+
+            // Clamp position
+            Vector3 pos = _cam.transform.position;
+            pos.x = Mathf.Clamp(pos.x, minX, maxX);
+            pos.y = Mathf.Clamp(pos.y, minY, maxY);
+            _cam.transform.position = pos;
         }
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 using Undermarch.Presentation.Managers;
 using Undermarch.Simulation.Interfaces;
 using Undermarch.Simulation.Core;
@@ -14,6 +15,8 @@ namespace Undermarch.Presentation.Controllers
         [Header("Top HUD")]
         public TextMeshProUGUI coinText;
         public TextMeshProUGUI turnIndicatorText;
+        public TextMeshProUGUI waveText;
+        public TextMeshProUGUI enemiesText;
         public Image turnIndicatorImage;
         public Button settingsButton;
         public Button levelSelectButton;
@@ -121,8 +124,10 @@ namespace Undermarch.Presentation.Controllers
                 return found;
             }
 
-            FindAndLog("TopHUD/InfoPanel/CoinText", ref coinText, "coinText");
-            FindAndLog("TopHUD/InfoPanel/TurnIndicatorText", ref turnIndicatorText, "turnIndicatorText");
+            FindAndLog("TopHUD/MiddlePanel/TurnIndicatorText", ref turnIndicatorText, "turnIndicatorText");
+            FindAndLog("TopHUD/MiddlePanel/StatsRow/WaveText", ref waveText, "waveText");
+            FindAndLog("TopHUD/MiddlePanel/StatsRow/EnemiesText", ref enemiesText, "enemiesText");
+            FindAndLog("TopHUD/MiddlePanel/StatsRow/CoinText", ref coinText, "coinText");
             FindAndLog("TopHUD/SettingsButton", ref settingsButton, "settingsButton");
             FindAndLog("TopHUD/LevelSelectButton", ref levelSelectButton, "levelSelectButton");
             FindAndLog("TopHUD/StartWaveButton", ref startCombatButton, "startCombatButton");
@@ -222,11 +227,12 @@ namespace Undermarch.Presentation.Controllers
         private void Update()
         {
             UpdateTurnIndicator();
+            UpdateWaveInfo();
 
             if (GameManager.Instance != null)
             {
                 bool isPhase2 = GameManager.Instance.CurrentPhase == GamePhase.BuildingPhase2 || GameManager.Instance.IsSecondStage;
-                
+
                 UpdateButtonState(buildGoblinButton, isPhase2, "Goblin", goblinPriceText);
                 UpdateButtonState(buildBearTrapButton, isPhase2, "Bear Trap", bearTrapPriceText);
             }
@@ -328,6 +334,27 @@ namespace Undermarch.Presentation.Controllers
 
             if (turnIndicatorText) turnIndicatorText.text = statusText;
             if (turnIndicatorImage) turnIndicatorImage.color = statusColor;
+        }
+
+        private void UpdateWaveInfo()
+        {
+            if (GameManager.Instance == null) return;
+
+            // Update wave display
+            if (waveText != null)
+            {
+                int currentWave = GameManager.Instance.GameState.Wave;
+                int totalWaves = GameManager.Instance.TickSystem?.WaveSpawner?.TotalWaves ?? 9;
+                waveText.text = $"Wave: {currentWave}/{totalWaves}";
+            }
+
+            // Update enemy count display
+            if (enemiesText != null && GameManager.Instance.Board != null)
+            {
+                var allCharacters = GameManager.Instance.Board.GetAllCharacters();
+                int heroCount = allCharacters.Count(c => c.faction == Undermarch.Simulation.Combat.Faction.Hero);
+                enemiesText.text = $"Enemies: {heroCount}";
+            }
         }
 
         private void OnSettingsClicked() { Debug.Log("HUD_CLICK: Settings Clicked"); }
@@ -433,6 +460,8 @@ namespace Undermarch.Presentation.Controllers
             // Reset references to ensure they are re-acquired from the new objects
             coinText = null;
             turnIndicatorText = null;
+            waveText = null;
+            enemiesText = null;
             settingsButton = null;
             levelSelectButton = null;
             startCombatButton = null;
@@ -450,26 +479,81 @@ namespace Undermarch.Presentation.Controllers
         void SetupHUD(GameObject canvasObj)
         {
             // 2. Top HUD
-            GameObject topPanel = CreatePanel(canvasObj.transform, "TopHUD", new Color(0.18f, 0.18f, 0.18f, 1f), 100, true);
-            SetupHorizontalLayout(topPanel, 20, 20, TextAnchor.MiddleCenter);
+            GameObject topPanel = CreatePanel(canvasObj.transform, "TopHUD", new Color(0.18f, 0.18f, 0.18f, 1f), 110, true);
+            SetupHorizontalLayout(topPanel, 20, 15, TextAnchor.MiddleCenter);
 
             // Top Elements
             CreateButton(topPanel.transform, "SettingsButton", "Set", new Vector2(60, 60));
             CreateButton(topPanel.transform, "LevelSelectButton", "Lvl", new Vector2(60, 60));
-            
-            CreateSpacer(topPanel.transform); 
 
-            GameObject infoPanel = CreateContainer(topPanel.transform, "InfoPanel");
-            var infoLayout = infoPanel.AddComponent<VerticalLayoutGroup>();
-            infoLayout.childAlignment = TextAnchor.MiddleCenter;
-            infoLayout.childControlWidth = true;
-            infoLayout.childControlHeight = true;
-            
-            CreateText(infoPanel.transform, "TurnIndicatorText", "BUILD PHASE", 24, Color.white, true);
-            CreateText(infoPanel.transform, "CoinText", "Coins: 0", 20, Color.yellow, false);
+            // === Middle Section - Simple RectTransform positioning ===
+            GameObject middlePanel = new GameObject("MiddlePanel", typeof(RectTransform));
+            middlePanel.transform.SetParent(topPanel.transform, false);
 
-            CreateSpacer(topPanel.transform); 
+            RectTransform middleRT = middlePanel.GetComponent<RectTransform>();
+            middleRT.sizeDelta = new Vector2(600, 65);  // Wider for phase text
 
+            // Phase text at top-center
+            CreateText(middlePanel.transform, "TurnIndicatorText", "BUILDING PHASE", 20, Color.white, true);  // Reduced font
+            RectTransform phaseTextRT = middlePanel.transform.Find("TurnIndicatorText") as RectTransform;
+            if (phaseTextRT != null)
+            {
+                phaseTextRT.anchorMin = new Vector2(0.5f, 1f);
+                phaseTextRT.anchorMax = new Vector2(0.5f, 1f);
+                phaseTextRT.pivot = new Vector2(0.5f, 1f);
+                phaseTextRT.anchoredPosition = new Vector2(0, 4);  // Slightly down from top
+            }
+            var tmp = middlePanel.GetComponentInChildren<TextMeshProUGUI>();
+            if (tmp != null)
+            {
+                tmp.alignment = TextAlignmentOptions.Center;
+                tmp.enableAutoSizing = false;
+                tmp.overflowMode = TextOverflowModes.Overflow;
+            }
+
+            // Stats row - MANUALLY POSITION each text to avoid LayoutGroup gap issues
+            GameObject statsRow = new GameObject("StatsRow", typeof(RectTransform));
+            statsRow.transform.SetParent(middlePanel.transform, false);
+            RectTransform statsRT = statsRow.GetComponent<RectTransform>();
+            statsRT.sizeDelta = new Vector2(600, 25);
+            statsRT.anchorMin = new Vector2(0.5f, 0f);
+            statsRT.anchorMax = new Vector2(0.5f, 0f);
+            statsRT.pivot = new Vector2(0.5f, 0f);
+            statsRT.anchoredPosition = new Vector2(0, 0);  // At bottom edge
+
+            // Manually position each stat text for tight spacing
+            CreateText(statsRow.transform, "WaveText", "Wave: 1/9", 14, Color.cyan, false);
+            CreateText(statsRow.transform, "EnemiesText", "Enemies: 0", 14, Color.red, false);
+            CreateText(statsRow.transform, "CoinText", "Coins: 0", 14, Color.yellow, false);
+
+            // Position each text manually
+            RectTransform waveRT = statsRow.transform.Find("WaveText") as RectTransform;
+            RectTransform enemiesRT = statsRow.transform.Find("EnemiesText") as RectTransform;
+            RectTransform coinRT = statsRow.transform.Find("CoinText") as RectTransform;
+
+            if (waveRT != null)
+            {
+                waveRT.anchorMin = new Vector2(0.5f, 0.5f);
+                waveRT.anchorMax = new Vector2(0.5f, 0.5f);
+                waveRT.pivot = new Vector2(0.5f, 0.5f);
+                waveRT.anchoredPosition = new Vector2(-150, 0);  // Left of center
+            }
+            if (enemiesRT != null)
+            {
+                enemiesRT.anchorMin = new Vector2(0.5f, 0.5f);
+                enemiesRT.anchorMax = new Vector2(0.5f, 0.5f);
+                enemiesRT.pivot = new Vector2(0.5f, 0.5f);
+                enemiesRT.anchoredPosition = new Vector2(0, 0);  // Center
+            }
+            if (coinRT != null)
+            {
+                coinRT.anchorMin = new Vector2(0.5f, 0.5f);
+                coinRT.anchorMax = new Vector2(0.5f, 0.5f);
+                coinRT.pivot = new Vector2(0.5f, 0.5f);
+                coinRT.anchoredPosition = new Vector2(150, 0);  // Right of center
+            }
+
+            // === Right Buttons ===
             CreateButton(topPanel.transform, "StartWaveButton", "START", new Vector2(120, 60), new Color(0.3f, 0.7f, 0.3f));
             CreateButton(topPanel.transform, "PauseButton", "||", new Vector2(60, 60));
 
@@ -505,7 +589,7 @@ namespace Undermarch.Presentation.Controllers
         void SetupHorizontalLayout(GameObject obj, int padding, int spacing, TextAnchor alignment)
         {
             var group = obj.AddComponent<HorizontalLayoutGroup>();
-            group.padding = new RectOffset(padding, padding, 10, 10);
+            group.padding = new RectOffset(padding, padding, 12, 12);
             group.spacing = spacing;
             group.childAlignment = alignment;
             group.childControlWidth = false;
