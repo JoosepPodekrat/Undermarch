@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Events;
@@ -17,34 +18,11 @@ namespace Undermarch.Simulation.Levels
         /// D = Dungeon Master
         /// X = Exit door
         /// </summary>
-        public static void LoadDungeon(Board board, out List<TilePos> entrances, out List<TilePos> chestPositions)
+        public static void LoadDungeon(Board board, out List<TilePos> entrances, out List<TilePos> chestPositions, string[] levelLayout)
         {
             entrances = new List<TilePos>();
             chestPositions = new List<TilePos>();
-
-            string[] levelLayout = new string[]
-            {
-                "####################",
-                "####################",
-                "###              ###",
-                "###      D       ###",
-                "####             ###",
-                "##C#####  ##########",
-                "## #####  ##########",
-                "##               ###",
-                "###              ###",
-                "###         ########",
-                "########  ####C  ###",
-                "########  ###### ###",
-                "####          ## ###",
-                "###           C# ###",
-                "###          ### ###",
-                "###              ###",
-                "####          ######",
-                "########  ##########",
-                "#######X  E#########",
-                "####################",
-            };
+            
 
             for (int y = 0; y < levelLayout.Length; y++)
             {
@@ -85,48 +63,48 @@ namespace Undermarch.Simulation.Levels
         /// Creates a wave schedule with spawn events triggered after placement.
         /// </summary>
         public static WaveSpawner CreateWaveSchedule(List<TilePos> entrances)
-{
-    WaveSpawner spawner = new WaveSpawner();
-    TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-
-    void ScheduleHeroWave(List<Character> heroes, int spawnTick)
-    {
-        var clonedHeroes = new List<Character>();
-        foreach (var hero in heroes)
         {
-            clonedHeroes.Add(hero.Clone());
+            WaveSpawner spawner = new WaveSpawner();
+            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+
+            void ScheduleHeroWave(List<Character> heroes, int spawnTick)
+            {
+                var clonedHeroes = new List<Character>();
+                foreach (var hero in heroes)
+                {
+                    clonedHeroes.Add(hero.Clone());
+                }
+                var party = new HeroParty(clonedHeroes, spawnTick, entrance);
+                spawner.ScheduleWave(party);
+            }
+
+            // 9 waves, spaced ~65 ticks apart (~32.5 seconds per wave)
+            int tickInterval = 65;
+
+            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant }, 0);
+        ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant }, 120); // was 60
+        ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue }, 240); // was 120
+        ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.peasant }, 360); // was 180
+        ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, 480); // was 240
+        ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage }, 600); // was 300
+        ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 720); // was 360
+        ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 840); // was 420
+
+        var finalHeroes = new List<Character> {
+            CharacterDatabase.rogue.Clone(),
+            CharacterDatabase.rogue.Clone(),
+            CharacterDatabase.apprenticeMage.Clone(),
+            CharacterDatabase.peasant.Clone()
+        };
+        foreach (var hero in finalHeroes)
+        {
+            if (hero is Entities.Characters.Heroes.Hero h)
+                h.FleeThreshold = 999999;
         }
-        var party = new HeroParty(clonedHeroes, spawnTick, entrance);
-        spawner.ScheduleWave(party);
-    }
+        ScheduleHeroWave(finalHeroes, 960); // was 480
 
-    // 9 waves, spaced ~65 ticks apart (~32.5 seconds per wave)
-    int tickInterval = 65;
-
-    ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant }, 0);
-ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant }, 120); // was 60
-ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue }, 240); // was 120
-ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.peasant }, 360); // was 180
-ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, 480); // was 240
-ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage }, 600); // was 300
-ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 720); // was 360
-ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 840); // was 420
-
-var finalHeroes = new List<Character> {
-    CharacterDatabase.rogue.Clone(),
-    CharacterDatabase.rogue.Clone(),
-    CharacterDatabase.apprenticeMage.Clone(),
-    CharacterDatabase.peasant.Clone()
-};
-foreach (var hero in finalHeroes)
-{
-    if (hero is Entities.Characters.Heroes.Hero h)
-        h.FleeThreshold = 999999;
-}
-ScheduleHeroWave(finalHeroes, 960); // was 480
-
-    return spawner;
-}
+            return spawner;
+        }
 
         public static WaveSpawner CreateWaveSchedule2(List<TilePos> entrances)
         {
@@ -149,12 +127,12 @@ ScheduleHeroWave(finalHeroes, 960); // was 480
             ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 120);
             ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 240);
             ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.apprenticeMage, CharacterDatabase.rogue }, 360);
-            
+
             var finalHeroes = new List<Character> {
                 CharacterDatabase.rogue.Clone(),
                 CharacterDatabase.rogue.Clone(),
                 CharacterDatabase.apprenticeMage.Clone(),
-                CharacterDatabase.apprenticeMage.Clone(),
+                CharacterDatabase.apprenticeMage.Clone(),   
                 CharacterDatabase.peasant.Clone(),
                 CharacterDatabase.peasant.Clone()
             };
@@ -166,6 +144,60 @@ ScheduleHeroWave(finalHeroes, 960); // was 480
             ScheduleHeroWave(finalHeroes, 480);
 
             return spawner;
+        }
+        public static void loadLevelOne(Board board, out List<TilePos> entrances, out List<TilePos> chestPositions)
+        {
+            string[] levelLayout = new string[]
+            {
+                "####################",
+                "####################",
+                "###              ###",
+                "###      D       ###",
+                "####             ###",
+                "##C#####  ##########",
+                "## #####  ##########",
+                "##               ###",
+                "###              ###",
+                "###         ########",
+                "########  ####C  ###",
+                "########  ###### ###",
+                "####          ## ###",
+                "###           C# ###",
+                "###          ### ###",
+                "###              ###",
+                "####          ######",
+                "########  ##########",
+                "#######X  E#########",
+                "####################",
+            };
+            LevelLoader.LoadDungeon(board, out entrances, out chestPositions,levelLayout);
+        }
+        public static void loadLevelTwo(Board board, out List<TilePos> entrances, out List<TilePos> chestPositions)
+        {
+            string[] levelLayout = new string[]
+            {
+                "####################",
+                "####################",
+                "###              ###",
+                "###      D       ###",
+                "####             ###",
+                "##C#####  ##########",
+                "## #####  ##########",
+                "##               ###",
+                "###              ###",
+                "###         ########",
+                "########  ####C  ###",
+                "########  ###### ###",
+                "####          ## ###",
+                "###           C# ###",
+                "###          ### ###",
+                "###              ###",
+                "####          ######",
+                "########  ##########",
+                "#######X  E#########",
+                "####################",
+            };
+            LevelLoader.LoadDungeon(board, out entrances, out chestPositions, levelLayout);
         }
 
     }

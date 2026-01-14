@@ -107,7 +107,7 @@ namespace Undermarch.Presentation.Managers
 
             // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
             List<TilePos> chestPositions;
-            LevelLoader.LoadDungeon(Board, out _entrances, out chestPositions);
+            LevelLoader.loadLevelOne(Board, out _entrances, out chestPositions);
             Debug.Log($"GameManager: Dungeon loaded. {chestPositions.Count} chests, {_entrances.Count} entrance(s).");
 
             // Create wave spawner with 9-wave schedule

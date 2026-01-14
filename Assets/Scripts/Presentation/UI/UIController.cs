@@ -46,4 +46,14 @@ public class MenuManager : MonoBehaviour
         levelPanel.SetActive(false);
         newGamePanel.SetActive(true);
     }
+    public void QuitGame()
+    {
+        Debug.Log("Quit button pressed");
+
+        Application.Quit();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
 }
