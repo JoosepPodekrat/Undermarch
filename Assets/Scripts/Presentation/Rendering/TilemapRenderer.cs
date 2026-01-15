@@ -77,6 +77,14 @@ namespace Undermarch.Presentation.Rendering
         public TileBase gasTrapTile;
         public TileBase pressurePlateTile;
 
+        [Header("Fallback")]
+        [Tooltip("Default tile to use when an entity's tile is not defined")]
+        public TileBase defaultEntityTile;
+        [Tooltip("Default tile to use when an interactable's tile is not defined")]
+        public TileBase defaultInteractableTile;
+        [Tooltip("Default tile to use when an effect's tile is not defined")]
+        public TileBase defaultEffectTile;
+
         private Board _board;
         private TilePos? _lastPreviewPos;
         private Dictionary<Character, TileBase> _overrideTiles = new Dictionary<Character, TileBase>();
@@ -261,6 +269,11 @@ namespace Undermarch.Presentation.Rendering
             {
                 interactableTilemap.SetTile(cellPos, chestTile);
             }
+            else if (interactable != null && !(interactable is Projectile) && !(interactable is TileEffect))
+            {
+                // Unknown interactable type - use fallback
+                interactableTilemap.SetTile(cellPos, defaultInteractableTile);
+            }
             else
             {
                 interactableTilemap.SetTile(cellPos, null);
@@ -270,7 +283,7 @@ namespace Undermarch.Presentation.Rendering
             // Check for projectiles first (they are stored in interactables)
             if (interactable is Projectile proj && proj.IsActive)
             {
-                effectsTilemap.SetTile(cellPos, arrowTile);
+                effectsTilemap.SetTile(cellPos, arrowTile ?? defaultEffectTile);
             }
             // Check for tile effects
             else if (interactable is TileEffect effect)
@@ -281,7 +294,7 @@ namespace Undermarch.Presentation.Rendering
                     EffectType.Slow => slowZoneTile,
                     EffectType.Fire => fireZoneTile,
                     EffectType.Fog => fogZoneTile,
-                    _ => null
+                    _ => defaultEffectTile // Use fallback for undefined effect types
                 };
                 if (effectTile != null)
                 {
@@ -367,6 +380,7 @@ namespace Undermarch.Presentation.Rendering
                             Debug.LogWarning(
                                 "TilemapRenderer: No tile mapped for character name '" + character.Name + "'"
                             );
+                            tile = defaultEntityTile; // Use fallback tile for undefined entities
                             break;
                     }
                 }
@@ -446,6 +460,9 @@ namespace Undermarch.Presentation.Rendering
                     break;
                 case PlacementController.PlacementType.BearTrap:
                     tile = bearTrapTile;
+                    break;
+                default:
+                    tile = defaultEntityTile; // Use fallback for unmapped placement types
                     break;
             }
 

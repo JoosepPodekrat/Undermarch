@@ -916,6 +916,9 @@ MonoBehaviour:
   ironSpikeTrapTile: {fileID: 11400000, guid: 21ddd92406e7bd24e8bfcdafb1f2e527, type: 2}
   gasTrapTile: {fileID: 0}
   pressurePlateTile: {fileID: 0}
+  defaultEntityTile: {fileID: 11400000, guid: f621c2bf865d5204faf97912bc9ab8ed, type: 2}
+  defaultInteractableTile: {fileID: 11400000, guid: e5d94ee92b7bf454cacf2471980471b9, type: 2}
+  defaultEffectTile: {fileID: 11400000, guid: 0becb6a98c14daf49aaae562e6677d66, type: 2}
 --- !u!1 &1802145946
 GameObject:
   m_ObjectHideFlags: 0
