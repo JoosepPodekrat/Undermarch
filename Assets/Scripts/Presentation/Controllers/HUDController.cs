@@ -818,18 +818,21 @@ namespace Undermarch.Presentation.Controllers
             Vector2 mousePos = Mouse.current.position.ReadValue();
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
+            // Debug board dimensions
+            int boardW = GameManager.Instance.Board.Width;
+            int boardH = GameManager.Instance.Board.Height;
+
             // Add board centering offset to match TilemapRenderer coordinate system
             // TilemapRenderer renders at (pos.x - Width/2, pos.y - Height/2)
-            // So we need to add those offsets back to get logical coordinates
-            mouseWorldPos.x += GameManager.Instance.Board.Width / 2;
-            mouseWorldPos.y += GameManager.Instance.Board.Height / 2;
+            mouseWorldPos.x += boardW / 2f;
+            mouseWorldPos.y += boardH / 2f;
 
             TilePos tilePos = new TilePos(
-                Mathf.RoundToInt(mouseWorldPos.x),
-                Mathf.RoundToInt(mouseWorldPos.y)
+                Mathf.FloorToInt(mouseWorldPos.x),
+                Mathf.FloorToInt(mouseWorldPos.y)
             );
 
-            Debug.Log($"CharacterInfo: Mouse screen={mousePos}, world={mouseWorldPos}, tile={tilePos.x},{tilePos.y}");
+            Debug.Log($"CharacterInfo: Board={boardW}x{boardH}, Mouse world=({mouseWorldPos.x - boardW/2f:F1},{mouseWorldPos.y - boardH/2f:F1}), tile={tilePos.x},{tilePos.y}");
 
             Character entity = GameManager.Instance.Board.GetEntityAt(tilePos);
             Debug.Log($"CharacterInfo: Entity at tile: {entity?.Name ?? "null"}");
