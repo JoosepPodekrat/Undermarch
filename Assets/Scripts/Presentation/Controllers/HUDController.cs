@@ -49,6 +49,10 @@ namespace Undermarch.Presentation.Controllers
         private TextMeshProUGUI charFactionText;
         private Undermarch.Simulation.Entities.Character selectedCharacter;
 
+        [Header("Pause Overlay")]
+        private GameObject pauseOverlay;
+        private TextMeshProUGUI pauseText;
+
         private void Awake()
         {
             Debug.Log("HUDController: Awake started.");
@@ -214,6 +218,15 @@ namespace Undermarch.Presentation.Controllers
 
         private void Update()
         {
+            // Check for spacebar pause toggle
+            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                TogglePause();
+            }
+
+            // Update pause overlay visibility
+            UpdatePauseOverlay();
+
             UpdateTurnIndicator();
             UpdateWaveInfo();
 
@@ -385,15 +398,22 @@ namespace Undermarch.Presentation.Controllers
             }
         }
 
-        private void OnPauseClicked() 
-        { 
-            Debug.Log("HUD_CLICK: Pause Clicked");
-            var tickSystem = GameManager.Instance.TickSystem;
+        private void TogglePause()
+        {
+            var tickSystem = GameManager.Instance?.TickSystem;
             if (tickSystem != null)
             {
-                if (tickSystem.Mode == TickMode.Paused) tickSystem.Resume();
-                else tickSystem.Pause();
+                if (tickSystem.Mode == TickMode.Paused)
+                    tickSystem.Resume();
+                else
+                    tickSystem.Pause();
             }
+        }
+
+        private void OnPauseClicked()
+        {
+            Debug.Log("HUD_CLICK: Pause Clicked");
+            TogglePause();
         }
 
         private void OnBuildSlimeClicked()
@@ -578,6 +598,9 @@ namespace Undermarch.Presentation.Controllers
 
             // 4. Character Info Panel (right side, initially hidden)
             CreateCharacterInfoPanel(canvasObj.transform);
+
+            // 5. Pause Overlay (initially hidden)
+            CreatePauseOverlay(canvasObj.transform);
         }
 
         GameObject CreatePanel(Transform parent, string name, Color color, float height, bool isTop)
@@ -756,6 +779,56 @@ namespace Undermarch.Presentation.Controllers
             if (bold) tmp.fontStyle = FontStyles.Bold;
 
             return tmp;
+        }
+
+        void CreatePauseOverlay(Transform canvasTransform)
+        {
+            // Create container for pause text
+            pauseOverlay = new GameObject("PauseOverlay", typeof(RectTransform), typeof(CanvasGroup));
+            pauseOverlay.transform.SetParent(canvasTransform, false);
+            pauseOverlay.SetActive(false); // Start hidden
+
+            RectTransform overlayRect = pauseOverlay.GetComponent<RectTransform>();
+            overlayRect.anchorMin = new Vector2(0.5f, 0.5f);  // Center anchors
+            overlayRect.anchorMax = new Vector2(0.5f, 0.5f);
+            overlayRect.pivot = new Vector2(0.5f, 0.5f);
+            overlayRect.anchoredPosition = new Vector2(0, 380);  // Offset from center (near top edge)
+            overlayRect.sizeDelta = new Vector2(300, 80);
+
+            // Add semi-transparent background
+            Image bg = pauseOverlay.AddComponent<Image>();
+            bg.color = new Color(0, 0, 0, 0.5f);
+            bg.raycastTarget = false; // Don't block clicks
+
+            // Create text
+            GameObject textObj = new GameObject("PauseText", typeof(RectTransform), typeof(TextMeshProUGUI));
+            textObj.transform.SetParent(pauseOverlay.transform, false);
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            pauseText = textObj.GetComponent<TextMeshProUGUI>();
+            pauseText.text = "PAUSED";
+            pauseText.fontSize = 48;
+            pauseText.fontStyle = FontStyles.Bold;
+            pauseText.alignment = TextAlignmentOptions.Center;
+            pauseText.color = Color.white;
+
+            // Get TMP font (same as other text)
+            pauseText.font = Resources.GetBuiltinResource<TMP_FontAsset>("LegacyRuntime.ttf");
+
+            Debug.Log("HUDController: Created pause overlay.");
+        }
+
+        private void UpdatePauseOverlay()
+        {
+            if (pauseOverlay == null) return;
+
+            bool isPaused = GameManager.Instance?.TickSystem?.Mode == TickMode.Paused;
+            pauseOverlay.SetActive(isPaused);
         }
 
         void HandleCharacterInfoPanel()

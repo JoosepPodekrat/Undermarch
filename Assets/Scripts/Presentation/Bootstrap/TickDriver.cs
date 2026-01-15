@@ -32,6 +32,9 @@ namespace Undermarch.Presentation.Bootstrap
         {
             if (paused || _tickSystem == null) return;
 
+            // Also respect TickSystem's pause mode
+            if (_tickSystem.Mode == TickMode.Paused) return;
+
             // Safety check to prevent division by zero
             if (ticksPerSecond <= 0)
             {
