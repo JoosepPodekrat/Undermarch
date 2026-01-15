@@ -1,6 +1,7 @@
 using Undermarch.Presentation.Managers;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Entities.Traps;
+using Undermarch.Simulation.Events;
 using Undermarch.Simulation.Grid;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -140,6 +141,7 @@ switch (_selectedType)
             slime.deathSound = "slimeSound";
 
             GameManager.Instance.Board.AddEntity(tilePos, slime);
+            CharacterEvents.RaiseSpawn(slime);
             GameManager.Instance.GameState.SpendGold(50);
             audioController.PlaySlimeSound();
             placed = true;
@@ -156,6 +158,7 @@ switch (_selectedType)
         {
             var archer = CharacterDatabase.archerMonster.Clone();
             GameManager.Instance.Board.AddEntity(tilePos, archer);
+            CharacterEvents.RaiseSpawn(archer);
             GameManager.Instance.GameState.SpendGold(80);
             placed = true;
             Debug.Log($"Placed Archer at {tilePos.x},{tilePos.y} for 80 gold");
@@ -167,6 +170,7 @@ switch (_selectedType)
         {
             var goblin = CharacterDatabase.goblin1.Clone();
             GameManager.Instance.Board.AddEntity(tilePos, goblin);
+            CharacterEvents.RaiseSpawn(goblin);
             GameManager.Instance.GameState.SpendGold(50);
             placed = true;
             Debug.Log($"Placed Goblin at {tilePos.x},{tilePos.y} for 50 gold");

@@ -53,6 +53,13 @@ namespace Undermarch.Presentation.Controllers
         private GameObject pauseOverlay;
         private TextMeshProUGUI pauseText;
 
+        // Set to false for release builds to disable dev panel
+        private const bool ENABLE_DEV_PANEL = true;
+
+        [Header("Dev Panel")]
+        private GameObject devPanel;
+        private const float DEV_PANEL_WIDTH = 150f;
+
         private void Awake()
         {
             Debug.Log("HUDController: Awake started.");
@@ -610,6 +617,12 @@ namespace Undermarch.Presentation.Controllers
 
             // 5. Pause Overlay (initially hidden)
             CreatePauseOverlay(canvasObj.transform);
+
+            // 6. Dev Panel (for development)
+            if (ENABLE_DEV_PANEL)
+            {
+                CreateDevPanel(canvasObj.transform);
+            }
         }
 
         GameObject CreatePanel(Transform parent, string name, Color color, float height, bool isTop)
@@ -945,6 +958,95 @@ namespace Undermarch.Presentation.Controllers
             Character entity = GameManager.Instance.Board.GetEntityAt(tilePos);
             Debug.Log($"CharacterInfo: Entity at tile: {entity?.Name ?? "null"}");
             return entity;
+        }
+
+        #endregion
+
+        #region Dev Panel
+
+        void CreateDevPanel(Transform canvasTransform)
+        {
+            devPanel = new GameObject("DevPanel", typeof(RectTransform));
+            devPanel.transform.SetParent(canvasTransform, false);
+
+            RectTransform panelRect = devPanel.GetComponent<RectTransform>();
+            panelRect.anchorMin = new Vector2(0, 0.5f);  // Left edge, vertically centered
+            panelRect.anchorMax = new Vector2(0, 0.5f);
+            panelRect.pivot = new Vector2(0, 0.5f);
+            panelRect.anchoredPosition = new Vector2(10, 0);  // Offset from left edge
+            panelRect.sizeDelta = new Vector2(DEV_PANEL_WIDTH, 120);
+
+            // Semi-transparent background
+            Image bg = devPanel.AddComponent<Image>();
+            bg.color = new Color(0.3f, 0.3f, 0.3f, 0.8f);
+
+            // Create buttons
+            CreateDevButton(devPanel.transform, "Kill Enemies", 40, OnKillAllEnemies);
+            CreateDevButton(devPanel.transform, "+1000 Gold", -40, OnAddGold);
+
+            Debug.Log("HUDController: Created dev panel.");
+        }
+
+        GameObject CreateDevButton(Transform parent, string text, float yOffset, UnityEngine.Events.UnityAction onClick)
+        {
+            GameObject btn = new GameObject(text.Replace(" ", "") + "Button", typeof(RectTransform), typeof(Image), typeof(Button));
+            btn.transform.SetParent(parent, false);
+
+            RectTransform rect = btn.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0, 0.5f);  // Left edge
+            rect.anchorMax = new Vector2(0, 0.5f);  // Left edge
+            rect.pivot = new Vector2(0, 0.5f);      // Pivot at left-center
+            rect.anchoredPosition = new Vector2(5, yOffset);  // 5px from left edge
+            rect.sizeDelta = new Vector2(DEV_PANEL_WIDTH - 10, 40);  // Width with margins
+
+            btn.GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f, 1f);
+            btn.GetComponent<Button>().onClick.AddListener(onClick);
+
+            // Button text
+            GameObject txt = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
+            txt.transform.SetParent(btn.transform, false);
+
+            RectTransform txtRect = txt.GetComponent<RectTransform>();
+            txtRect.anchorMin = Vector2.zero;
+            txtRect.anchorMax = Vector2.one;
+            txtRect.offsetMin = Vector2.zero;
+            txtRect.offsetMax = Vector2.zero;
+
+            TextMeshProUGUI tmp = txt.GetComponent<TextMeshProUGUI>();
+            tmp.text = text;
+            tmp.fontSize = 14;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.font = Resources.GetBuiltinResource<TMP_FontAsset>("LegacyRuntime.ttf");
+            tmp.color = Color.white;
+
+            return btn;
+        }
+
+        private void OnKillAllEnemies()
+        {
+            if (GameManager.Instance?.Board == null) return;
+
+            var heroes = GameManager.Instance.Board.GetAllCharacters()
+                .Where(c => c.faction == Undermarch.Simulation.Combat.Faction.Hero)
+                .ToList();
+
+            foreach (var hero in heroes)
+            {
+                // Deal lethal damage to kill the hero
+                var damagePacket = new Undermarch.Simulation.Combat.DamagePacket();
+                damagePacket.Add(Undermarch.Simulation.Combat.DamageType.Physical, 9999);
+                hero.TakeDamage(damagePacket);
+            }
+
+            Debug.Log($"Dev: Killed {heroes.Count} enemies");
+        }
+
+        private void OnAddGold()
+        {
+            if (GameManager.Instance?.GameState == null) return;
+
+            GameManager.Instance.GameState.EarnGold(1000);
+            Debug.Log("Dev: Added 1000 gold");
         }
 
         #endregion
