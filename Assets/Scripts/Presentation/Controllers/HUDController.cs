@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using Undermarch;
 using Undermarch.Presentation.Managers;
 using Undermarch.Simulation.Interfaces;
 using Undermarch.Simulation.Core;
@@ -848,6 +849,43 @@ namespace Undermarch.Presentation.Controllers
             selectedCharacter = null;
         }
 
+        void ShowTrapInfo(Trap trap)
+        {
+            if (characterInfoPanel == null) return;
+
+            characterInfoPanel.SetActive(true);
+
+            if (charNameText != null)
+                charNameText.text = trap.Name;
+
+            if (charHPText != null)
+                charHPText.text = $"Durability: {trap.Durability}";
+
+            if (charDamageText != null)
+            {
+                // Show damage info from the trap's damage packet
+                string damageInfo = "Damage: ";
+                if (trap.DamagePacket != null && trap.DamagePacket.TotalDamage() > 0)
+                {
+                    damageInfo += trap.DamagePacket.TotalDamage().ToString();
+                }
+                else
+                {
+                    damageInfo += "0";
+                }
+                charDamageText.text = damageInfo;
+            }
+
+            if (charAgilityText != null)
+                charAgilityText.text = "";
+
+            if (charFactionText != null)
+                charFactionText.text = "Type: Trap (Placed)";
+
+            // Mark that we're not showing a character
+            selectedCharacter = null;
+        }
+
         void CreateCharacterInfoPanel(Transform canvasTransform)
         {
             // Create panel background
@@ -996,10 +1034,21 @@ namespace Undermarch.Presentation.Controllers
                 }
                 else
                 {
-                    // Clicked on empty space - only close if not showing a placement preview
-                    if (placementController == null || placementController.SelectedType == PlacementController.PlacementType.None)
+                    // Check for traps if no character found
+                    Trap trap = GetTrapAtMousePosition();
+                    if (trap != null)
                     {
-                        CloseCharacterInfo();
+                        ShowTrapInfo(trap);
+                        // Clear placement preview tracking since we're now showing a placed trap
+                        _lastShownPlacementType = PlacementController.PlacementType.None;
+                    }
+                    else
+                    {
+                        // Clicked on empty space - only close if not showing a placement preview
+                        if (placementController == null || placementController.SelectedType == PlacementController.PlacementType.None)
+                        {
+                            CloseCharacterInfo();
+                        }
                     }
                 }
             }
@@ -1067,6 +1116,38 @@ namespace Undermarch.Presentation.Controllers
             Character entity = GameManager.Instance.Board.GetEntityAt(tilePos);
             Debug.Log($"CharacterInfo: Entity at tile: {entity?.Name ?? "null"}");
             return entity;
+        }
+
+        Trap GetTrapAtMousePosition()
+        {
+            if (GameManager.Instance?.Board == null || Camera.main == null)
+            {
+                return null;
+            }
+
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+            int boardW = GameManager.Instance.Board.Width;
+            int boardH = GameManager.Instance.Board.Height;
+
+            mouseWorldPos.x += boardW / 2f;
+            mouseWorldPos.y += boardH / 2f;
+
+            TilePos tilePos = new TilePos(
+                Mathf.FloorToInt(mouseWorldPos.x),
+                Mathf.FloorToInt(mouseWorldPos.y)
+            );
+
+            var interactable = GameManager.Instance.Board.GetInteractableAt(tilePos);
+            if (interactable is Trap trap)
+            {
+                Debug.Log($"CharacterInfo: Trap at tile: {trap.Name}");
+                return trap;
+            }
+
+            Debug.Log("CharacterInfo: No trap at tile");
+            return null;
         }
 
         #endregion
