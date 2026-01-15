@@ -82,6 +82,24 @@ namespace Undermarch.Presentation.Rendering
         private Dictionary<Character, TileBase> _overrideTiles = new Dictionary<Character, TileBase>();
         private Dictionary<Character, Color> _overrideColors = new Dictionary<Character, Color>();
 
+        [Header("Breathing Animation")]
+        private Dictionary<Character, BreathingState> _breathingStates = new Dictionary<Character, BreathingState>();
+        private System.Random _rng = new System.Random();
+
+        private class BreathingState
+        {
+            public float offset;           // Random start offset (0-1)
+            public float speed;            // Animation speed (approx 1 cycle/sec)
+            public float amplitude;        // Scale amount (0.05 = 5% squash/stretch)
+
+            public BreathingState(System.Random rng)
+            {
+                offset = (float)rng.NextDouble();
+                speed = 0.5f + (float)rng.NextDouble() * 0.2f;  // 0.5-0.7 sec (slower)
+                amplitude = 0.015f + (float)rng.NextDouble() * 0.02f;  // 1.5-3.5% scale (less)
+            }
+        }
+
         void Start()
         {
             // Get the board from the GameManager
@@ -97,8 +115,15 @@ namespace Undermarch.Presentation.Rendering
 
             CharacterEvents.OnCharacterAttacked += HandleAttack;
             CharacterEvents.OnCharacterHurt += HandleHurt;
+            CharacterEvents.OnCharacterSpawned += HandleCharacterSpawned;
 
             RedrawAll();
+
+            // Initialize breathing states for all existing characters
+            foreach (var character in _board.GetAllCharacters())
+            {
+                InitializeBreathingState(character);
+            }
         }
 
         void OnDestroy()
@@ -111,6 +136,76 @@ namespace Undermarch.Presentation.Rendering
 
             CharacterEvents.OnCharacterAttacked -= HandleAttack;
             CharacterEvents.OnCharacterHurt -= HandleHurt;
+            CharacterEvents.OnCharacterSpawned -= HandleCharacterSpawned;
+        }
+
+        private void InitializeBreathingState(Character character)
+        {
+            if (!_breathingStates.ContainsKey(character))
+            {
+                _breathingStates[character] = new BreathingState(_rng);
+            }
+        }
+
+        private void HandleCharacterSpawned(Character character)
+        {
+            InitializeBreathingState(character);
+        }
+
+        void Update()
+        {
+            if (_board == null || entityTilemap == null) return;
+
+            float time = Time.time;
+
+            // Clean up dead characters from breathing states
+            var toRemove = new List<Character>();
+            foreach (var kvp in _breathingStates)
+            {
+                // Check if character still exists on board
+                TilePos pos = _board.GetPositionOf(kvp.Key);
+                if (!_board.InBounds(pos) || _board.GetEntityAt(pos) != kvp.Key)
+                {
+                    toRemove.Add(kvp.Key);
+                }
+            }
+            foreach (var c in toRemove)
+            {
+                _breathingStates.Remove(c);
+            }
+
+            // Apply breathing animation
+            foreach (var kvp in _breathingStates)
+            {
+                Character character = kvp.Key;
+                BreathingState state = kvp.Value;
+
+                // Get character position
+                TilePos pos = _board.GetPositionOf(character);
+                if (!_board.InBounds(pos)) continue;
+
+                var cellPos = new Vector3Int(pos.x - _board.Width / 2, pos.y - _board.Height / 2, 0);
+
+                // Calculate breathing scale using sine wave
+                float phase = (time * state.speed + state.offset) * Mathf.PI * 2;
+                float scaleY = 1f + Mathf.Sin(phase) * state.amplitude;
+                float scaleX = 1f - Mathf.Sin(phase) * (state.amplitude * 0.5f); // Preserve volume: shrink X when Y grows
+
+                // Create transform matrix scaling from bottom (feet fixed)
+                // For a 1x1 tile, center is at (0,0), bottom is at y=-0.5
+                Matrix4x4 scaleMatrix = Matrix4x4.TRS(
+                    Vector3.zero,
+                    Quaternion.identity,
+                    new Vector3(scaleX, scaleY, 1f)
+                );
+                Matrix4x4 translateUp = Matrix4x4.Translate(new Vector3(0, 0.5f, 0));
+                Matrix4x4 translateDown = Matrix4x4.Translate(new Vector3(0, -0.5f, 0));
+
+                // Final transform: translateDown * scale * translateUp (scales from bottom anchor)
+                Matrix4x4 transform = translateDown * scaleMatrix * translateUp;
+
+                entityTilemap.SetTransformMatrix(cellPos, transform);
+            }
         }
 
         /// <summary>
@@ -278,6 +373,9 @@ namespace Undermarch.Presentation.Rendering
 
                 entityTilemap.SetTile(cellPos, tile);
 
+                // Reset transform when tile changes (will be reapplied in Update)
+                entityTilemap.SetTransformMatrix(cellPos, Matrix4x4.identity);
+
                 if (_overrideColors.ContainsKey(character))
                 {
                     entityTilemap.SetTileFlags(cellPos, TileFlags.None);
@@ -292,6 +390,7 @@ namespace Undermarch.Presentation.Rendering
             else
             {
                 entityTilemap.SetTile(cellPos, null);
+                entityTilemap.SetTransformMatrix(cellPos, Matrix4x4.identity);
             }
 
         }
