@@ -167,5 +167,23 @@ namespace Undermarch.Simulation.Entities
             charHelmet = ItemDatabase.mysticCowl, // Placeholder
             charAccessory = ItemDatabase.charmOfFocus // Placeholder
         };
+
+        public static readonly Hero levelOne = new Hero //female mage, 
+        {
+            Name = "Apprentice Mage",
+            faction = Faction.Hero,
+            strength = 7,
+            stamina = 9,
+            agility = 9,
+            intelligence = 13,
+            spirit = 11,
+            charWeapon = ItemDatabase.apprenticeStaff,
+            charArmor = ItemDatabase.apprenticeRobe,
+            charHelmet = ItemDatabase.mysticCowl,
+            charAccessory = ItemDatabase.charmOfFocus,
+
+            deathSound = "humanfemalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 50 } } // reward 15 gold
+        };
     }
 }

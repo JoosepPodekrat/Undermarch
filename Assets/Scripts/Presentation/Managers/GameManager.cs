@@ -25,6 +25,8 @@ namespace Undermarch.Presentation.Managers
         public TickCounter TickCounter { get; private set; }
 
         public Simulation.Core.GameState GameState { get; private set; }
+        private Level currentLevel;
+
         public GamePhase CurrentPhase { get; private set; }
         public EndGameUI endGameUI;
 
@@ -106,9 +108,14 @@ namespace Undermarch.Presentation.Managers
             // CreateBackground();
 
             // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
-            List<TilePos> chestPositions;
-            LevelLoader.loadLevelOne(Board, out _entrances, out chestPositions);
-            Debug.Log($"GameManager: Dungeon loaded. {chestPositions.Count} chests, {_entrances.Count} entrance(s).");
+            currentLevel = LevelLoader.LoadLevelOne(Board);
+
+            _entrances = currentLevel.Entrances;
+
+            Debug.Log($"GameManager: Dungeon loaded. " +
+                      $"{currentLevel.ChestPositions.Count} chests, " +
+                      $"{_entrances.Count} entrance(s).");
+
 
             // Create wave spawner with 9-wave schedule
             waveSpawner = LevelLoader.CreateWaveSchedule(_entrances);

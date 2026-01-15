@@ -1,9 +1,12 @@
+using log4net.Core;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Events;
 using Undermarch.Simulation.Grid;
+
+
 
 namespace Undermarch.Simulation.Levels
 {
@@ -18,15 +21,16 @@ namespace Undermarch.Simulation.Levels
         /// D = Dungeon Master
         /// X = Exit door
         /// </summary>
-        public static void LoadDungeon(Board board, out List<TilePos> entrances, out List<TilePos> chestPositions, string[] levelLayout)
+        public static void LoadDungeon(Board board, Level level, string[] levelLayout)
         {
-            entrances = new List<TilePos>();
-            chestPositions = new List<TilePos>();
-            
+            // Ensure lists are ready (defensive, in case caller forgot)
+            level.Entrances.Clear();
+            level.ChestPositions.Clear();
 
             for (int y = 0; y < levelLayout.Length; y++)
             {
                 int boardY = board.Height - 1 - y;
+
                 for (int x = 0; x < levelLayout[y].Length; x++)
                 {
                     var pos = new TilePos(x, boardY);
@@ -37,19 +41,23 @@ namespace Undermarch.Simulation.Levels
                         case '#':
                             board.AddWall(pos);
                             break;
+
                         case 'E':
-                            entrances.Add(pos);
+                            level.Entrances.Add(pos);
                             break;
+
                         case 'D':
                             var dm = CharacterDatabase.dungeonMaster.Clone();
                             board.AddEntity(pos, dm);
-                            CharacterEvents.RaiseSpawn(dm); // spawn event after placement
+                            CharacterEvents.RaiseSpawn(dm);
                             break;
+
                         case 'C':
                             var chest = new Chest(pos, goldAmount: 30);
                             board.AddInteractable(pos, chest);
-                            chestPositions.Add(pos);
+                            level.ChestPositions.Add(pos);
                             break;
+
                         case 'X':
                             var exitDoor = new Door(pos, -1, TilePos.Invalid, isExit: true);
                             board.AddInteractable(pos, exitDoor);
@@ -145,60 +153,37 @@ namespace Undermarch.Simulation.Levels
 
             return spawner;
         }
-        public static void loadLevelOne(Board board, out List<TilePos> entrances, out List<TilePos> chestPositions)
+        public static Level LoadLevelOne(Board board)
         {
-            string[] levelLayout = new string[]
-            {
-                "####################",
-                "####################",
-                "###              ###",
-                "###      D       ###",
-                "####             ###",
-                "##C#####  ##########",
-                "## #####  ##########",
-                "##               ###",
-                "###              ###",
-                "###         ########",
-                "########  ####C  ###",
-                "########  ###### ###",
-                "####          ## ###",
-                "###           C# ###",
-                "###          ### ###",
-                "###              ###",
-                "####          ######",
-                "########  ##########",
-                "#######X  E#########",
-                "####################",
-            };
-            LevelLoader.LoadDungeon(board, out entrances, out chestPositions,levelLayout);
-        }
-        public static void loadLevelTwo(Board board, out List<TilePos> entrances, out List<TilePos> chestPositions)
-        {
-            string[] levelLayout = new string[]
-            {
-                "####################",
-                "####################",
-                "###              ###",
-                "###      D       ###",
-                "####             ###",
-                "##C#####  ##########",
-                "## #####  ##########",
-                "##               ###",
-                "###              ###",
-                "###         ########",
-                "########  ####C  ###",
-                "########  ###### ###",
-                "####          ## ###",
-                "###           C# ###",
-                "###          ### ###",
-                "###              ###",
-                "####          ######",
-                "########  ##########",
-                "#######X  E#########",
-                "####################",
-            };
-            LevelLoader.LoadDungeon(board, out entrances, out chestPositions, levelLayout);
-        }
+            Level level = PremadeLevels.LevelOne;
 
+            string[] levelLayout =
+            {
+                "####################",
+                "####################",
+                "###              ###",
+                "###      D       ###",
+                "####             ###",
+                "##C#####  ##########",
+                "## #####  ##########",
+                "##               ###",
+                "###              ###",
+                "###         ########",
+                "########  ####C  ###",
+                "########  ###### ###",
+                "####          ## ###",
+                "###           C# ###",
+                "###          ### ###",
+                "###              ###",
+                "####          ######",
+                "########  ##########",
+                "#######X  E#########",
+                "####################",
+            };
+
+            LoadDungeon(board, level, levelLayout);
+            return level;
+        }
     }
+
 }
