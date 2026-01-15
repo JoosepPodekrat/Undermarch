@@ -59,11 +59,11 @@ namespace Undermarch.Presentation.Controllers
 
         private void Start()
         {
-            audioController = FindObjectOfType<AudioController>();
+            audioController = FindFirstObjectByType<AudioController>();
             if (audioController == null)
                 Debug.LogError("PlacementController: No AudioController found in scene!");
 
-            _tilemapRenderer = FindObjectOfType<TilemapRenderer>();
+            _tilemapRenderer = FindFirstObjectByType<TilemapRenderer>();
         }
 
     
@@ -72,6 +72,13 @@ namespace Undermarch.Presentation.Controllers
         {
             if (_selectedType == PlacementType.None)
             {
+                if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
+                return;
+            }
+
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                _selectedType = PlacementType.None;
                 if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
                 return;
             }
@@ -125,7 +132,15 @@ namespace Undermarch.Presentation.Controllers
 
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                if (!inBounds || !isValid) return;
+
+                if (!inBounds) return;
+
+                if (!isValid)
+                {
+                    _selectedType = PlacementType.None;
+                    if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
+                    return;
+                }
 
                 bool placed = false;
 
