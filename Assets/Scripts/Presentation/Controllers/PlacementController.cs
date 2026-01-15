@@ -25,6 +25,9 @@ namespace Undermarch.Presentation.Controllers
         private PlacementType _selectedType = PlacementType.None;
         private AudioController audioController;
         private TilemapRenderer _tilemapRenderer;
+        
+        private Vector2 _rightMouseStartPos;
+        private bool _isRightClicking;
    
 
         public void SelectSlime()
@@ -78,9 +81,19 @@ namespace Undermarch.Presentation.Controllers
 
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {
-                _selectedType = PlacementType.None;
-                if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
-                return;
+                _rightMouseStartPos = Mouse.current.position.ReadValue();
+                _isRightClicking = true;
+            }
+
+            if (_isRightClicking && Mouse.current.rightButton.wasReleasedThisFrame)
+            {
+                _isRightClicking = false;
+                if (Vector2.Distance(_rightMouseStartPos, Mouse.current.position.ReadValue()) < 10f)
+                {
+                    _selectedType = PlacementType.None;
+                    if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
+                    return;
+                }
             }
             
             if (Camera.main == null) return;
