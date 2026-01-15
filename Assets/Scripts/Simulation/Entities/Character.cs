@@ -19,6 +19,10 @@ namespace Undermarch.Simulation.Entities
         bool isScared = false;
         public string Name = "Character";
         public int gold = 0; // Gold carried by this character
+        public int wood = 0;
+        public int food = 0;
+        public int metal = 0;
+        public int magic = 0;
         public string history;
         // base stats, i think these should default to 10, so every point increase is roughly a 10% increase in effectiveness of the stat.
         public Faction faction; // { Hero, Defender, Neutral, ProjectileHero, ProjectileDefender }
