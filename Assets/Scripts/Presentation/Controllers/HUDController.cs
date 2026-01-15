@@ -24,6 +24,7 @@ namespace Undermarch.Presentation.Controllers
         public Button settingsButton;
         public Button levelSelectButton;
         public Button startCombatButton;
+        public TextMeshProUGUI startButtonText;
         public Button pauseButton;
 
         [Header("Bottom HUD")]
@@ -111,6 +112,14 @@ namespace Undermarch.Presentation.Controllers
             FindAndLog("TopHUD/LevelSelectButton", ref levelSelectButton, "levelSelectButton");
             FindAndLog("TopHUD/StartWaveButton", ref startCombatButton, "startCombatButton");
             FindAndLog("TopHUD/PauseButton", ref pauseButton, "pauseButton");
+
+            // Get button text component
+            if (startCombatButton != null && startButtonText == null)
+            {
+                startButtonText = startCombatButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (startButtonText == null)
+                    Debug.LogError("HUDController: Could not find StartButton Text child!");
+            }
 
             FindAndLog("BottomHUD/PlaceSlimeButton", ref buildSlimeButton, "buildSlimeButton");
             FindAndLog("BottomHUD/PlaceTrapButton", ref buildTrapButton, "buildTrapButton");
@@ -298,20 +307,32 @@ namespace Undermarch.Presentation.Controllers
                     statusText = "BUILDING PHASE";
                     statusColor = Color.green;
                     if (startCombatButton) startCombatButton.interactable = true;
+                    if (startButtonText) startButtonText.text = "START";
                     break;
                 case GamePhase.Combat:
                     statusText = "ENEMY WAVE";
                     statusColor = Color.red;
-                    if (startCombatButton) startCombatButton.interactable = false;
+
+                    // Enable "Next Wave" button if waves remain
+                    var waveSpawner = GameManager.Instance.TickSystem?.WaveSpawner;
+                    bool hasMoreWaves = waveSpawner != null && !waveSpawner.AllWavesSpawned;
+
+                    if (startCombatButton) startCombatButton.interactable = hasMoreWaves;
+                    if (startButtonText)
+                    {
+                        startButtonText.text = hasMoreWaves ? "NEXT WAVE" : "WAITING";
+                    }
                     break;
                 case GamePhase.BuildingPhase2:
                     statusText = "BUILDING PHASE 2";
                     statusColor = Color.cyan;
                     if (startCombatButton) startCombatButton.interactable = true;
+                    if (startButtonText) startButtonText.text = "START";
                     break;
                 case GamePhase.GameOver:
                     statusText = "GAME OVER";
                     statusColor = Color.gray;
+                    if (startCombatButton) startCombatButton.interactable = false;
                     break;
             }
 
@@ -343,14 +364,19 @@ namespace Undermarch.Presentation.Controllers
         private void OnSettingsClicked() { Debug.Log("HUD_CLICK: Settings Clicked"); }
         private void OnLevelSelectClicked() { Debug.Log("HUD_CLICK: Level Select Clicked"); }
         
-        private void OnStartCombatClicked() 
-        { 
+        private void OnStartCombatClicked()
+        {
             Debug.Log("HUD_CLICK: Start Combat Clicked");
-            if (GameManager.Instance) 
+            if (GameManager.Instance)
             {
                 if (GameManager.Instance.CurrentPhase == GamePhase.BuildingPhase2)
                 {
                     GameManager.Instance.StartSecondWave();
+                }
+                else if (GameManager.Instance.CurrentPhase == GamePhase.Combat)
+                {
+                    // Start next wave early
+                    GameManager.Instance.StartNextWave();
                 }
                 else
                 {

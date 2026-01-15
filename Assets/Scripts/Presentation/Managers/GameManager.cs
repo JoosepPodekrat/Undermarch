@@ -315,5 +315,32 @@ namespace Undermarch.Presentation.Managers
                 Debug.Log("Second Wave Combat started.");
             }
         }
+
+        /// <summary>
+        /// Manually trigger the next wave spawn during combat phase.
+        /// </summary>
+        public void StartNextWave()
+        {
+            if (CurrentPhase != GamePhase.Combat)
+            {
+                Debug.LogWarning("GameManager: StartNextWave called outside Combat phase!");
+                return;
+            }
+
+            if (TickSystem?.WaveSpawner == null)
+            {
+                Debug.LogError("GameManager: WaveSpawner is null!");
+                return;
+            }
+
+            if (TickSystem.WaveSpawner.AllWavesSpawned)
+            {
+                Debug.Log("GameManager: All waves already spawned!");
+                return;
+            }
+
+            // Force spawn the next wave immediately
+            TickSystem.WaveSpawner.ForceSpawnNextWave(Board);
+        }
     }
 }

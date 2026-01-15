@@ -95,6 +95,47 @@ namespace Undermarch.Simulation.Core
 }
 
 
+        /// <summary>
+        /// Manually spawn the next wave immediately, bypassing scheduled tick timing.
+        /// Returns the list of spawned heroes, or empty if no waves remaining.
+        /// </summary>
+        public List<Character> ForceSpawnNextWave(Board board)
+        {
+            List<Character> spawnedHeroes = new List<Character>();
+
+            if (currentWaveIndex >= scheduledWaves.Count)
+            {
+                SimulationLog.Log("WaveSpawner: All waves already spawned!");
+                return spawnedHeroes;
+            }
+
+            HeroParty wave = scheduledWaves[currentWaveIndex];
+
+            foreach (var hero in wave.Heroes)
+            {
+                // Final wave heroes never flee
+                if (wave.IsFinalWave && hero is Hero h)
+                {
+                    h.FleeThreshold = int.MaxValue;
+                }
+                hero.spawnSound = "humanmalegrunt";
+                hero.hurtSound = "humanMaleHurt";
+                hero.attackSound = "humanMaleGrunt";
+                hero.deathSound = "humanMaleHurt";
+
+                var pos = board.FindNearestFreeTile(wave.SpawnPosition);
+                board.AddEntity(pos, hero);
+
+                CharacterEvents.RaiseSpawn(hero);
+                spawnedHeroes.Add(hero);
+            }
+
+            SimulationLog.Log($"Wave {currentWaveIndex + 1} FORCE SPAWNED: {wave.Heroes.Count} heroes");
+            currentWaveIndex++;
+
+            return spawnedHeroes;
+        }
+
         public void Reset()
         {
             currentWaveIndex = 0;
