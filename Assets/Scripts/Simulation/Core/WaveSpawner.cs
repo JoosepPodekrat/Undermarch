@@ -17,6 +17,7 @@ namespace Undermarch.Simulation.Core
         public int SpawnTick { get; set; }
         public TilePos SpawnPosition { get; set; }
         public bool IsFinalWave { get; set; }
+        public int TicksUntilNextWave { get; set; } = 30; // Delay after this wave before next (default ~15 sec @ 2 TPS)
 
 
         public HeroParty(List<Character> heroes, int spawnTick, TilePos spawnPos, bool isFinal = false)
@@ -35,6 +36,8 @@ namespace Undermarch.Simulation.Core
     {
         private List<HeroParty> scheduledWaves;
         private int currentWaveIndex;
+        private int _nextSpawnTick = 0; // Track next spawn time for scheduling
+
         public int CurrentWave => currentWaveIndex;
         public int TotalWaves => scheduledWaves.Count;
         public bool AllWavesSpawned => currentWaveIndex >= scheduledWaves.Count;
@@ -45,9 +48,23 @@ namespace Undermarch.Simulation.Core
             currentWaveIndex = 0;
         }
 
+        /// <summary>
+        /// Reset the scheduler to start from tick 0. Call when creating a new wave schedule.
+        /// </summary>
+        public void ResetScheduler()
+        {
+            _nextSpawnTick = 0;
+        }
+
+        /// <summary>
+        /// Schedule a wave. SpawnTick is assigned automatically based on TicksUntilNextWave.
+        /// </summary>
         public void ScheduleWave(HeroParty party)
         {
+            party.SpawnTick = _nextSpawnTick;
             scheduledWaves.Add(party);
+            // Next wave spawns after this wave's delay
+            _nextSpawnTick += party.TicksUntilNextWave;
         }
 
        public List<Character> CheckSpawn(int currentTick, Board board)

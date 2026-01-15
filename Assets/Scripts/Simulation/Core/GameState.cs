@@ -13,8 +13,6 @@ namespace Undermarch.Simulation.Core
         public int CurrentFood { get; private set; }
         public int CurrentMana { get; private set; }
 
-        public int Wave { get; private set; }
-
         public event Action OnResourcesChanged;
 
         public readonly Dictionary<string, int> PlacementCosts = new()
@@ -26,10 +24,9 @@ namespace Undermarch.Simulation.Core
             { "Goblin", 50 }
         };
 
-        public GameState(int startingGold = 200, int startingWave = 1)
+        public GameState(int startingGold = 200)
         {
             CurrentGold = startingGold;
-            Wave = startingWave;
             Phase = GamePhase.Placement;
         }
 
@@ -124,12 +121,6 @@ namespace Undermarch.Simulation.Core
             }
             OnResourcesChanged?.Invoke();
             return true;
-        }
-
-
-        public void NextWave()
-        {
-            Wave++;
         }
     }
 }

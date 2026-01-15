@@ -360,9 +360,18 @@ namespace Undermarch.Presentation.Controllers
             // Update wave display
             if (waveText != null)
             {
-                int currentWave = GameManager.Instance.GameState.Wave;
-                int totalWaves = GameManager.Instance.TickSystem?.WaveSpawner?.TotalWaves ?? 9;
-                waveText.text = $"Wave: {currentWave}/{totalWaves}";
+                var waveSpawner = GameManager.Instance.TickSystem?.WaveSpawner;
+                if (waveSpawner != null)
+                {
+                    // CurrentWaveIndex is 0-based, increments after each wave spawns
+                    // Use max(1, index) so we show "1" before any waves spawn, and "1" after wave 1 spawns
+                    int currentWave = Mathf.Max(1, waveSpawner.CurrentWave);
+                    waveText.text = $"Wave: {currentWave}/{waveSpawner.TotalWaves}";
+                }
+                else
+                {
+                    waveText.text = "Wave: 1/9";
+                }
             }
 
             // Update enemy count display

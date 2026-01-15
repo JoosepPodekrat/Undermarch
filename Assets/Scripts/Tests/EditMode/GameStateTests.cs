@@ -11,10 +11,9 @@ namespace Undermarch.Tests
         [Test]
         public void GameState_InitializesWithCorrectValues()
         {
-            IGameState gameState = new GameState(150, 1);
+            IGameState gameState = new GameState(150);
 
             Assert.AreEqual(150, gameState.CurrentGold);
-            Assert.AreEqual(1, gameState.Wave);
             Assert.AreEqual(GamePhase.Placement, gameState.Phase);
         }
 

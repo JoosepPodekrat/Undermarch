@@ -68,91 +68,168 @@ namespace Undermarch.Simulation.Levels
         }
 
         /// <summary>
-        /// Creates a wave schedule with spawn events triggered after placement.
+        /// Helper: Creates a HeroParty with cloned characters.
+        /// </summary>
+        private static HeroParty CreateHeroParty(List<Character> heroes, TilePos position, bool isFinal = false)
+        {
+            var clonedHeroes = new List<Character>();
+            foreach (var hero in heroes)
+            {
+                var cloned = hero.Clone();
+                // Set audio properties for all heroes
+                cloned.spawnSound = "humanmalegrunt";
+                cloned.hurtSound = "humanMaleHurt";
+                cloned.attackSound = "humanMaleGrunt";
+                cloned.deathSound = "humanMaleHurt";
+                clonedHeroes.Add(cloned);
+            }
+
+            var party = new HeroParty(clonedHeroes, 0, position, isFinal);
+
+            // Final wave heroes never flee
+            if (isFinal)
+            {
+                foreach (var hero in party.Heroes)
+                {
+                    if (hero is Entities.Characters.Heroes.Hero h)
+                    {
+                        h.FleeThreshold = int.MaxValue;
+                    }
+                }
+            }
+
+            return party;
+        }
+
+        /// <summary>
+        /// Helper: Schedules a wave with the spawner.
+        /// </summary>
+        private static void ScheduleWave(HeroParty wave, WaveSpawner spawner)
+        {
+            spawner.ScheduleWave(wave);
+        }
+
+        /// <summary>
+        /// Creates the first wave schedule with 9 waves.
+        /// Waves auto-spawn every ~15 seconds (30 ticks @ 2 TPS).
+        /// Player can click "NEXT WAVE" to spawn early.
         /// </summary>
         public static WaveSpawner CreateWaveSchedule(List<TilePos> entrances)
         {
             WaveSpawner spawner = new WaveSpawner();
+            spawner.ResetScheduler(); // Start at tick 0
+
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
 
-            void ScheduleHeroWave(List<Character> heroes, int spawnTick)
-            {
-                var clonedHeroes = new List<Character>();
-                foreach (var hero in heroes)
-                {
-                    clonedHeroes.Add(hero.Clone());
-                }
-                var party = new HeroParty(clonedHeroes, spawnTick, entrance);
-                spawner.ScheduleWave(party);
-            }
+            // Wave 1: Single peasant (tutorial wave)
+            var wave1 = CreateHeroParty(new List<Character> { CharacterDatabase.peasant }, entrance);
+            wave1.TicksUntilNextWave = 30; // ~15 seconds
+            ScheduleWave(wave1, spawner);
 
-            // 9 waves, spaced ~65 ticks apart (~32.5 seconds per wave)
-            int tickInterval = 65;
+            // Wave 2: Two peasants
+            var wave2 = CreateHeroParty(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant }, entrance);
+            wave2.TicksUntilNextWave = 30;
+            ScheduleWave(wave2, spawner);
 
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant }, 0);
-        ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant }, 120); // was 60
-        ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue }, 240); // was 120
-        ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.peasant }, 360); // was 180
-        ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, 480); // was 240
-        ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage }, 600); // was 300
-        ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 720); // was 360
-        ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 840); // was 420
+            // Wave 3: First rogue
+            var wave3 = CreateHeroParty(new List<Character> { CharacterDatabase.rogue }, entrance);
+            wave3.TicksUntilNextWave = 35; // Slightly longer for harder waves
+            ScheduleWave(wave3, spawner);
 
-        var finalHeroes = new List<Character> {
-            CharacterDatabase.rogue.Clone(),
-            CharacterDatabase.rogue.Clone(),
-            CharacterDatabase.apprenticeMage.Clone(),
-            CharacterDatabase.peasant.Clone()
-        };
-        foreach (var hero in finalHeroes)
-        {
-            if (hero is Entities.Characters.Heroes.Hero h)
-                h.FleeThreshold = 999999;
-        }
-        ScheduleHeroWave(finalHeroes, 960); // was 480
+            // Wave 4: Mage + peasant combo
+            var wave4 = CreateHeroParty(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.peasant }, entrance);
+            wave4.TicksUntilNextWave = 35;
+            ScheduleWave(wave4, spawner);
+
+            // Wave 5: Double rogues
+            var wave5 = CreateHeroParty(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, entrance);
+            wave5.TicksUntilNextWave = 40;
+            ScheduleWave(wave5, spawner);
+
+            // Wave 6: Mixed group
+            var wave6 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage
+            }, entrance);
+            wave6.TicksUntilNextWave = 40;
+            ScheduleWave(wave6, spawner);
+
+            // Wave 7: Triple peasants (swarm)
+            var wave7 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant
+            }, entrance);
+            wave7.TicksUntilNextWave = 40;
+            ScheduleWave(wave7, spawner);
+
+            // Wave 8: Double mages
+            var wave8 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage
+            }, entrance);
+            wave8.TicksUntilNextWave = 45;
+            ScheduleWave(wave8, spawner);
+
+            // Wave 9: Final wave - full squad, never flees
+            var wave9 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.peasant
+            }, entrance, isFinal: true);
+            wave9.TicksUntilNextWave = 0; // No delay after final wave
+            ScheduleWave(wave9, spawner);
 
             return spawner;
         }
 
+        /// <summary>
+        /// Creates the second stage wave schedule with 5 harder waves.
+        /// </summary>
         public static WaveSpawner CreateWaveSchedule2(List<TilePos> entrances)
         {
             WaveSpawner spawner = new WaveSpawner();
+            spawner.ResetScheduler();
+
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
 
-            void ScheduleHeroWave(List<Character> heroes, int spawnTick)
-            {
-                var clonedHeroes = new List<Character>();
-                foreach (var hero in heroes)
-                {
-                    clonedHeroes.Add(hero.Clone());
-                }
-                var party = new HeroParty(clonedHeroes, spawnTick, entrance);
-                spawner.ScheduleWave(party);
-            }
+            // Wave 1: Double rogues immediately
+            var wave1 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue
+            }, entrance);
+            wave1.TicksUntilNextWave = 30;
+            ScheduleWave(wave1, spawner);
 
-            // Harder waves
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.rogue }, 0);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage }, 120);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, 240);
-            ScheduleHeroWave(new List<Character> { CharacterDatabase.rogue, CharacterDatabase.apprenticeMage, CharacterDatabase.rogue }, 360);
+            // Wave 2: Double mages
+            var wave2 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage
+            }, entrance);
+            wave2.TicksUntilNextWave = 35;
+            ScheduleWave(wave2, spawner);
 
-            var finalHeroes = new List<Character> {
-                CharacterDatabase.rogue.Clone(),
-                CharacterDatabase.rogue.Clone(),
-                CharacterDatabase.apprenticeMage.Clone(),
-                CharacterDatabase.apprenticeMage.Clone(),   
-                CharacterDatabase.peasant.Clone(),
-                CharacterDatabase.peasant.Clone()
-            };
-            foreach (var hero in finalHeroes)
-            {
-                if (hero is Entities.Characters.Heroes.Hero h)
-                    h.FleeThreshold = 999999;
-            }
-            ScheduleHeroWave(finalHeroes, 480);
+            // Wave 3: Peasant swarm (4)
+            var wave3 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
+            }, entrance);
+            wave3.TicksUntilNextWave = 35;
+            ScheduleWave(wave3, spawner);
+
+            // Wave 4: Mixed dangerous group
+            var wave4 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+                CharacterDatabase.rogue
+            }, entrance);
+            wave4.TicksUntilNextWave = 40;
+            ScheduleWave(wave4, spawner);
+
+            // Wave 5: Final wave - largest group, never flees
+            var wave5 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
+            }, entrance, isFinal: true);
+            wave5.TicksUntilNextWave = 0;
+            ScheduleWave(wave5, spawner);
 
             return spawner;
         }
+
         public static Level LoadLevelOne(Board board)
         {
             Level level = PremadeLevels.LevelOne;

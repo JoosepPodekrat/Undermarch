@@ -29,7 +29,6 @@ namespace Undermarch.Simulation.Interfaces
         int CurrentSteel { get; }
         int CurrentFood { get; }
         int CurrentMana { get; }
-        int Wave { get; }
 
 
         bool CanAfford(int cost);
