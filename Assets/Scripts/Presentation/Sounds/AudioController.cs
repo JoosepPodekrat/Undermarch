@@ -24,6 +24,9 @@ namespace Undermarch.Presentation.Controllers
 
         private void Awake()
         {
+            // Keep AudioController at origin to prevent any spatial audio issues
+            transform.position = Vector3.zero;
+
             InitializeSound(slimeSound);
             InitializeSound(humanmalegrunt);
             InitializeSound(humanMaleHurt);
