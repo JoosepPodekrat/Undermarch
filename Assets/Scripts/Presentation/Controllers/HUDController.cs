@@ -273,6 +273,9 @@ namespace Undermarch.Presentation.Controllers
 
             // Character info panel handling
             HandleCharacterInfoPanel();
+
+            // Show stats for selected placement type
+            UpdatePlacementPreviewStats();
         }
 
         private void UpdateButtonState(Button btn, bool unlocked, string name, TextMeshProUGUI priceText)
@@ -747,6 +750,104 @@ namespace Undermarch.Presentation.Controllers
 
         #region Character Info Panel
 
+        private PlacementController.PlacementType _lastShownPlacementType = PlacementController.PlacementType.None;
+
+        void UpdatePlacementPreviewStats()
+        {
+            if (placementController == null) return;
+
+            var selectedType = placementController.SelectedType;
+
+            // If a placement type is selected, show its stats
+            if (selectedType != PlacementController.PlacementType.None)
+            {
+                // Only update if the selection changed
+                if (selectedType != _lastShownPlacementType)
+                {
+                    _lastShownPlacementType = selectedType;
+                    ShowPlacementStats(selectedType);
+                }
+            }
+            else
+            {
+                // Clear if we were showing placement stats
+                if (_lastShownPlacementType != PlacementController.PlacementType.None)
+                {
+                    _lastShownPlacementType = PlacementController.PlacementType.None;
+                    // Don't close the panel if we're showing a placed character
+                    if (selectedCharacter == null)
+                    {
+                        CloseCharacterInfo();
+                    }
+                }
+            }
+        }
+
+        void ShowPlacementStats(PlacementController.PlacementType placementType)
+        {
+            Character previewCharacter = null;
+
+            // Create a temporary character based on the placement type
+            switch (placementType)
+            {
+                case PlacementController.PlacementType.Slime:
+                    previewCharacter = CharacterDatabase.slimeMonster.Clone();
+                    break;
+                case PlacementController.PlacementType.Archer:
+                    previewCharacter = CharacterDatabase.archerMonster.Clone();
+                    break;
+                case PlacementController.PlacementType.Goblin:
+                    previewCharacter = CharacterDatabase.goblin1.Clone();
+                    break;
+                case PlacementController.PlacementType.SpikeTrap:
+                    // Traps don't have character stats
+                    ShowTrapStats("Spike Trap", 30, "Damages enemies that step on it");
+                    return;
+                case PlacementController.PlacementType.BearTrap:
+                    // Traps don't have character stats
+                    ShowTrapStats("Bear Trap", 50, "Immobilizes and damages enemies");
+                    return;
+            }
+
+            if (previewCharacter != null)
+            {
+                // Initialize the character's stats
+                previewCharacter.CalculateStats();
+                previewCharacter.InitStats();
+                
+                // Show in the info panel
+                ShowCharacterInfo(previewCharacter);
+                
+                // Mark as preview (not a placed character)
+                selectedCharacter = null;
+            }
+        }
+
+        void ShowTrapStats(string trapName, int cost, string description)
+        {
+            if (characterInfoPanel == null) return;
+
+            characterInfoPanel.SetActive(true);
+
+            if (charNameText != null)
+                charNameText.text = trapName;
+
+            if (charHPText != null)
+                charHPText.text = $"Cost: {cost} Gold";
+
+            if (charDamageText != null)
+                charDamageText.text = description;
+
+            if (charAgilityText != null)
+                charAgilityText.text = "";
+
+            if (charFactionText != null)
+                charFactionText.text = "Type: Trap";
+
+            // Mark as preview
+            selectedCharacter = null;
+        }
+
         void CreateCharacterInfoPanel(Transform canvasTransform)
         {
             // Create panel background
@@ -860,6 +961,8 @@ namespace Undermarch.Presentation.Controllers
             {
                 Debug.Log("CharacterInfo: Escape pressed, closing panel");
                 CloseCharacterInfo();
+                // Also clear placement selection
+                _lastShownPlacementType = PlacementController.PlacementType.None;
                 return;
             }
 
@@ -875,6 +978,7 @@ namespace Undermarch.Presentation.Controllers
                     {
                         Debug.Log("CharacterInfo: Click inside panel, closing");
                         CloseCharacterInfo();
+                        _lastShownPlacementType = PlacementController.PlacementType.None;
                         return;
                     }
                 }
@@ -887,11 +991,16 @@ namespace Undermarch.Presentation.Controllers
                 if (clicked != null)
                 {
                     ShowCharacterInfo(clicked);
+                    // Clear placement preview tracking since we're now showing a real character
+                    _lastShownPlacementType = PlacementController.PlacementType.None;
                 }
                 else
                 {
-                    // Clicked on empty space - close panel
-                    CloseCharacterInfo();
+                    // Clicked on empty space - only close if not showing a placement preview
+                    if (placementController == null || placementController.SelectedType == PlacementController.PlacementType.None)
+                    {
+                        CloseCharacterInfo();
+                    }
                 }
             }
         }

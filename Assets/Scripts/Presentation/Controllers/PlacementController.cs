@@ -28,6 +28,9 @@ namespace Undermarch.Presentation.Controllers
         
         private Vector2 _rightMouseStartPos;
         private bool _isRightClicking;
+
+        // Public property to expose selected type for UI
+        public PlacementType SelectedType => _selectedType;
    
 
         public void SelectSlime()
