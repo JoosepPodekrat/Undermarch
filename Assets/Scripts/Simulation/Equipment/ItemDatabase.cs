@@ -46,6 +46,22 @@ namespace Undermarch
             stamina = 2,
             agility = 1
         };
+        public static readonly Weapon holySword = new Weapon
+        {
+            name = "Holy Sword",
+            description = "A sword blessed by the saintess",
+            damage = 15,
+            damageType = DamageType.Light,
+        };
+        public static readonly Weapon warriorAxe = new Weapon
+        {
+            name = "Holy Sword",
+            description = "A sword blessed by the saintess",
+            damage = 8,
+            damageType = DamageType.Bleed,
+            strength = 3,
+            intelligence = -2
+        };
 
         // =============================
         // Armors

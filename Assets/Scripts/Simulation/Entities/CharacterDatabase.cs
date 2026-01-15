@@ -68,7 +68,41 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.luckyPendant,
             deathSound = "humanfemalehurt",
             attackSound = "largehumanfemalegrunt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 120 } } // reward 20 gold
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 120 } }
+        };
+        public static readonly Hero knight = new Hero
+        {
+            Name = "Knight",
+            faction = Faction.Hero,
+            strength = 15,
+            stamina = 25,
+            agility = 2,
+            intelligence = 5,
+            spirit = 10,
+            charWeapon = ItemDatabase.ironSword,
+            charArmor = ItemDatabase.chainmailArmor,
+            charHelmet = ItemDatabase.ironHelmet,
+            charAccessory = ItemDatabase.ironRing,
+            spawnSound = "humanmalegrunt",
+            deathSound = "humanmalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 200 } }
+        };
+        public static readonly Hero warrior = new Hero
+        {
+            Name = "warrior",
+            faction = Faction.Hero,
+            strength = 12,
+            stamina = 20,
+            agility = 10,
+            intelligence = 5,
+            spirit = 15,
+            charWeapon = ItemDatabase.ironSword,
+            charArmor = ItemDatabase.chainmailArmor,
+            charHelmet = ItemDatabase.ironHelmet,
+            charAccessory = ItemDatabase.ironRing,
+            spawnSound = "humanmalegrunt",
+            deathSound = "humanmalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 } }
         };
 
         // ==========================
