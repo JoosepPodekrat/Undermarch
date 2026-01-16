@@ -32,10 +32,10 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.ironRing,
             spawnSound = "humanmalegrunt",
             deathSound = "humanmalehurt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 30 }, { ResourceType.Corpse, 1 } } // reward 5 gold
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 30 }, { ResourceType.Corpse, 1 } } 
         };
 
-        public static readonly Hero apprenticeMage = new Hero //female mage, 
+        public static readonly Hero apprenticeMage = new Hero
         {
             Name = "Apprentice Mage",
             faction = Faction.Hero,
@@ -50,7 +50,24 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.charmOfFocus,
 
             deathSound = "humanfemalehurt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 50 }, { ResourceType.Corpse, 1 } } // reward 15 gold
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 50 }, { ResourceType.Corpse, 1 } } 
+        };
+        public static readonly Hero Mage = new Hero
+        {
+            Name = "Mage",
+            faction = Faction.Hero,
+            strength = 7,
+            stamina = 9,
+            agility = 9,
+            intelligence = 15,
+            spirit = 16,
+            charWeapon = ItemDatabase.adeptStaff,
+            charArmor = ItemDatabase.mageRobe,
+            charHelmet = ItemDatabase.mysticCowl,
+            charAccessory = ItemDatabase.amuletOfClarity,
+
+            deathSound = "humanfemalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 75 }, { ResourceType.Corpse, 1 } } 
         };
 
         public static readonly Hero rogue = new Hero //female rogue (use deeper voicelines)
@@ -138,6 +155,23 @@ namespace Undermarch.Simulation.Entities
             deathSound = "humanmalehurt",
             ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 },{ResourceType.Corpse, 1 } }
         };
+        public static readonly Hero isekai = new Hero
+        {
+            Name = "Legendary Hero",
+            faction = Faction.Hero,
+            strength = 20,
+            stamina = 10,
+            agility = 20,
+            intelligence = 15,
+            spirit = 20,
+            charWeapon = ItemDatabase.heroSword,
+            charArmor = ItemDatabase.heroArmor,
+            charHelmet = ItemDatabase.heroHelmet,
+            charAccessory = ItemDatabase.heroTalisman,
+            spawnSound = "humanmalegrunt",
+            deathSound = "humanmalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 }, { ResourceType.Corpse, 1 } }
+        };
 
         // ==========================
         // CharacterS
@@ -159,6 +193,22 @@ namespace Undermarch.Simulation.Entities
             spawnSound = "slimeonspawn",
             hurtSound = "slimeonspawn"
         };
+        public static readonly Monster strongSlime = new Monster
+        {
+            Name = "Strong Slime",
+            faction = Faction.Defender,
+            strength = 14,
+            stamina = 17,
+            agility = 11,
+            intelligence = 6,
+            spirit = 7,
+            charWeapon = ItemDatabase.ironDagger,
+            charArmor = ItemDatabase.tatteredArmor,
+            charHelmet = ItemDatabase.crackedHelm,
+            charAccessory = ItemDatabase.cursedTalisman,
+            spawnSound = "slimeonspawn",
+            hurtSound = "slimeonspawn"
+        };
         public static readonly Monster goblin1 = new Monster
         {
             Name = "Goblin",
@@ -168,6 +218,21 @@ namespace Undermarch.Simulation.Entities
             agility = 12,
             intelligence = 3,
             spirit = 3,
+            charWeapon = ItemDatabase.ironDagger,
+            charArmor = ItemDatabase.tatteredArmor,
+            charHelmet = ItemDatabase.crackedHelm,
+            charAccessory = ItemDatabase.cursedTalisman,
+        };
+
+        public static readonly Monster ghost = new Monster
+        {
+            Name = "Ghost",
+            faction = Faction.Defender,
+            strength = 10,
+            stamina = 10,
+            agility = 10,
+            intelligence = 10,
+            spirit = 10,
             charWeapon = ItemDatabase.ironDagger,
             charArmor = ItemDatabase.tatteredArmor,
             charHelmet = ItemDatabase.crackedHelm,

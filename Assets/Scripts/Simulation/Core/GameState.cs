@@ -12,6 +12,7 @@ namespace Undermarch.Simulation.Core
         public int CurrentSteel { get; private set; }
         public int CurrentFood { get; private set; }
         public int CurrentMana { get; private set; }
+        public int CurrentCorpse { get; private set; }
 
         public event Action OnResourcesChanged;
 

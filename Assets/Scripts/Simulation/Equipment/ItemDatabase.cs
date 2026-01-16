@@ -121,6 +121,18 @@ namespace Undermarch
             agility = 2,
             stamina = 1
         };
+        public static readonly Weapon heroSword = new Weapon
+        {
+            name = "Holy Sword",
+            description = "A sword blessed by the saintess",
+            damage = 25,
+            damageType = DamageType.Light,
+            strength = 10,
+            stamina = 3,
+            intelligence = 3,
+            agility = 3,
+            spirit = 3,
+        };
 
         // =============================
         // Armors
@@ -212,7 +224,18 @@ namespace Undermarch
             strength = -2
         };
 
-      
+        public static readonly Armor heroArmor = new Armor
+        {
+            name = "Hero Armor",
+            description = "Armor fitting of a true hero.",
+            intelligence = 3,
+            spirit = 3,
+            stamina = 10,
+            agility = 3,
+            strength = 3
+        };
+
+
 
         // =============================
         // Helmets
@@ -290,6 +313,16 @@ namespace Undermarch
             agility = -1,
             intelligence = 0,
             spirit = 0
+        };
+        public static readonly Helmet heroHelmet = new Helmet
+        {
+            name = "Heroic Helmet",
+            description = "A helmet fit for a hero.",
+            stamina = 3,
+            strength = 10,
+            agility = 3,
+            intelligence = 3,
+            spirit = 3
         };
 
         public static readonly Helmet enchantedHood = new Helmet
@@ -369,6 +402,16 @@ namespace Undermarch
             stamina = 0,
             agility = 0,
             strength = -1
+        };
+        public static readonly Accessory heroTalisman = new Accessory
+        {
+            name = "Heroic Talisman",
+            description = "A talisman fit for a hero",
+            intelligence = 10,
+            spirit = 10,
+            stamina = 3,
+            agility = 3,
+            strength = 3
         };
     }
 }
