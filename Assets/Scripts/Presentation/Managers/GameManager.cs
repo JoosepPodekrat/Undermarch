@@ -256,6 +256,41 @@ namespace Undermarch.Presentation.Managers
             SceneManager.LoadScene("Bootstrap");
         }
 
+        /// <summary>
+        /// Returns to the main menu without marking the level as completed.
+        /// </summary>
+        public void GoToMainMenu()
+        {
+            // Reset the level selection so Bootstrap redirects to main menu
+            LevelSelectorUI.ResetSelection();
+            SceneManager.LoadScene("Bootstrap");
+        }
+
+        /// <summary>
+        /// Checks if there is a next level available.
+        /// </summary>
+        public bool HasNextLevel()
+        {
+            if (levelRegistry == null) return false;
+            return currentLevelIndex + 1 < levelRegistry.LevelCount;
+        }
+
+        /// <summary>
+        /// Loads the next level in the sequence.
+        /// </summary>
+        public void LoadNextLevel()
+        {
+            if (!HasNextLevel())
+            {
+                Debug.LogWarning("GameManager: No next level available!");
+                return;
+            }
+
+            int nextLevelIndex = currentLevelIndex + 1;
+            LevelSelectorUI.SetSelectedLevel(nextLevelIndex);
+            SceneManager.LoadScene("Bootstrap");
+        }
+
         public void InitializeTickDriver(Bootstrap.TickDriver driver)
         {
             if (driver != null)

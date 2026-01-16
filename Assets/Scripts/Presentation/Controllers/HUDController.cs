@@ -4,6 +4,7 @@ using TMPro;
 using System.Linq;
 using Undermarch;
 using Undermarch.Presentation.Managers;
+using Undermarch.Presentation.UI;
 using Undermarch.Simulation.Interfaces;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
@@ -22,8 +23,7 @@ namespace Undermarch.Presentation.Controllers
         public TextMeshProUGUI waveText;
         public TextMeshProUGUI enemiesText;
         public Image turnIndicatorImage;
-        public Button settingsButton;
-        public Button levelSelectButton;
+        public Button menuButton;
         public Button startCombatButton;
         public TextMeshProUGUI startButtonText;
         public Button pauseButton;
@@ -40,6 +40,9 @@ namespace Undermarch.Presentation.Controllers
 
         [Header("References")]
         public PlacementController placementController;
+        
+        [Header("Confirmation Dialog")]
+        private ConfirmationDialogUI confirmationDialog;
 
         [Header("Character Info Panel")]
         private GameObject characterInfoPanel;
@@ -120,8 +123,7 @@ namespace Undermarch.Presentation.Controllers
             FindAndLog("TopHUD/MiddlePanel/StatsRow/WaveText", ref waveText, "waveText");
             FindAndLog("TopHUD/MiddlePanel/StatsRow/EnemiesText", ref enemiesText, "enemiesText");
             FindAndLog("TopHUD/MiddlePanel/StatsRow/CoinText", ref coinText, "coinText");
-            FindAndLog("TopHUD/SettingsButton", ref settingsButton, "settingsButton");
-            FindAndLog("TopHUD/LevelSelectButton", ref levelSelectButton, "levelSelectButton");
+            FindAndLog("TopHUD/MenuButton", ref menuButton, "menuButton");
             FindAndLog("TopHUD/StartWaveButton", ref startCombatButton, "startCombatButton");
             FindAndLog("TopHUD/PauseButton", ref pauseButton, "pauseButton");
 
@@ -174,14 +176,21 @@ namespace Undermarch.Presentation.Controllers
             Debug.Log("HUDController: Start() called.");
 
             // 4. Listener Binding
-            BindButton(settingsButton, OnSettingsClicked, "SettingsButton");
-            BindButton(levelSelectButton, OnLevelSelectClicked, "LevelSelectButton");
+            BindButton(menuButton, OnMenuClicked, "MenuButton");
             BindButton(startCombatButton, OnStartCombatClicked, "StartCombatButton");
             BindButton(pauseButton, OnPauseClicked, "PauseButton");
             BindButton(buildSlimeButton, OnBuildSlimeClicked, "BuildSlimeButton");
             BindButton(buildTrapButton, OnBuildTrapClicked, "BuildTrapButton");
             BindButton(buildGoblinButton, OnBuildGoblinClicked, "BuildGoblinButton");
             BindButton(buildBearTrapButton, OnBuildBearTrapClicked, "BuildBearTrapButton");
+
+            // Find or create confirmation dialog
+            confirmationDialog = FindObjectOfType<ConfirmationDialogUI>();
+            if (confirmationDialog == null)
+            {
+                Debug.Log("HUDController: Creating confirmation dialog...");
+                CreateConfirmationDialog();
+            }
 
             // 5. Logic Init
             if (GameManager.Instance != null && GameManager.Instance.GameState != null)
@@ -399,8 +408,32 @@ namespace Undermarch.Presentation.Controllers
             }
         }
 
-        private void OnSettingsClicked() { Debug.Log("HUD_CLICK: Settings Clicked"); }
-        private void OnLevelSelectClicked() { Debug.Log("HUD_CLICK: Level Select Clicked"); }
+        private void OnMenuClicked()
+        {
+            Debug.Log("HUD_CLICK: Menu Clicked");
+            if (confirmationDialog != null)
+            {
+                confirmationDialog.Show(
+                    "Return to main menu?\nProgress will not be saved.",
+                    () => {
+                        // On confirm - go to main menu
+                        if (GameManager.Instance != null)
+                        {
+                            GameManager.Instance.GoToMainMenu();
+                        }
+                    }
+                );
+            }
+            else
+            {
+                // Fallback if no confirmation dialog exists
+                Debug.LogWarning("HUDController: No confirmation dialog found, going to main menu directly.");
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.GoToMainMenu();
+                }
+            }
+        }
         
         private void OnStartCombatClicked()
         {
@@ -516,8 +549,7 @@ namespace Undermarch.Presentation.Controllers
             turnIndicatorText = null;
             waveText = null;
             enemiesText = null;
-            settingsButton = null;
-            levelSelectButton = null;
+            menuButton = null;
             startCombatButton = null;
             pauseButton = null;
             buildSlimeButton = null;
@@ -536,9 +568,8 @@ namespace Undermarch.Presentation.Controllers
             GameObject topPanel = CreatePanel(canvasObj.transform, "TopHUD", new Color(0.18f, 0.18f, 0.18f, 1f), 110, true);
             SetupHorizontalLayout(topPanel, 20, 15, TextAnchor.MiddleCenter);
 
-            // Top Elements
-            CreateButton(topPanel.transform, "SettingsButton", "Set", new Vector2(60, 60));
-            CreateButton(topPanel.transform, "LevelSelectButton", "Lvl", new Vector2(60, 60));
+            // Top Elements - Single Menu button
+            CreateButton(topPanel.transform, "MenuButton", "Menu", new Vector2(80, 60));
 
             // === Middle Section - Simple RectTransform positioning ===
             GameObject middlePanel = new GameObject("MiddlePanel", typeof(RectTransform));
@@ -745,6 +776,119 @@ namespace Undermarch.Presentation.Controllers
             obj.transform.SetParent(parent, false);
             LayoutElement le = obj.GetComponent<LayoutElement>();
             le.flexibleWidth = 1;
+        }
+
+        void CreateConfirmationDialog()
+        {
+            // Create dialog root
+            GameObject dialogRoot = new GameObject("ConfirmationDialog", typeof(RectTransform), typeof(ConfirmationDialogUI));
+            dialogRoot.transform.SetParent(transform, false);
+            
+            RectTransform rootRT = dialogRoot.GetComponent<RectTransform>();
+            rootRT.anchorMin = Vector2.zero;
+            rootRT.anchorMax = Vector2.one;
+            rootRT.offsetMin = Vector2.zero;
+            rootRT.offsetMax = Vector2.zero;
+
+            // Create dark overlay/panel
+            GameObject panel = new GameObject("DialogPanel", typeof(RectTransform), typeof(Image));
+            panel.transform.SetParent(dialogRoot.transform, false);
+            
+            RectTransform panelRT = panel.GetComponent<RectTransform>();
+            panelRT.anchorMin = Vector2.zero;
+            panelRT.anchorMax = Vector2.one;
+            panelRT.offsetMin = Vector2.zero;
+            panelRT.offsetMax = Vector2.zero;
+            
+            Image panelImage = panel.GetComponent<Image>();
+            panelImage.color = new Color(0, 0, 0, 0.7f);
+            panelImage.raycastTarget = true;
+
+            // Create center box
+            GameObject box = new GameObject("DialogBox", typeof(RectTransform), typeof(Image));
+            box.transform.SetParent(panel.transform, false);
+            
+            RectTransform boxRT = box.GetComponent<RectTransform>();
+            boxRT.anchorMin = new Vector2(0.5f, 0.5f);
+            boxRT.anchorMax = new Vector2(0.5f, 0.5f);
+            boxRT.pivot = new Vector2(0.5f, 0.5f);
+            boxRT.sizeDelta = new Vector2(400, 200);
+            
+            Image boxImage = box.GetComponent<Image>();
+            boxImage.color = new Color(0.2f, 0.2f, 0.2f, 1f);
+
+            // Create message text
+            GameObject messageObj = new GameObject("MessageText", typeof(RectTransform), typeof(TextMeshProUGUI));
+            messageObj.transform.SetParent(box.transform, false);
+            
+            RectTransform messageRT = messageObj.GetComponent<RectTransform>();
+            messageRT.anchorMin = new Vector2(0.1f, 0.4f);
+            messageRT.anchorMax = new Vector2(0.9f, 0.9f);
+            messageRT.offsetMin = Vector2.zero;
+            messageRT.offsetMax = Vector2.zero;
+            
+            TextMeshProUGUI messageText = messageObj.GetComponent<TextMeshProUGUI>();
+            messageText.text = "Are you sure?";
+            messageText.fontSize = 24;
+            messageText.color = Color.white;
+            messageText.alignment = TextAlignmentOptions.Center;
+
+            // Create Yes button
+            GameObject yesBtn = CreateDialogButton(box.transform, "YesButton", "Yes", new Vector2(-70, -70));
+            Button yesButton = yesBtn.GetComponent<Button>();
+
+            // Create No button
+            GameObject noBtn = CreateDialogButton(box.transform, "NoButton", "No", new Vector2(70, -70));
+            Button noButton = noBtn.GetComponent<Button>();
+
+            // Wire up the ConfirmationDialogUI component
+            confirmationDialog = dialogRoot.GetComponent<ConfirmationDialogUI>();
+            confirmationDialog.dialogPanel = panel;
+            confirmationDialog.messageText = messageText;
+            confirmationDialog.yesButton = yesButton;
+            confirmationDialog.noButton = noButton;
+
+            // Initialize button listeners now that references are assigned
+            confirmationDialog.Initialize();
+
+            // Start hidden
+            panel.SetActive(false);
+
+            Debug.Log("HUDController: Confirmation dialog created.");
+        }
+
+        GameObject CreateDialogButton(Transform parent, string name, string text, Vector2 position)
+        {
+            GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
+            obj.transform.SetParent(parent, false);
+            
+            RectTransform rt = obj.GetComponent<RectTransform>();
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = position;
+            rt.sizeDelta = new Vector2(100, 40);
+            
+            Image img = obj.GetComponent<Image>();
+            img.color = new Color(0.3f, 0.3f, 0.3f);
+            img.raycastTarget = true;
+
+            GameObject textObj = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
+            textObj.transform.SetParent(obj.transform, false);
+            
+            RectTransform textRT = textObj.GetComponent<RectTransform>();
+            textRT.anchorMin = Vector2.zero;
+            textRT.anchorMax = Vector2.one;
+            textRT.offsetMin = Vector2.zero;
+            textRT.offsetMax = Vector2.zero;
+            
+            TextMeshProUGUI tmp = textObj.GetComponent<TextMeshProUGUI>();
+            tmp.text = text;
+            tmp.fontSize = 20;
+            tmp.color = Color.white;
+            tmp.alignment = TextAlignmentOptions.Center;
+
+            return obj;
         }
 
         GameObject CreateContainer(Transform parent, string name)

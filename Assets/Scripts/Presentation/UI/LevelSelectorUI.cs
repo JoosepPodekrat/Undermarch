@@ -1,4 +1,4 @@
-﻿using TMPro;
+﻿﻿using TMPro;
 using Undermarch.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,6 +42,15 @@ namespace Undermarch.Presentation.UI
         public static void ResetSelection()
         {
             SelectedLevelIndex = -1;
+        }
+
+        /// <summary>
+        /// Sets the selected level to a specific index.
+        /// Used when progressing to the next level.
+        /// </summary>
+        public static void SetSelectedLevel(int levelIndex)
+        {
+            SelectedLevelIndex = levelIndex;
         }
 
         private void Start()

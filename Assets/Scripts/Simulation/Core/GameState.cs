@@ -37,6 +37,20 @@ namespace Undermarch.Simulation.Core
                     { ResourceType.Gold, 30 },
                     { ResourceType.Steel, 10 }
                 }
+            },
+            {
+                "Goblin",
+                new Dictionary<ResourceType, int>
+                {
+                    { ResourceType.Gold, 50 }
+                }
+            },
+            {
+                "BearTrap",
+                new Dictionary<ResourceType, int>
+                {
+                    { ResourceType.Gold, 50 }
+                }
             }
         };
 
@@ -48,7 +62,7 @@ namespace Undermarch.Simulation.Core
             {
                 { ResourceType.Gold, startingGold },
                 { ResourceType.Wood, 0 },
-                { ResourceType.Steel, 0 },
+                { ResourceType.Steel, 100 },
                 { ResourceType.Food, 0 },
                 { ResourceType.Mana, 0 },
                 { ResourceType.Corpse, 0 }

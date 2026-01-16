@@ -53,9 +53,8 @@ namespace Undermarch.Presentation.Tools
             GameObject topPanel = CreatePanel(canvasObj.transform, "TopHUD", new Color(0.18f, 0.18f, 0.18f, 1f), 100, true);
             SetupHorizontalLayout(topPanel, 20, 20, TextAnchor.MiddleCenter);
 
-            // Top Elements
-            CreateButton(topPanel.transform, "SettingsButton", "Set", new Vector2(60, 60));
-            CreateButton(topPanel.transform, "LevelSelectButton", "Lvl", new Vector2(60, 60));
+            // Top Elements - Single Menu button
+            CreateButton(topPanel.transform, "MenuButton", "Menu", new Vector2(80, 60));
             
             CreateSpacer(topPanel.transform); // Spacer Left
 
@@ -83,7 +82,7 @@ namespace Undermarch.Presentation.Tools
             CreateBuildButton(bottomPanel.transform, "PlaceTrapButton", "Trap", "30 G");
 
             // 4. Cleanup Old Junk
-            string[] oldNames = { "PlaceSlimeButton", "PlaceTrapButton", "StartWaveButton", "CoinText", "TurnIndicatorText", "SettingsButton", "LevelSelectButton", "PauseButton" };
+            string[] oldNames = { "PlaceSlimeButton", "PlaceTrapButton", "StartWaveButton", "CoinText", "TurnIndicatorText", "MenuButton", "PauseButton" };
             foreach (string name in oldNames)
             {
                 Transform t = canvasObj.transform.Find(name);
