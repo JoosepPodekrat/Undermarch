@@ -1,3 +1,4 @@
+using Undermarch.Presentation.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,17 @@ namespace Undermarch.Presentation.Bootstrap
         void Awake()
         {
             Debug.Log("Bootstrapper: Awake() called.");
+
+            // Check if a level has been selected
+            if (LevelSelectorUI.SelectedLevelIndex < 0)
+            {
+                Debug.Log("Bootstrapper: No level selected. Loading main menu...");
+                LoadMainMenu();
+                return;
+            }
+
+            Debug.Log($"Bootstrapper: Level {LevelSelectorUI.SelectedLevelIndex} selected. Loading game scenes...");
+
             bool simulationSceneLoaded = IsSceneLoaded("Simulation");
             Debug.Log($"Bootstrapper: IsSceneLoaded('Simulation') returned {simulationSceneLoaded}.");
 
@@ -19,6 +31,11 @@ namespace Undermarch.Presentation.Bootstrap
 
             Debug.Log("Bootstrapper: Loading core scenes...");
             LoadCoreScenes();
+        }
+
+        private void LoadMainMenu()
+        {
+            SceneManager.LoadScene("New UI", LoadSceneMode.Single);
         }
 
         private void LoadCoreScenes()

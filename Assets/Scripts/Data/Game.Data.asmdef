@@ -1,11 +1,8 @@
 {
-    "name": "Game.Presentation",
+    "name": "Game.Data",
     "rootNamespace": "Undermarch",
     "references": [
-        "GUID:1aeee74991d994137ad4d4e5ba31d26b",
-        "Unity.InputSystem",
-        "Unity.TextMeshPro",
-        "Game.Data"
+        "Game.Simulation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

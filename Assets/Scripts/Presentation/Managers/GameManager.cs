@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Undermarch.Data;
 using Undermarch.Presentation.UI;
 using Undermarch.Simulation.Combat;
 using Undermarch.Simulation.Core;
@@ -38,6 +39,12 @@ namespace Undermarch.Presentation.Managers
         private List<TilePos> _entrances;
         public bool IsSecondStage { get; private set; }
         public bool CanBuild => CurrentPhase == GamePhase.Placement || CurrentPhase == GamePhase.Combat || CurrentPhase == GamePhase.BuildingPhase2;
+
+        [Header("Level Selection")]
+        [Tooltip("Registry containing all available levels")]
+        public LevelRegistry levelRegistry;
+        
+        private int currentLevelIndex = -1;
 
 
         private void Awake()
@@ -107,8 +114,21 @@ namespace Undermarch.Presentation.Managers
             // Create Background
             // CreateBackground();
 
-            // Load the dungeon with new layout (4 rooms, 4 chests, DM, entrance)
-            currentLevel = LevelLoader.LoadLevelOne(Board);
+            // Load the selected level from the registry
+            currentLevelIndex = LevelSelectorUI.SelectedLevelIndex;
+            if (levelRegistry != null && currentLevelIndex >= 0 && currentLevelIndex < levelRegistry.LevelCount)
+            {
+                var levelData = levelRegistry.GetLevel(currentLevelIndex);
+                currentLevel = levelData.Load(Board);
+                Debug.Log($"GameManager: Loaded level '{levelData.displayName}' (index {currentLevelIndex}).");
+            }
+            else
+            {
+                // Fallback to level one if no valid selection
+                Debug.LogWarning("GameManager: No valid level selected, falling back to Level One.");
+                currentLevel = LevelLoader.LoadLevelOne(Board);
+                currentLevelIndex = 1;
+            }
 
             _entrances = currentLevel.Entrances;
 
@@ -292,6 +312,16 @@ namespace Undermarch.Presentation.Managers
                 else
                 {
                     Debug.Log("Game Over: All waves defeated! YOU WIN!");
+                    
+                    // Mark level as completed for progression
+                    if (currentLevelIndex >= 0)
+                    {
+                        LevelProgressManager.MarkLevelCompleted(currentLevelIndex);
+                    }
+                    
+                    // Reset selection so returning to menu works correctly
+                    LevelSelectorUI.ResetSelection();
+                    
                     if (endGameUI != null)
                     {
                         endGameUI.ShowEndGamePopup("You Win!");

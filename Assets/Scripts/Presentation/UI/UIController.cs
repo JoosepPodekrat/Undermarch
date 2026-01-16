@@ -18,7 +18,7 @@ public class MenuManager : MonoBehaviour
 
         optionsPanel.SetActive(true);
         levelPanel.SetActive(false);
-        newGamePanel.SetActive(false);
+        if (newGamePanel != null) newGamePanel.SetActive(false);
     }
 
     public void OpenMainMenu()
@@ -29,23 +29,35 @@ public class MenuManager : MonoBehaviour
 
     public void OpenLevelLoader()
     {
-        mainMenuPanel.SetActive(false);
-        subMenus.SetActive(true);
-
-        optionsPanel.SetActive(false);
-        levelPanel.SetActive(true);
-        newGamePanel.SetActive(false);
+        OpenLevelSelector();
     }
 
-    public void OpenNewGame()
+    /// <summary>
+    /// Opens the level selector panel. Called by New Game button.
+    /// </summary>
+    public void OpenLevelSelector()
     {
         mainMenuPanel.SetActive(false);
         subMenus.SetActive(true);
 
         optionsPanel.SetActive(false);
-        levelPanel.SetActive(false);
-        newGamePanel.SetActive(true);
+        levelPanel.SetActive(true);
+        if (newGamePanel != null) newGamePanel.SetActive(false);
+        
+        // Refresh the level buttons to show current unlock status
+        var levelSelectorUI = levelPanel.GetComponent<Undermarch.Presentation.UI.LevelSelectorUI>();
+        if (levelSelectorUI != null)
+        {
+            levelSelectorUI.RefreshButtons();
+        }
     }
+
+    public void OpenNewGame()
+    {
+        // Redirect to level selector
+        OpenLevelSelector();
+    }
+    
     public void QuitGame()
     {
         Debug.Log("Quit button pressed");

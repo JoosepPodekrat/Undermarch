@@ -151,6 +151,7 @@ MonoBehaviour:
   endGameUI: {fileID: 0}
   resourceDisplay: {fileID: 0}
   tickControlUI: {fileID: 0}
+  levelRegistry: {fileID: 11400000, guid: 44a3bce2c94e5584fb11c5e9b0206b63, type: 2}
 --- !u!4 &1908932531
 Transform:
   m_ObjectHideFlags: 0
