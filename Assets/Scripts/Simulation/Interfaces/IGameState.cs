@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Undermarch.Simulation.Interfaces
 {
@@ -9,6 +10,7 @@ namespace Undermarch.Simulation.Interfaces
         BuildingPhase2,
         GameOver
     }
+
     public enum ResourceType
     {
         Gold,
@@ -20,26 +22,27 @@ namespace Undermarch.Simulation.Interfaces
     }
 
     /// <summary>
-    /// Interface for game state management (resources, phase, wave number, etc.).
+    /// Interface for game state management (resources, phase, etc.).
     /// </summary>
     public interface IGameState
     {
         GamePhase Phase { get; set; }
-        int CurrentGold { get; }
-        int CurrentWood { get; }
-        int CurrentSteel { get; }
-        int CurrentFood { get; }
-        int CurrentMana { get; }
-        int CurrentCorpse { get; }
 
-        bool CanAfford(int cost);
-        void SpendGold(int amount);
-        void EarnGold(int amount);
+        // ----------------------
+        // Resource access
+        // ----------------------
 
         int GetResource(ResourceType type);
+
         bool AddResource(ResourceType type, int amount);
         bool SpendResource(ResourceType type, int amount);
 
+        // ----------------------
+        // Multi-resource costs
+        // ----------------------
+
+        bool CanAfford(Dictionary<ResourceType, int> cost);
+        bool SpendResources(Dictionary<ResourceType, int> cost);
 
         event Action OnResourcesChanged;
     }
