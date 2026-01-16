@@ -16,6 +16,7 @@ namespace Undermarch.Simulation.Interfaces
         Steel,
         Food,
         Mana,
+        Corpse
     }
 
     /// <summary>
@@ -29,7 +30,7 @@ namespace Undermarch.Simulation.Interfaces
         int CurrentSteel { get; }
         int CurrentFood { get; }
         int CurrentMana { get; }
-
+        int CurrentCorpse { get; }
 
         bool CanAfford(int cost);
         void SpendGold(int amount);

@@ -32,7 +32,7 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.ironRing,
             spawnSound = "humanmalegrunt",
             deathSound = "humanmalehurt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 30 } } // reward 5 gold
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 30 }, { ResourceType.Corpse, 1 } } // reward 5 gold
         };
 
         public static readonly Hero apprenticeMage = new Hero //female mage, 
@@ -50,7 +50,7 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.charmOfFocus,
 
             deathSound = "humanfemalehurt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 50 } } // reward 15 gold
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 50 }, { ResourceType.Corpse, 1 } } // reward 15 gold
         };
 
         public static readonly Hero rogue = new Hero //female rogue (use deeper voicelines)
@@ -68,7 +68,7 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.luckyPendant,
             deathSound = "humanfemalehurt",
             attackSound = "largehumanfemalegrunt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 120 } }
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 120 }, { ResourceType.Corpse, 1 } }
         };
         public static readonly Hero knight = new Hero
         {
@@ -79,13 +79,13 @@ namespace Undermarch.Simulation.Entities
             agility = 2,
             intelligence = 5,
             spirit = 10,
-            charWeapon = ItemDatabase.ironSword,
-            charArmor = ItemDatabase.chainmailArmor,
-            charHelmet = ItemDatabase.ironHelmet,
-            charAccessory = ItemDatabase.ironRing,
+            charWeapon = ItemDatabase.steelSword,
+            charArmor = ItemDatabase.steelBreastplate,
+            charHelmet = ItemDatabase.knightHelmet,
+            charAccessory = ItemDatabase.silverRing,
             spawnSound = "humanmalegrunt",
             deathSound = "humanmalehurt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 200 } }
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 200 }, { ResourceType.Corpse, 1 } }
         };
         public static readonly Hero warrior = new Hero
         {
@@ -96,13 +96,47 @@ namespace Undermarch.Simulation.Entities
             agility = 10,
             intelligence = 5,
             spirit = 15,
-            charWeapon = ItemDatabase.ironSword,
-            charArmor = ItemDatabase.chainmailArmor,
-            charHelmet = ItemDatabase.ironHelmet,
-            charAccessory = ItemDatabase.ironRing,
+            charWeapon = ItemDatabase.warriorAxe,
+            charArmor = ItemDatabase.reinforcedLeatherArmor,
+            charHelmet = ItemDatabase.barbarianHelmet,
+            charAccessory = ItemDatabase.silverRing,
             spawnSound = "humanmalegrunt",
             deathSound = "humanmalehurt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 } }
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 }, { ResourceType.Corpse, 1 } }
+        };
+        public static readonly Hero priestess = new Hero
+        {
+            Name = "priestess",
+            faction = Faction.Hero,
+            strength = 0,
+            stamina = 4,
+            agility = 5,
+            intelligence = 13,
+            spirit = 15,
+            charWeapon = ItemDatabase.priestessStaff,
+            charArmor = ItemDatabase.priestessRobe,
+            charHelmet = ItemDatabase.enchantedHood,
+            charAccessory = ItemDatabase.amuletOfClarity,
+            spawnSound = "humanmalegrunt",
+            deathSound = "humanmalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 }, { ResourceType.Corpse, 1 } }
+        };
+        public static readonly Hero highPriestess = new Hero
+        {
+            Name = "priestess",
+            faction = Faction.Hero,
+            strength = 3,
+            stamina = 10,
+            agility = 8,
+            intelligence = 15,
+            spirit = 20,
+            charWeapon = ItemDatabase.warriorAxe,
+            charArmor = ItemDatabase.reinforcedLeatherArmor,
+            charHelmet = ItemDatabase.barbarianHelmet,
+            charAccessory = ItemDatabase.silverRing,
+            spawnSound = "humanmalegrunt",
+            deathSound = "humanmalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 },{ResourceType.Corpse, 1 } }
         };
 
         // ==========================
