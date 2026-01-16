@@ -6,8 +6,6 @@ namespace Undermarch.Presentation.UI
 {
     /// <summary>
     /// Displays current resources (gold) on screen.
-    /// Attach this to a TextMeshProUGUI object in the UI scene.
-    /// Assign the text field in the Inspector.
     /// </summary>
     public class ResourceDisplay : MonoBehaviour
     {
@@ -32,10 +30,11 @@ namespace Undermarch.Presentation.UI
 
         private void UpdateDisplay()
         {
-            if (goldText != null && gameState != null)
-            {
-                goldText.text = $"Gold: {gameState.CurrentGold}";
-            }
+            if (goldText == null || gameState == null)
+                return;
+
+            int gold = gameState.GetResource(ResourceType.Gold);
+            goldText.text = $"Gold: {gold}";
         }
     }
 }

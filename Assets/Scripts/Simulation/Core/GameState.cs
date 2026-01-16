@@ -7,86 +7,71 @@ namespace Undermarch.Simulation.Core
     public class GameState : IGameState
     {
         public GamePhase Phase { get; set; }
-        public int CurrentGold { get; private set; }
-        public int CurrentWood { get; private set; }
-        public int CurrentSteel { get; private set; }
-        public int CurrentFood { get; private set; }
-        public int CurrentMana { get; private set; }
+
+        private readonly Dictionary<ResourceType, int> _resources;
 
         public event Action OnResourcesChanged;
 
-        public readonly Dictionary<string, int> PlacementCosts = new()
+        // Example: placement costs using multiple resources
+        public readonly Dictionary<string, Dictionary<ResourceType, int>> PlacementCosts = new()
         {
-            { "SlimeMonster", 50 },
-            { "ArcherMonster", 80 },
-            { "SpikeTrap", 30 },
-            { "BearTrap", 50 },
-            { "Goblin", 50 }
+            {
+                "SlimeMonster",
+                new Dictionary<ResourceType, int>
+                {
+                    { ResourceType.Gold, 50 }
+                }
+            },
+            {
+                "ArcherMonster",
+                new Dictionary<ResourceType, int>
+                {
+                    { ResourceType.Gold, 80 },
+                    { ResourceType.Wood, 20 }
+                }
+            },
+            {
+                "SpikeTrap",
+                new Dictionary<ResourceType, int>
+                {
+                    { ResourceType.Gold, 30 },
+                    { ResourceType.Steel, 10 }
+                }
+            }
         };
 
         public GameState(int startingGold = 200)
         {
-            CurrentGold = startingGold;
             Phase = GamePhase.Placement;
+
+            _resources = new Dictionary<ResourceType, int>
+            {
+                { ResourceType.Gold, startingGold },
+                { ResourceType.Wood, 0 },
+                { ResourceType.Steel, 0 },
+                { ResourceType.Food, 0 },
+                { ResourceType.Mana, 0 },
+                { ResourceType.Corpse, 0 }
+            };
         }
 
-        public bool CanAfford(int cost)
-        {
-            return CurrentGold >= cost;
-        }
-
-        public void SpendGold(int amount)
-        {
-            if (amount < 0) throw new ArgumentException("Cannot spend negative gold");
-            if (!CanAfford(amount)) throw new InvalidOperationException("Insufficient gold");
-
-            CurrentGold -= amount;
-            OnResourcesChanged?.Invoke();
-        }
-
-        public void EarnGold(int amount)
-        {
-            if (amount < 0) throw new ArgumentException("Cannot earn negative gold");
-
-            CurrentGold += amount;
-            OnResourcesChanged?.Invoke();
-        }
+        // ----------------------
+        // Resource access
+        // ----------------------
 
         public int GetResource(ResourceType type)
         {
-            return type switch
-            {
-                ResourceType.Gold => CurrentGold,
-                ResourceType.Wood => CurrentWood,
-                ResourceType.Steel => CurrentSteel,
-                ResourceType.Food => CurrentFood,
-                ResourceType.Mana => CurrentMana,
-                _ => throw new ArgumentOutOfRangeException(nameof(type), "Unknown resource type"),
-            };
+            return _resources.TryGetValue(type, out var amount) ? amount : 0;
         }
+
         public bool AddResource(ResourceType type, int amount)
         {
             if (amount < 0) return false;
-            switch (type)
-            {
-                case ResourceType.Gold:
-                    CurrentGold += amount;
-                    break;
-                case ResourceType.Wood:
-                    CurrentWood += amount;
-                    break;
-                case ResourceType.Steel:
-                    CurrentSteel += amount;
-                    break;
-                case ResourceType.Food:
-                    CurrentFood += amount;
-                    break;
-                case ResourceType.Mana:
-                    CurrentMana += amount;
-                    break;
-                default:
-                    return false;
-            }
+
+            if (!_resources.ContainsKey(type))
+                _resources[type] = 0;
+
+            _resources[type] += amount;
             OnResourcesChanged?.Invoke();
             return true;
         }
@@ -94,31 +79,37 @@ namespace Undermarch.Simulation.Core
         public bool SpendResource(ResourceType type, int amount)
         {
             if (amount < 0) return false;
-            switch (type)
+            if (GetResource(type) < amount) return false;
+
+            _resources[type] -= amount;
+            OnResourcesChanged?.Invoke();
+            return true;
+        }
+
+        // ----------------------
+        // Multi-resource costs
+        // ----------------------
+
+        public bool CanAfford(Dictionary<ResourceType, int> cost)
+        {
+            foreach (var (type, amount) in cost)
             {
-                case ResourceType.Gold:
-                    if (CurrentGold < amount) return false;
-                    CurrentGold -= amount;
-                    break;
-                case ResourceType.Wood:
-                    if (CurrentWood < amount) return false;
-                    CurrentWood -= amount;
-                    break;
-                case ResourceType.Steel:
-                    if (CurrentSteel < amount) return false;
-                    CurrentSteel -= amount;
-                    break;
-                case ResourceType.Food:
-                    if (CurrentFood < amount) return false;
-                    CurrentFood -= amount;
-                    break;
-                case ResourceType.Mana:
-                    if (CurrentMana < amount) return false;
-                    CurrentMana -= amount;
-                    break;
-                default:
+                if (GetResource(type) < amount)
                     return false;
             }
+            return true;
+        }
+
+        public bool SpendResources(Dictionary<ResourceType, int> cost)
+        {
+            if (!CanAfford(cost))
+                return false;
+
+            foreach (var (type, amount) in cost)
+            {
+                _resources[type] -= amount;
+            }
+
             OnResourcesChanged?.Invoke();
             return true;
         }

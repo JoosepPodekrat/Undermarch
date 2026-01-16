@@ -222,7 +222,7 @@ namespace Undermarch.Simulation.Entities
             CharacterEvents.RaiseAttack(this);
 
             float damage = charWeapon.damage;
-            if (charWeapon.damageType == DamageType.Physical)
+            if (charWeapon.damageType == DamageType.Physical || charWeapon.damageType == DamageType.Bleed)
                 damage += effectiveStrength;
             else if (charWeapon.damageType == DamageType.Arcane || charWeapon.damageType == DamageType.Frost || charWeapon.damageType == DamageType.Fire)
                 damage += effectiveIntelligence;

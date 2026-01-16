@@ -186,15 +186,18 @@ namespace Undermarch.Presentation.Controllers
             // 5. Logic Init
             if (GameManager.Instance != null && GameManager.Instance.GameState != null)
             {
-                var gameState = GameManager.Instance.GameState as GameState;
+                IGameState gameState = GameManager.Instance.GameState;
+
                 if (gameState != null)
                 {
-                    Debug.Log("HUDController: Connecting to GameState events.");
-                    if (slimePriceText) slimePriceText.text = $"{gameState.PlacementCosts["SlimeMonster"]} G";
-                    if (trapPriceText) trapPriceText.text = $"{gameState.PlacementCosts["SpikeTrap"]} G";
-                    if (goblinPriceText) goblinPriceText.text = $"{gameState.PlacementCosts["Goblin"]} G";
-                    if (bearTrapPriceText) bearTrapPriceText.text = $"{gameState.PlacementCosts["BearTrap"]} G";
-                    GameManager.Instance.GameState.OnResourcesChanged += UpdateResourceDisplay;
+                    // These values should eventually come from a data source,
+                    // but for now we keep your existing numbers
+                    slimePriceText.text = "50 G";
+                    trapPriceText.text = "30 G";
+                    goblinPriceText.text = "50 G";
+                    bearTrapPriceText.text = "50 G";
+
+                    gameState.OnResourcesChanged += UpdateResourceDisplay;
                 }
             }
             else
@@ -311,11 +314,13 @@ namespace Undermarch.Presentation.Controllers
 
         private void UpdateResourceDisplay()
         {
-            if (GameManager.Instance != null && coinText != null)
-            {
-                coinText.text = $"Coins: {GameManager.Instance.GameState.CurrentGold}";
-            }
+            if (GameManager.Instance?.GameState == null || coinText == null)
+                return;
+
+            int gold = GameManager.Instance.GameState.GetResource(ResourceType.Gold);
+            coinText.text = $"Gold: {gold}";
         }
+
 
         private void UpdateTurnIndicator()
         {
@@ -834,7 +839,8 @@ namespace Undermarch.Presentation.Controllers
                 charNameText.text = trapName;
 
             if (charHPText != null)
-                charHPText.text = $"Cost: {cost} Gold";
+                charHPText.text = $"Cost: {cost} {ResourceType.Gold}";
+
 
             if (charDamageText != null)
                 charDamageText.text = description;
@@ -1235,9 +1241,10 @@ namespace Undermarch.Presentation.Controllers
         {
             if (GameManager.Instance?.GameState == null) return;
 
-            GameManager.Instance.GameState.EarnGold(1000);
+            GameManager.Instance.GameState.AddResource(ResourceType.Gold, 1000);
             Debug.Log("Dev: Added 1000 gold");
         }
+
 
         #endregion
     }
