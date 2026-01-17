@@ -65,7 +65,12 @@ namespace Undermarch.Presentation.Rendering
         public TileBase skeletonTile;
         public TileBase slimeTile;
         public TileBase archerTile;
-
+        [Header("Demons")]
+        public TileBase redDemonTile;
+        public TileBase purpleDemonTile;
+        [Header("Spiders")]
+        public TileBase redSpiderTile;
+        public TileBase purpleSpiderTile;
         [Header("Dungeon Master")]
         public TileBase dungeonMasterTile;
 
@@ -358,6 +363,18 @@ namespace Undermarch.Presentation.Rendering
                         break;
                     case "Slime":
                         tile = slimeTile;
+                        break;
+                    case "WeakerDemon":
+                        tile = redDemonTile;
+                        break;
+                    case "StrongDemon":
+                        tile = purpleDemonTile;
+                        break;
+                    case "RedSpider":
+                        tile = redSpiderTile;
+                        break;
+                    case "PurpleSpider":
+                        tile = purpleSpiderTile;
                         break;
                     case "DungeonMaster":
                         tile = dungeonMasterTile;

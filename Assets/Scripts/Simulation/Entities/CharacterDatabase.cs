@@ -318,22 +318,33 @@ namespace Undermarch.Simulation.Entities
             charAccessory = ItemDatabase.charmOfFocus // Placeholder
         };
 
-        public static readonly Hero levelOne = new Hero //female mage, 
+        public static readonly Monster weakerDemon = new Monster
         {
-            Name = "Apprentice Mage",
-            faction = Faction.Hero,
-            strength = 7,
-            stamina = 9,
-            agility = 9,
+            Name = "Red Demon",
+            faction = Faction.Defender,
+            strength = 20,
+            stamina = 10,
+            agility = 15,
+            intelligence = 8,
+            spirit = 9,
+            charWeapon = ItemDatabase.ironSword,
+            charArmor = ItemDatabase.leatherArmor,
+            charHelmet = ItemDatabase.leatherCap,
+            charAccessory = ItemDatabase.charmOfFocus
+        };
+        public static readonly Monster strongerDemon = new Monster
+        {
+            Name = "Purple Demon",
+            faction = Faction.Defender,
+            strength = 20,
+            stamina = 20,
+            agility = 15,
             intelligence = 13,
-            spirit = 11,
-            charWeapon = ItemDatabase.apprenticeStaff,
-            charArmor = ItemDatabase.apprenticeRobe,
-            charHelmet = ItemDatabase.mysticCowl,
-            charAccessory = ItemDatabase.charmOfFocus,
-
-            deathSound = "humanfemalehurt",
-            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 50 } } // reward 15 gold
+            spirit = 15,
+            charWeapon = ItemDatabase.ironSword,
+            charArmor = ItemDatabase.leatherArmor,
+            charHelmet = ItemDatabase.leatherCap,
+            charAccessory = ItemDatabase.charmOfFocus
         };
     }
 }

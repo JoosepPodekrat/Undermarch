@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: fce0e9a581f47994eb49bcd6eb0fb426
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2264183206955709915
+    second: poison_cloud_0
+  - first:
+      213: 8485737430102517315
+    second: poison_cloud_1
+  - first:
+      213: -6635443790500079887
+    second: poison_cloud_2
+  - first:
+      213: 5807557888562220200
+    second: poison_cloud_3
+  - first:
+      213: -9118588303936021491
+    second: poison_cloud_4
+  - first:
+      213: -6002016284349396740
+    second: poison_cloud_5
+  - first:
+      213: 3914665606853533602
+    second: poison_cloud_6
+  - first:
+      213: -2667365101140882599
+    second: poison_cloud_7
+  - first:
+      213: -1639898639940459585
+    second: poison_cloud_8
+  - first:
+      213: 881216281184938491
+    second: poison_cloud_9
+  - first:
+      213: -2550694849115334379
+    second: poison_cloud_10
+  - first:
+      213: -6083325753851761139
+    second: poison_cloud_11
+  - first:
+      213: 4569322568214403181
+    second: poison_cloud_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1000
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: poison_cloud_0
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 478
+        width: 167
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52a00039e510490e0800000000000000
+      internalID: -2264183206955709915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_1
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 633
+        width: 425
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3462f7abb3563c570800000000000000
+      internalID: 8485737430102517315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_2
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 464
+        width: 301
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f6db24570b2ae3a0800000000000000
+      internalID: -6635443790500079887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_3
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 232
+        width: 178
+        height: 314
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8acc4404127989050800000000000000
+      internalID: 5807557888562220200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_4
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 183
+        width: 126
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0c9cdaff34447180800000000000000
+      internalID: -9118588303936021491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_5
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 271
+        width: 543
+        height: 348
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf88e3b4dfd84bca0800000000000000
+      internalID: -6002016284349396740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_6
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 263
+        width: 246
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2af91fee0afa35630800000000000000
+      internalID: 3914665606853533602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_7
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 145
+        width: 104
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95b4934a29d9bfad0800000000000000
+      internalID: -2667365101140882599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_8
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 261
+        width: 43
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb3e3b220e8ed39e0800000000000000
+      internalID: -1639898639940459585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_9
+      rect:
+        serializedVersion: 2
+        x: 628
+        y: 179
+        width: 42
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf9a152f985ba3c00800000000000000
+      internalID: 881216281184938491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_10
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 189
+        width: 200
+        height: 214
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 519df048c8c1a9cd0800000000000000
+      internalID: -2550694849115334379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_11
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 143
+        width: 129
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0e2eac257fa39ba0800000000000000
+      internalID: -6083325753851761139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poison_cloud_12
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 156
+        width: 63
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d68589e9aae796f30800000000000000
+      internalID: 4569322568214403181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      poison_cloud_0: -2264183206955709915
+      poison_cloud_1: 8485737430102517315
+      poison_cloud_10: -2550694849115334379
+      poison_cloud_11: -6083325753851761139
+      poison_cloud_12: 4569322568214403181
+      poison_cloud_2: -6635443790500079887
+      poison_cloud_3: 5807557888562220200
+      poison_cloud_4: -9118588303936021491
+      poison_cloud_5: -6002016284349396740
+      poison_cloud_6: 3914665606853533602
+      poison_cloud_7: -2667365101140882599
+      poison_cloud_8: -1639898639940459585
+      poison_cloud_9: 881216281184938491
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

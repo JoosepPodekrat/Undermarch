@@ -887,7 +887,7 @@ MonoBehaviour:
   bearTrapTile: {fileID: 11400000, guid: 21ddd92406e7bd24e8bfcdafb1f2e527, type: 2}
   chestTile: {fileID: 11400000, guid: 5d7234bf14281984e86d422c1d730e03, type: 2}
   arrowTile: {fileID: 0}
-  poisonCloudTile: {fileID: 0}
+  poisonCloudTile: {fileID: 11400000, guid: 623e38692abaebe4dbef69f70363ccd2, type: 2}
   slowZoneTile: {fileID: 0}
   fireZoneTile: {fileID: 0}
   fogZoneTile: {fileID: 0}
@@ -906,11 +906,15 @@ MonoBehaviour:
   skeletonTile: {fileID: 11400000, guid: 0a6b2d25349e7b945973629ec437de9e, type: 2}
   slimeTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
   archerTile: {fileID: 0}
+  redDemonTile: {fileID: 11400000, guid: b22982c4ca5fd27428927e84c501c4b8, type: 2}
+  purpleDemonTile: {fileID: 11400000, guid: 7e78eae6aeae29c47bc2ee6626729b22, type: 2}
+  redSpiderTile: {fileID: 11400000, guid: b22c6d4c3e3f4ae4790cb736f2a879cf, type: 2}
+  purpleSpiderTile: {fileID: 11400000, guid: 4bc5e7114665aea439e3df6f8d5ae976, type: 2}
   dungeonMasterTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
   woodenSpikeTrapTile: {fileID: 11400000, guid: 39e0253dda1af4c2b911d7d3b041ab4e, type: 2}
   ironSpikeTrapTile: {fileID: 11400000, guid: 53fe2867b2066004191dec79d8aba071, type: 2}
-  gasTrapTile: {fileID: 0}
-  pressurePlateTile: {fileID: 0}
+  gasTrapTile: {fileID: 11400000, guid: f41510c814bdb79488d160389ce91d5f, type: 2}
+  pressurePlateTile: {fileID: 11400000, guid: f41510c814bdb79488d160389ce91d5f, type: 2}
   defaultEntityTile: {fileID: 11400000, guid: f621c2bf865d5204faf97912bc9ab8ed, type: 2}
   defaultInteractableTile: {fileID: 11400000, guid: e5d94ee92b7bf454cacf2471980471b9, type: 2}
   defaultEffectTile: {fileID: 11400000, guid: 0becb6a98c14daf49aaae562e6677d66, type: 2}

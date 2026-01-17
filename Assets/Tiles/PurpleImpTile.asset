@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
-  m_Name: DungeonMasterTile
+  m_Name: PurpleImpTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: -2424553518018739129, guid: 09627b1b13ba17643a0141a1f231dfc5, type: 3}
+  m_DefaultSprite: {fileID: 7806903185615573512, guid: 54f3f06408d968a46b792c638f6da69e, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_MaskType: 0
