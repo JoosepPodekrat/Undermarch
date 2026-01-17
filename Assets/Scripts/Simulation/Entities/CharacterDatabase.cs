@@ -106,7 +106,7 @@ namespace Undermarch.Simulation.Entities
         };
         public static readonly Hero warrior = new Hero
         {
-            Name = "warrior",
+            Name = "Warrior",
             faction = Faction.Hero,
             strength = 12,
             stamina = 20,
@@ -123,7 +123,7 @@ namespace Undermarch.Simulation.Entities
         };
         public static readonly Hero priestess = new Hero
         {
-            Name = "priestess",
+            Name = "Priestess",
             faction = Faction.Hero,
             strength = 0,
             stamina = 4,
@@ -134,13 +134,13 @@ namespace Undermarch.Simulation.Entities
             charArmor = ItemDatabase.priestessRobe,
             charHelmet = ItemDatabase.enchantedHood,
             charAccessory = ItemDatabase.amuletOfClarity,
-            spawnSound = "humanmalegrunt",
-            deathSound = "humanmalehurt",
+            spawnSound = "humanfemalegrunt",
+            deathSound = "humanfemalehurt",
             ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 }, { ResourceType.Corpse, 1 } }
         };
         public static readonly Hero highPriestess = new Hero
         {
-            Name = "priestess",
+            Name = "High Priestess",
             faction = Faction.Hero,
             strength = 3,
             stamina = 10,
@@ -151,9 +151,26 @@ namespace Undermarch.Simulation.Entities
             charArmor = ItemDatabase.reinforcedLeatherArmor,
             charHelmet = ItemDatabase.barbarianHelmet,
             charAccessory = ItemDatabase.silverRing,
-            spawnSound = "humanmalegrunt",
-            deathSound = "humanmalehurt",
+            spawnSound = "humanfemalegrunt",
+            deathSound = "humanfemalehurt",
             ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 },{ResourceType.Corpse, 1 } }
+        };
+        public static readonly Hero HolyPriestess = new Hero
+        {
+            Name = "Holy Priestess",
+            faction = Faction.Hero,
+            strength = 5,
+            stamina = 15,
+            agility = 10,
+            intelligence = 25,
+            spirit = 25,
+            charWeapon = ItemDatabase.warriorAxe,
+            charArmor = ItemDatabase.reinforcedLeatherArmor,
+            charHelmet = ItemDatabase.barbarianHelmet,
+            charAccessory = ItemDatabase.silverRing,
+            spawnSound = "humanfemalegrunt",
+            deathSound = "humanfemalehurt",
+            ResourcesGiven = new Dictionary<ResourceType, int> { { ResourceType.Gold, 145 }, { ResourceType.Corpse, 1 } }
         };
         public static readonly Hero isekai = new Hero
         {

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
-  m_Name: TrapTile
+  m_Name: SkeletonTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: 21300000, guid: 0493cd83bcbee264396bc81abab57bb3, type: 3}
+  m_DefaultSprite: {fileID: -964824239653993824, guid: d9483781541f20947966fc62884ff955, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_MaskType: 0

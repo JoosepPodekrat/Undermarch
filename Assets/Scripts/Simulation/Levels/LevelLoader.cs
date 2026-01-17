@@ -114,7 +114,8 @@ namespace Undermarch.Simulation.Levels
         /// Waves auto-spawn every ~15 seconds (30 ticks @ 2 TPS).
         /// Player can click "NEXT WAVE" to spawn early.
         /// </summary>
-        public static WaveSpawner CreateWaveSchedule(List<TilePos> entrances)
+        /// 
+        public static WaveSpawner CreateWaveScheduleTutorial(List<TilePos> entrances)
         {
             WaveSpawner spawner = new WaveSpawner();
             spawner.ResetScheduler(); // Start at tick 0
@@ -123,7 +124,35 @@ namespace Undermarch.Simulation.Levels
 
             // Wave 1: Single peasant (tutorial wave)
             var wave1 = CreateHeroParty(new List<Character> { CharacterDatabase.peasant }, entrance);
-            wave1.TicksUntilNextWave = 30; // ~15 seconds
+            wave1.TicksUntilNextWave = 20;
+            ScheduleWave(wave1, spawner);
+
+            // Wave 2: Two peasants
+            var wave2 = CreateHeroParty(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant }, entrance);
+            wave2.TicksUntilNextWave = 20;
+            ScheduleWave(wave2, spawner);
+
+            // Wave 3: Three peasants.
+            var wave3 = CreateHeroParty(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant }, entrance);
+            wave3.TicksUntilNextWave = 20; 
+            ScheduleWave(wave3, spawner);
+            //Boss wave. Should kill DM if not defended.
+            var wave4 = CreateHeroParty(new List<Character> { CharacterDatabase.knight, CharacterDatabase.apprenticeMage }, entrance);
+            wave4.TicksUntilNextWave = 20;
+            ScheduleWave(wave4, spawner);
+
+            return spawner;
+        }
+        public static WaveSpawner CreateWaveSchedule1Level1(List<TilePos> entrances)
+        {
+            WaveSpawner spawner = new WaveSpawner();
+            spawner.ResetScheduler(); // Start at tick 0
+
+            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+
+            // Wave 1: Single peasant (tutorial wave)
+            var wave1 = CreateHeroParty(new List<Character> { CharacterDatabase.peasant }, entrance);
+            wave1.TicksUntilNextWave = 15; // ~15 seconds
             ScheduleWave(wave1, spawner);
 
             // Wave 2: Two peasants
@@ -157,14 +186,14 @@ namespace Undermarch.Simulation.Levels
             var wave7 = CreateHeroParty(new List<Character> {
                 CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant
             }, entrance);
-            wave7.TicksUntilNextWave = 40;
+            wave7.TicksUntilNextWave = 20;
             ScheduleWave(wave7, spawner);
 
             // Wave 8: Double mages
             var wave8 = CreateHeroParty(new List<Character> {
                 CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage
             }, entrance);
-            wave8.TicksUntilNextWave = 45;
+            wave8.TicksUntilNextWave = 20;
             ScheduleWave(wave8, spawner);
 
             // Wave 9: Final wave - full squad, never flees
@@ -181,7 +210,7 @@ namespace Undermarch.Simulation.Levels
         /// <summary>
         /// Creates the second stage wave schedule with 5 harder waves.
         /// </summary>
-        public static WaveSpawner CreateWaveSchedule2(List<TilePos> entrances)
+        public static WaveSpawner CreateWaveSchedule2Level1(List<TilePos> entrances)
         {
             WaveSpawner spawner = new WaveSpawner();
             spawner.ResetScheduler();
@@ -192,41 +221,241 @@ namespace Undermarch.Simulation.Levels
             var wave1 = CreateHeroParty(new List<Character> {
                 CharacterDatabase.rogue, CharacterDatabase.rogue
             }, entrance);
-            wave1.TicksUntilNextWave = 30;
+            wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
 
             // Wave 2: Double mages
             var wave2 = CreateHeroParty(new List<Character> {
                 CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage
             }, entrance);
-            wave2.TicksUntilNextWave = 35;
+            wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
 
-            // Wave 3: Peasant swarm (4)
+            // Wave 3: Peasant swarm 8
             var wave3 = CreateHeroParty(new List<Character> {
                 CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant, CharacterDatabase.peasant,
                 CharacterDatabase.peasant, CharacterDatabase.peasant
             }, entrance);
-            wave3.TicksUntilNextWave = 35;
+            wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
 
             // Wave 4: Mixed dangerous group
             var wave4 = CreateHeroParty(new List<Character> {
-                CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
-                CharacterDatabase.rogue
+                CharacterDatabase.knight, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+                
             }, entrance);
-            wave4.TicksUntilNextWave = 40;
+            wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
 
             // Wave 5: Final wave - largest group, never flees
             var wave5 = CreateHeroParty(new List<Character> {
                 CharacterDatabase.rogue, CharacterDatabase.rogue,
-                CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage,
-                CharacterDatabase.peasant, CharacterDatabase.peasant
+                CharacterDatabase.apprenticeMage, CharacterDatabase.priestess,
+                CharacterDatabase.knight, CharacterDatabase.warrior
             }, entrance, isFinal: true);
             wave5.TicksUntilNextWave = 0;
             ScheduleWave(wave5, spawner);
 
+            return spawner;
+        }
+
+        public static WaveSpawner CreateWaveSchedule1Level2(List<TilePos> entrances)
+        {
+            WaveSpawner spawner = new WaveSpawner();
+            spawner.ResetScheduler();
+
+            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+            var wave1 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.priestess
+            }, entrance);
+            wave1.TicksUntilNextWave = 20;
+            ScheduleWave(wave1, spawner);
+            var wave2 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave2.TicksUntilNextWave = 20;
+            ScheduleWave(wave2, spawner);
+            var wave3 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave3.TicksUntilNextWave = 20;
+            ScheduleWave(wave3, spawner);
+            var wave4 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave4.TicksUntilNextWave = 20;
+            ScheduleWave(wave4, spawner);
+            var wave5 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave5.TicksUntilNextWave = 20;
+            ScheduleWave(wave5, spawner);
+            var wave6 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave6.TicksUntilNextWave = 20;
+            ScheduleWave(wave6, spawner);
+            var wave7 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave7.TicksUntilNextWave = 20;
+            ScheduleWave(wave7, spawner);
+            return spawner;
+        }
+        public static WaveSpawner CreateWaveSchedule2Level2(List<TilePos> entrances)
+        {
+            WaveSpawner spawner = new WaveSpawner();
+            spawner.ResetScheduler();
+
+            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+
+            // Wave 1: Double rogues immediately
+            var wave1 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue
+            }, entrance);
+            wave1.TicksUntilNextWave = 20;
+            ScheduleWave(wave1, spawner);
+
+            // Wave 2: Double mages
+            var wave2 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.apprenticeMage, CharacterDatabase.apprenticeMage
+            }, entrance);
+            wave2.TicksUntilNextWave = 20;
+            ScheduleWave(wave2, spawner);
+
+            // Wave 3: Peasant swarm 8
+            var wave3 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
+            }, entrance);
+            wave3.TicksUntilNextWave = 20;
+            ScheduleWave(wave3, spawner);
+
+            // Wave 4: Mixed dangerous group
+            var wave4 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.knight, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+
+            }, entrance);
+            wave4.TicksUntilNextWave = 20;
+            ScheduleWave(wave4, spawner);
+
+            // Wave 5: Final wave - largest group, never flees
+            var wave5 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.priestess,
+                CharacterDatabase.knight, CharacterDatabase.warrior
+            }, entrance, isFinal: true);
+            wave5.TicksUntilNextWave = 0;
+            ScheduleWave(wave5, spawner);
+
+            return spawner;
+        }
+        public static WaveSpawner CreateWaveSchedule1Level3(List<TilePos> entrances)
+        {
+            WaveSpawner spawner = new WaveSpawner();
+            spawner.ResetScheduler();
+
+            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+            var wave1 = CreateHeroParty(new List<Character>
+            {
+                CharacterDatabase.rogue
+            }, entrance);
+            wave1.TicksUntilNextWave = 20;
+            ScheduleWave(wave1, spawner);
+            var wave2 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave2.TicksUntilNextWave = 20;
+            ScheduleWave(wave2, spawner);
+            var wave3 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave3.TicksUntilNextWave = 20;
+            ScheduleWave(wave3, spawner);
+            var wave4 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave4.TicksUntilNextWave = 20;
+            ScheduleWave(wave4, spawner);
+            var wave5 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave5.TicksUntilNextWave = 20;
+            ScheduleWave(wave5, spawner);
+            var wave6 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave6.TicksUntilNextWave = 20;
+            ScheduleWave(wave6, spawner);
+            var wave7 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave7.TicksUntilNextWave = 20;
+            ScheduleWave(wave7, spawner);
+            return spawner;
+        }
+        public static WaveSpawner CreateWaveSchedule1Level4(List<TilePos> entrances)
+        {
+            WaveSpawner spawner = new WaveSpawner();
+            spawner.ResetScheduler();
+
+            TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
+            var wave1 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave1.TicksUntilNextWave = 20;
+            ScheduleWave(wave1, spawner);
+            var wave2 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave2.TicksUntilNextWave = 20;
+            ScheduleWave(wave2, spawner);
+            var wave3 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave3.TicksUntilNextWave = 20;
+            ScheduleWave(wave3, spawner);
+            var wave4 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave4.TicksUntilNextWave = 20;
+            ScheduleWave(wave4, spawner);
+            var wave5 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave5.TicksUntilNextWave = 20;
+            ScheduleWave(wave5, spawner);
+            var wave6 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave6.TicksUntilNextWave = 20;
+            ScheduleWave(wave6, spawner);
+            var wave7 = CreateHeroParty(new List<Character>
+            {
+
+            }, entrance);
+            wave7.TicksUntilNextWave = 20;
+            ScheduleWave(wave7, spawner);
             return spawner;
         }
         public static WaveSpawner CreateWaveSchedule3(List<TilePos> entrances)
@@ -235,30 +464,42 @@ namespace Undermarch.Simulation.Levels
             spawner.ResetScheduler();
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-
-            // Wave 1: Double rogues immediately
+            // Wave 1 : Single rogue
             var wave1 = CreateHeroParty(new List<Character> {
-                CharacterDatabase.rogue, CharacterDatabase.rogue
+                CharacterDatabase.rogue
             }, entrance);
-            wave1.TicksUntilNextWave = 30;
+            wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
 
+            // Wave 2: Warrior and Mage
             var wave2 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.priestess, CharacterDatabase.warrior
             }, entrance);
-            wave2.TicksUntilNextWave = 35;
+            wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
 
+            // Wave 3: Peasant swarm 8
             var wave3 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
             }, entrance);
-            wave3.TicksUntilNextWave = 35;
+            wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
 
+            // Wave 4: Mixed dangerous group
             var wave4 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.knight, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+
             }, entrance);
-            wave4.TicksUntilNextWave = 40;
+            wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
 
+            // Wave 5: Final wave - largest group, never flees
             var wave5 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.priestess,
+                CharacterDatabase.knight, CharacterDatabase.warrior
             }, entrance, isFinal: true);
             wave5.TicksUntilNextWave = 0;
             ScheduleWave(wave5, spawner);
@@ -271,34 +512,42 @@ namespace Undermarch.Simulation.Levels
             spawner.ResetScheduler();
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-
-            // Wave 1: Double rogues immediately
+            // Wave 1 : 3 Peasants
             var wave1 = CreateHeroParty(new List<Character> {
-                CharacterDatabase.rogue, CharacterDatabase.rogue
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant
             }, entrance);
-            wave1.TicksUntilNextWave = 30;
+            wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
 
-            var wave2 = CreateHeroParty(new List<Character>
-            {
+            // Wave 2: Warrior and Mage
+            var wave2 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.priestess, CharacterDatabase.warrior
             }, entrance);
-            wave2.TicksUntilNextWave = 35;
+            wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
 
-            var wave3 = CreateHeroParty(new List<Character>
-            {
+            // Wave 3: Peasant swarm 8
+            var wave3 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
             }, entrance);
-            wave3.TicksUntilNextWave = 35;
+            wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
 
-            var wave4 = CreateHeroParty(new List<Character>
-            {
+            // Wave 4: Mixed dangerous group
+            var wave4 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.knight, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+
             }, entrance);
-            wave4.TicksUntilNextWave = 40;
+            wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
 
-            var wave5 = CreateHeroParty(new List<Character>
-            {
+            // Wave 5: Final wave - largest group, never flees
+            var wave5 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.priestess,
+                CharacterDatabase.knight, CharacterDatabase.warrior
             }, entrance, isFinal: true);
             wave5.TicksUntilNextWave = 0;
             ScheduleWave(wave5, spawner);
@@ -311,95 +560,91 @@ namespace Undermarch.Simulation.Levels
             spawner.ResetScheduler();
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-
-            var wave1 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.rogue,
-        CharacterDatabase.rogue,
-        CharacterDatabase.rogue
-    }, entrance);
-            wave1.TicksUntilNextWave = 25;
+            // Wave 1 : 3 Peasants
+            var wave1 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant
+            }, entrance);
+            wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
 
-            var wave2 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.warrior
-    }, entrance);
-            wave2.TicksUntilNextWave = 30;
+            // Wave 2: Warrior and Mage
+            var wave2 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.priestess, CharacterDatabase.warrior
+            }, entrance);
+            wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
 
-            var wave3 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.warrior,
-        CharacterDatabase.rogue
-    }, entrance);
-            wave3.TicksUntilNextWave = 35;
+            // Wave 3: Peasant swarm 8
+            var wave3 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
+            }, entrance);
+            wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
 
-            var wave4 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.warrior,
-        CharacterDatabase.rogue,
-        CharacterDatabase.rogue
-    }, entrance);
-            wave4.TicksUntilNextWave = 40;
+            // Wave 4: Mixed dangerous group
+            var wave4 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.knight, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+
+            }, entrance);
+            wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
 
-            var wave5 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.knight
-    }, entrance, isFinal: true);
+            // Wave 5: Final wave - largest group, never flees
+            var wave5 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.priestess,
+                CharacterDatabase.knight, CharacterDatabase.warrior
+            }, entrance, isFinal: true);
             wave5.TicksUntilNextWave = 0;
             ScheduleWave(wave5, spawner);
 
             return spawner;
         }
-
         public static WaveSpawner CreateWaveSchedule6(List<TilePos> entrances)
         {
             WaveSpawner spawner = new WaveSpawner();
             spawner.ResetScheduler();
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-
-            var wave1 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.rogue,
-        CharacterDatabase.warrior
-    }, entrance);
-            wave1.TicksUntilNextWave = 25;
+            // Wave 1 : 3 Peasants
+            var wave1 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant
+            }, entrance);
+            wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
 
-            var wave2 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.warrior,
-        CharacterDatabase.warrior
-    }, entrance);
-            wave2.TicksUntilNextWave = 30;
+            // Wave 2: Warrior and Mage
+            var wave2 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.priestess, CharacterDatabase.warrior
+            }, entrance);
+            wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
 
-            var wave3 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.rogue,
-        CharacterDatabase.rogue,
-        CharacterDatabase.warrior
-    }, entrance);
-            wave3.TicksUntilNextWave = 35;
+            // Wave 3: Peasant swarm 8
+            var wave3 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
+            }, entrance);
+            wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
 
-            var wave4 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.knight,
-        CharacterDatabase.rogue
-    }, entrance);
-            wave4.TicksUntilNextWave = 40;
+            // Wave 4: Mixed dangerous group
+            var wave4 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.knight, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+
+            }, entrance);
+            wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
 
-            var wave5 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.knight,
-        CharacterDatabase.warrior
-    }, entrance, isFinal: true);
+            // Wave 5: Final wave - largest group, never flees
+            var wave5 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.priestess,
+                CharacterDatabase.knight, CharacterDatabase.warrior
+            }, entrance, isFinal: true);
             wave5.TicksUntilNextWave = 0;
             ScheduleWave(wave5, spawner);
 
@@ -411,50 +656,49 @@ namespace Undermarch.Simulation.Levels
             spawner.ResetScheduler();
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-
-            var wave1 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.rogue,
-        CharacterDatabase.rogue
-    }, entrance);
+            // Wave 1 : 3 Peasants
+            var wave1 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant
+            }, entrance);
             wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
 
-            var wave2 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.warrior,
-        CharacterDatabase.rogue
-    }, entrance);
-            wave2.TicksUntilNextWave = 25;
+            // Wave 2: Warrior and Mage
+            var wave2 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.priestess, CharacterDatabase.warrior
+            }, entrance);
+            wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
 
-            var wave3 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.warrior,
-        CharacterDatabase.warrior,
-        CharacterDatabase.rogue
-    }, entrance);
-            wave3.TicksUntilNextWave = 30;
+            // Wave 3: Peasant swarm 8
+            var wave3 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant,CharacterDatabase.peasant, CharacterDatabase.peasant,
+                CharacterDatabase.peasant, CharacterDatabase.peasant
+            }, entrance);
+            wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
 
-            var wave4 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.knight,
-        CharacterDatabase.warrior
-    }, entrance);
-            wave4.TicksUntilNextWave = 35;
+            // Wave 4: Mixed dangerous group
+            var wave4 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.knight, CharacterDatabase.rogue, CharacterDatabase.apprenticeMage,
+
+            }, entrance);
+            wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
 
-            var wave5 = CreateHeroParty(new List<Character>
-    {
-        CharacterDatabase.knight,
-        CharacterDatabase.knight
-    }, entrance, isFinal: true);
+            // Wave 5: Final wave - largest group, never flees
+            var wave5 = CreateHeroParty(new List<Character> {
+                CharacterDatabase.rogue, CharacterDatabase.rogue,
+                CharacterDatabase.apprenticeMage, CharacterDatabase.priestess,
+                CharacterDatabase.knight, CharacterDatabase.warrior
+            }, entrance, isFinal: true);
             wave5.TicksUntilNextWave = 0;
             ScheduleWave(wave5, spawner);
 
             return spawner;
         }
+
 
 
         public static WaveSpawner CreateWaveScheduleDualEntrance(List<TilePos> entrances)
@@ -579,7 +823,7 @@ namespace Undermarch.Simulation.Levels
         }
         public static Level LoadLevelTutorial(Board board)
         {
-            Level level = PremadeLevels.LevelOne;
+            Level level = PremadeLevels.LevelTutorial;
 
             string[] levelLayout =
             {
@@ -590,18 +834,18 @@ namespace Undermarch.Simulation.Levels
                 "####################",
                 "####################",
                 "####################",
-                "#####C######D#######",
-                "##### ###### #######",
-                "##### ###### #######",
-                "##### ###### #######",
-                "##### ###### #######",
-                "#####        #######",
-                "######## ###########",
-                "######## ###########",
-                "######## ###########",
-                "######## ###########",
-                "######## ###########",
-                "#######X E##########",
+                "#### C######D ######",
+                "####  ######  ######",
+                "####  ######  ######",
+                "####  ######  ######",
+                "####  ######  ######",
+                "####          ######",
+                "########  ##########",
+                "########  ##########",
+                "########  ##########",
+                "########  ##########",
+                "########  ##########",
+                "#######X  E#########",
                 "####################",
             };
 
@@ -610,7 +854,7 @@ namespace Undermarch.Simulation.Levels
         }
         public static Level LoadLevelTwo(Board board)
         {
-            Level level = PremadeLevels.LevelOne;
+            Level level = PremadeLevels.LevelTwo;
 
             string[] levelLayout =
             {
@@ -620,17 +864,17 @@ namespace Undermarch.Simulation.Levels
                 "############## #####",
                 "############## #####",
                 "###     ###      ###",
-                "###C###  #  #### ###",
-                "#######  # ##### ###",
-                "#X       # #       #",
+                "###C###     ###  ###",
+                "#######    ####  ###",
+                "#X         #       #",
                 "#E         #       #",
                 "############       #",
-                "################ ###",
-                "################ ###",
-                "#######  D  #### ###",
-                "#######     #### ###",
+                "###############  ###",
+                "###############  ###",
+                "#######  D  ###  ###",
+                "#######     ###  ###",
                 "#######          ###",
-                "####################",
+                "###########      ###",
                 "####################",
                 "####################",
                 "####################",
@@ -641,26 +885,26 @@ namespace Undermarch.Simulation.Levels
         }
         public static Level LoadLevelThree(Board board)
         {
-            Level level = PremadeLevels.LevelOne;
+            Level level = PremadeLevels.LevelThree;
 
             string[] levelLayout =
             {
                 "####################",
                 "#E                X#",
-                "######### ##########",
-                "######### ##########",
-                "######### ##########",
-                "######### ##########",
+                "#                  #",
+                "#########  #########",
+                "#########  #########",
+                "#########  #########",
                 "#######      #######",
+                "#######  C   #######",
                 "#######      #######",
-                "#######      #######",
-                "#########C##########",
-                "######### ##########",
+                "#########  #########",
+                "#########  #########",
                 "######        ######",
+                "######   C    ######",
                 "######        ######",
-                "######        ######",
-                "#########C##########",
-                "######### ##########",
+                "#########  #########",
+                "#########  #########",
                 "######        ######",
                 "######   D    ######",
                 "######        ######",
@@ -672,7 +916,7 @@ namespace Undermarch.Simulation.Levels
         }
         public static Level LoadLevelFour(Board board)
         {
-            Level level = PremadeLevels.LevelOne;
+            Level level = PremadeLevels.LevelFour;
 
             string[] levelLayout =
             {
@@ -703,7 +947,7 @@ namespace Undermarch.Simulation.Levels
         }
         public static Level LoadLevelFive(Board board)
         {
-            Level level = PremadeLevels.LevelOne;
+            Level level = PremadeLevels.LevelFive;
 
             string[] levelLayout =
             {

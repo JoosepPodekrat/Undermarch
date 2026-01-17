@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
   m_Name: ChestTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: -5281422124547630143, guid: ea196477e42818d42a05e9d378ca4263, type: 3}
+  m_DefaultSprite: {fileID: -4400158131537669700, guid: 4f602a1c5ce38b34db27724f584455f8, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_MaskType: 0

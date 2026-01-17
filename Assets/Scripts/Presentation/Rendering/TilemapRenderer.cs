@@ -38,44 +38,43 @@ namespace Undermarch.Presentation.Rendering
         public TileBase fogZoneTile;
         [Header("Knights")]
         public TileBase orangeKnightTile;
-        public TileBase orangeKnightFightingTile;
-
         public TileBase purpleKnightTile;
-        public TileBase purpleKnightFightingTile;
-
         public TileBase blueKnightTile;
-        public TileBase blueKnightFightingTile;
 
-        [Header("Humanoids")]
+        [Header("Peasants")]
         public TileBase peasantTile;
-        public TileBase peasantFightingTile;
 
-        public TileBase wizardTile;
-        public TileBase wizardFightingTile;
 
-        public TileBase priestessTile;
-        public TileBase priestessFightingTile;
+        [Header("Wizards")]
+
+        public TileBase purpleWizardTile;
+        public TileBase greenWizardTile;
+        public TileBase greenPurpleWizardTile;
+
+        [Header("Priestesses")]
+
+        public TileBase redPriestessTile;
+        public TileBase orangePriestessTile;
+        public TileBase purplePriestessTile;
+
+        [Header("Rogue")]
+        public TileBase blackRogueTile;
 
         [Header("Monsters")]
         public TileBase goblinTile;
-        public TileBase goblinFightingTile;
-
         public TileBase skeletonTile;
-        public TileBase skeletonFightingTile;
-
         public TileBase slimeTile;
-        public TileBase slimeFightingTile;
         public TileBase archerTile;
 
         [Header("Dungeon Master")]
         public TileBase dungeonMasterTile;
-        public TileBase dungeonMasterFightingTile;
 
         [Header("Traps")]
         public TileBase woodenSpikeTrapTile;
         public TileBase ironSpikeTrapTile;
         public TileBase gasTrapTile;
         public TileBase pressurePlateTile;
+
 
         [Header("Fallback")]
         [Tooltip("Default tile to use when an entity's tile is not defined")]
@@ -316,74 +315,74 @@ namespace Undermarch.Presentation.Rendering
             {
                 TileBase tile = _overrideTiles.ContainsKey(character) ? _overrideTiles[character] : null;
 
-                if (tile == null)
+                switch (character.Name)
                 {
-                    switch (character.Name)
-                    {
-                        case "Peasant":
-                            tile = peasantTile;
-                            break;
-
-                        case "Wizard":
-                            tile = wizardTile;
-                            break;
-
-                        case "Priestess":
-                            tile = priestessTile;
-                            break;
-
-                        case "OrangeKnight":
-                            tile = orangeKnightTile;
-                            break;
-
-                        case "PurpleKnight":
-                            tile = purpleKnightTile;
-                            break;
-
-                        case "BlueKnight":
-                            tile = blueKnightTile;
-                            break;
-
-                        case "Goblin":
-                            tile = goblinTile;
-                            break;
-
-                        case "Skeleton":
-                            tile = skeletonTile;
-                            break;
-
-                        case "Slime":
-                            tile = slimeTile;
-                            break;
-
-                        case "DungeonMaster":
-                            tile = dungeonMasterTile;
-                            break;
-
-                        case "WoodenSpikeTrap":
-                            tile = woodenSpikeTrapTile;
-                            break;
-
-                        case "IronSpikeTrap":
-                            tile = ironSpikeTrapTile;
-                            break;
-
-                        case "GasTrap":
-                            tile = gasTrapTile;
-                            break;
-
-                        case "PressurePlate":
-                            tile = pressurePlateTile;
-                            break;
-
-                        default:
-                            Debug.LogWarning(
-                                "TilemapRenderer: No tile mapped for character name '" + character.Name + "'"
-                            );
-                            tile = defaultEntityTile; // Use fallback tile for undefined entities
-                            break;
-                    }
+                    case "Peasant":
+                        tile = peasantTile;
+                        break;
+                    case "Rogue":
+                        tile = blackRogueTile;
+                        break;
+                    case "Apprentice Mage":
+                        tile = greenWizardTile;
+                        break;
+                    case "Mage":
+                        tile = greenPurpleWizardTile;
+                        break;
+                    case "StrongWizard":
+                        tile = purpleWizardTile;
+                        break;
+                    case "Priestess":
+                        tile = orangePriestessTile;
+                        break;
+                    case "High Priestess":
+                        tile = purplePriestessTile;
+                        break;
+                    case "Holy Priestess":
+                        tile = purplePriestessTile;
+                        break;
+                    case "Knight":
+                        tile = orangeKnightTile;
+                        break;
+                    case "Warrior":
+                        tile = purpleKnightTile;
+                        break;
+                    case "Legendary Hero":
+                        tile = blueKnightTile;
+                        break;
+                    case "Goblin":
+                        tile = goblinTile;
+                        break;
+                    case "Skeleton":
+                        tile = skeletonTile;
+                        break;
+                    case "Slime":
+                        tile = slimeTile;
+                        break;
+                    case "DungeonMaster":
+                        tile = dungeonMasterTile;
+                        break;
+                    case "WoodenSpikeTrap":
+                        tile = woodenSpikeTrapTile;
+                        break;
+                    case "IronSpikeTrap":
+                        tile = ironSpikeTrapTile;
+                        break;
+                    case "Bear Trap":
+                        tile = bearTrapTile;
+                        break;
+                    case "GasTrap":
+                        tile = gasTrapTile;
+                        break;
+                    case "PressurePlate":
+                        tile = pressurePlateTile;
+                        break;
+                    default:
+                        Debug.LogWarning($"TilemapRenderer: No tile mapped for '{character.Name}'");
+                        tile = defaultEntityTile;
+                        break;
                 }
+
 
                 entityTilemap.SetTile(cellPos, tile);
 
@@ -493,16 +492,13 @@ namespace Undermarch.Presentation.Rendering
 
         private IEnumerator AnimateAttack(Character character)
         {
-            TileBase fightTile = GetFightingTile(character.Name);
-            if (fightTile != null)
-            {
-                _overrideTiles[character] = fightTile;
-                RefreshCharacterTile(character);
-                yield return new WaitForSeconds(0.2f);
-                _overrideTiles.Remove(character);
-                RefreshCharacterTile(character);
-            }
+            _overrideColors[character] = new Color(1f, 0.85f, 0.2f); // warm attack flash
+            RefreshCharacterTile(character);
+            yield return new WaitForSeconds(0.15f);
+            _overrideColors.Remove(character);
+            RefreshCharacterTile(character);
         }
+
 
         private IEnumerator AnimateHurt(Character character)
         {
@@ -523,22 +519,5 @@ namespace Undermarch.Presentation.Rendering
             }
         }
 
-        private TileBase GetFightingTile(string charName)
-        {
-            return charName switch
-            {
-                "Peasant" => peasantFightingTile,
-                "Wizard" => wizardFightingTile,
-                "Priestess" => priestessFightingTile,
-                "OrangeKnight" => orangeKnightFightingTile,
-                "PurpleKnight" => purpleKnightFightingTile,
-                "BlueKnight" => blueKnightFightingTile,
-                "Goblin" => goblinFightingTile,
-                "Skeleton" => skeletonFightingTile,
-                "Slime" => slimeFightingTile,
-                "DungeonMaster" => dungeonMasterFightingTile,
-                _ => null
-            };
-        }
     }
 }

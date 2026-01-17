@@ -60,7 +60,7 @@ namespace Undermarch.Presentation.UI
             // Next Level button should only be visible on win AND if there's a next level available
             if (nextLevelButton != null)
             {
-                bool hasNextLevel = GameManager.Instance != null && GameManager.Instance.HasNextLevel();
+                bool hasNextLevel = (GameManager.Instance != null && GameManager.Instance.HasNextLevel());
                 nextLevelButton.gameObject.SetActive(isWin && hasNextLevel);
             }
         }

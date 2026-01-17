@@ -892,28 +892,23 @@ MonoBehaviour:
   fireZoneTile: {fileID: 0}
   fogZoneTile: {fileID: 0}
   orangeKnightTile: {fileID: 11400000, guid: 785bafd5fa0f8454a8183b721ab52926, type: 2}
-  orangeKnightFightingTile: {fileID: 0}
   purpleKnightTile: {fileID: 11400000, guid: 92dbffb8f3689974fa83cfe84af009de, type: 2}
-  purpleKnightFightingTile: {fileID: 0}
   blueKnightTile: {fileID: 11400000, guid: 1b49ac090b12a2b4194918dfb31f64f7, type: 2}
-  blueKnightFightingTile: {fileID: 0}
-  peasantTile: {fileID: 11400000, guid: 92dbffb8f3689974fa83cfe84af009de, type: 2}
-  peasantFightingTile: {fileID: 11400000, guid: 1b49ac090b12a2b4194918dfb31f64f7, type: 2}
-  wizardTile: {fileID: 0}
-  wizardFightingTile: {fileID: 0}
-  priestessTile: {fileID: 0}
-  priestessFightingTile: {fileID: 0}
+  peasantTile: {fileID: 11400000, guid: d393ce582ab3e854e836a292b3168b5e, type: 2}
+  purpleWizardTile: {fileID: 11400000, guid: 573276803ccd1d34ea88f74301af93a4, type: 2}
+  greenWizardTile: {fileID: 11400000, guid: f7adca0aeedec114eb5faa0b54a2f01e, type: 2}
+  greenPurpleWizardTile: {fileID: 11400000, guid: 3c355cfdabf1235488dd6ef7ad8e5135, type: 2}
+  redPriestessTile: {fileID: 11400000, guid: 405f8cb499ac7be41ae7aafbfe62fea7, type: 2}
+  orangePriestessTile: {fileID: 11400000, guid: c887fe15f1029524cb81cc754368011b, type: 2}
+  purplePriestessTile: {fileID: 11400000, guid: 4047b23fea173e749981196225c56314, type: 2}
+  blackRogueTile: {fileID: 11400000, guid: 341babb382b214d45b9f94f5e502e458, type: 2}
   goblinTile: {fileID: 11400000, guid: 4547850f36cce2048973979181a81841, type: 2}
-  goblinFightingTile: {fileID: 0}
-  skeletonTile: {fileID: 0}
-  skeletonFightingTile: {fileID: 0}
+  skeletonTile: {fileID: 11400000, guid: 0a6b2d25349e7b945973629ec437de9e, type: 2}
   slimeTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
-  slimeFightingTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
   archerTile: {fileID: 0}
   dungeonMasterTile: {fileID: 11400000, guid: 1417824c173a221b99e7837727366a53, type: 2}
-  dungeonMasterFightingTile: {fileID: 0}
   woodenSpikeTrapTile: {fileID: 11400000, guid: 39e0253dda1af4c2b911d7d3b041ab4e, type: 2}
-  ironSpikeTrapTile: {fileID: 11400000, guid: 21ddd92406e7bd24e8bfcdafb1f2e527, type: 2}
+  ironSpikeTrapTile: {fileID: 11400000, guid: 53fe2867b2066004191dec79d8aba071, type: 2}
   gasTrapTile: {fileID: 0}
   pressurePlateTile: {fileID: 0}
   defaultEntityTile: {fileID: 11400000, guid: f621c2bf865d5204faf97912bc9ab8ed, type: 2}

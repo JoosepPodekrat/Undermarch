@@ -27,11 +27,6 @@ public class MenuManager : MonoBehaviour
         mainMenuPanel.SetActive(true);
     }
 
-    public void OpenLevelLoader()
-    {
-        OpenLevelSelector();
-    }
-
     /// <summary>
     /// Opens the level selector panel. Called by New Game button.
     /// </summary>

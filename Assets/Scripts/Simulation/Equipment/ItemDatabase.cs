@@ -349,7 +349,7 @@ namespace Undermarch
             agility = 0,
             intelligence = 0
         };
-
+                
         public static readonly Accessory charmOfFocus = new Accessory
         {
             name = "Charm of Focus",

@@ -19,7 +19,7 @@ namespace Undermarch.Simulation.Core
                 "SlimeMonster",
                 new Dictionary<ResourceType, int>
                 {
-                    { ResourceType.Gold, 50 }
+                    { ResourceType.Gold, 30 }
                 }
             },
             {
