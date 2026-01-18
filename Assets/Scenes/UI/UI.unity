@@ -3124,14 +3124,7 @@ MonoBehaviour:
   startCombatButton: {fileID: 0}
   startButtonText: {fileID: 0}
   pauseButton: {fileID: 0}
-  buildSlimeButton: {fileID: 0}
-  slimePriceText: {fileID: 0}
-  buildTrapButton: {fileID: 0}
-  trapPriceText: {fileID: 0}
-  buildGoblinButton: {fileID: 0}
-  goblinPriceText: {fileID: 0}
-  buildBearTrapButton: {fileID: 0}
-  bearTrapPriceText: {fileID: 0}
+  lockIconSprite: {fileID: 3515853929352641204, guid: 8a83a438d955c9540a7cd7c33554dd93, type: 3}
   placementController: {fileID: 0}
 --- !u!114 &1815327415
 MonoBehaviour:

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6950bfa976a71d4187723378a80f231, type: 3}
   m_Name: Archer
   m_EditorClassIdentifier: Game.Data::Undermarch.Data.BuildableDefinition
-  displayName: Buildable
-  icon: {fileID: 0}
+  displayName: Archer
+  icon: {fileID: -765150924802650856, guid: d8cb8186c3d40df7a808241e74645854, type: 3}
   buttonColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
-  placementType: 0
+  placementType: 2
   goldCost: 50
-  requiresPhase2: 0
+  requiresPhase2: 1
   description: 

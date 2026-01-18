@@ -32,6 +32,9 @@ namespace Undermarch.Presentation.UI
         [Tooltip("Size of arrow buttons")]
         public Vector2 arrowSize = new Vector2(40, 100);
 
+        [Tooltip("Sprite for the lock icon")]
+        public Sprite lockIconSprite;
+
         // UI Elements created at runtime
         private Button leftArrowButton;
         private Button rightArrowButton;
@@ -249,21 +252,23 @@ namespace Undermarch.Presentation.UI
             lockImg.color = new Color(0, 0, 0, 0.6f);
             lockImg.raycastTarget = false;
 
-            // Lock icon text (🔒)
-            var lockTextObj = new GameObject("LockIcon", typeof(RectTransform), typeof(TextMeshProUGUI));
-            lockTextObj.transform.SetParent(slot.lockOverlay.transform, false);
-            
-            var lockTextRT = lockTextObj.GetComponent<RectTransform>();
-            lockTextRT.anchorMin = Vector2.zero;
-            lockTextRT.anchorMax = Vector2.one;
-            lockTextRT.offsetMin = Vector2.zero;
-            lockTextRT.offsetMax = Vector2.zero;
+            // Add LayoutElement to ignore parent layout logic
+            var lockLE = slot.lockOverlay.AddComponent<LayoutElement>();
+            lockLE.ignoreLayout = true;
 
-            var lockTmp = lockTextObj.GetComponent<TextMeshProUGUI>();
-            lockTmp.text = "🔒";
-            lockTmp.alignment = TextAlignmentOptions.Center;
-            lockTmp.fontSize = 24;
-            lockTmp.color = Color.white;
+            // Lock icon image
+            var lockIconObj = new GameObject("LockIcon", typeof(RectTransform), typeof(Image));
+            lockIconObj.transform.SetParent(slot.lockOverlay.transform, false);
+            
+            var lockIconRT = lockIconObj.GetComponent<RectTransform>();
+            lockIconRT.anchorMin = new Vector2(0.5f, 0.5f);
+            lockIconRT.anchorMax = new Vector2(0.5f, 0.5f);
+            lockIconRT.sizeDelta = new Vector2(40, 40); // Adjust size as needed
+
+            var lockIconImg = lockIconObj.GetComponent<Image>();
+            lockIconImg.sprite = lockIconSprite;
+            lockIconImg.preserveAspect = true;
+            lockIconImg.raycastTarget = false;
 
             slot.lockOverlay.SetActive(false);
 
@@ -323,9 +328,14 @@ namespace Undermarch.Presentation.UI
                     slot.lockOverlay.SetActive(isLocked);
                     slot.button.interactable = !isLocked;
                     
-                    // Gray out text if locked
+                    // Gray out text and icon if locked
                     slot.nameText.color = isLocked ? Color.gray : Color.white;
                     slot.priceText.color = isLocked ? Color.gray : Color.yellow;
+                    
+                    if (slot.iconImage != null)
+                    {
+                        slot.iconImage.color = isLocked ? new Color(0.3f, 0.3f, 0.3f, 1f) : Color.white;
+                    }
 
                     // Highlight selected slot
                     if (buildableIndex == selectedSlotIndex && !isLocked)

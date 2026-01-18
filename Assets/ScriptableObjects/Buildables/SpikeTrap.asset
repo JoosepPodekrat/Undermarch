@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6950bfa976a71d4187723378a80f231, type: 3}
   m_Name: SpikeTrap
   m_EditorClassIdentifier: Game.Data::Undermarch.Data.BuildableDefinition
-  displayName: Buildable
-  icon: {fileID: 0}
+  displayName: Spike trap
+  icon: {fileID: 8225454439056827210, guid: a018bfcdb6af0fb49b40ef1765a8dedf, type: 3}
   buttonColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
-  placementType: 0
+  placementType: 4
   goldCost: 50
   requiresPhase2: 0
   description: 

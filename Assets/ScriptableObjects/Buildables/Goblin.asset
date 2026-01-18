@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Goblin
   m_EditorClassIdentifier: Game.Data::Undermarch.Data.BuildableDefinition
   displayName: Buildable
-  icon: {fileID: 0}
+  icon: {fileID: 2572365745140355499, guid: 7dc87c23e43d467b68ce979ce0831fc1, type: 3}
   buttonColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
-  placementType: 0
+  placementType: 3
   goldCost: 50
   requiresPhase2: 0
   description: 

@@ -31,6 +31,7 @@ namespace Undermarch.Presentation.Controllers
 
         [Header("Bottom HUD - Buildable Slider")]
         private BuildableSliderUI buildableSlider;
+        public Sprite lockIconSprite; // Assign in Inspector
 
         [Header("References")]
         public PlacementController placementController;
@@ -565,6 +566,7 @@ namespace Undermarch.Presentation.Controllers
 
             // Add the slider component
             buildableSlider = sliderObj.AddComponent<BuildableSliderUI>();
+            buildableSlider.lockIconSprite = lockIconSprite;
             
             Debug.Log("HUDController: Created BuildableSlider.");
 
