@@ -9,34 +9,41 @@ namespace Undermarch.Simulation.Pathfinding
     {
         public static List<TilePos> FindPath(IBoard board, TilePos startPos, TilePos endPos)
         {
-            var startNode = new Node(startPos);
-            var endNode = new Node(endPos);
+            if (startPos.Equals(endPos)) return new List<TilePos>();
 
-            var openList = new List<Node> { startNode };
-            var closedList = new HashSet<Node>();
+            var startNode = new Node(startPos);
+            
+            // Use dictionary for O(1) lookup by position
+            var openList = new Dictionary<TilePos, Node>();
+            var closedList = new HashSet<TilePos>();
+
+            openList[startPos] = startNode;
 
             while (openList.Count > 0)
             {
-                var currentNode = openList[0];
-                for (int i = 1; i < openList.Count; i++)
+                // Find node with lowest FCost
+                Node currentNode = null;
+                foreach (var node in openList.Values)
                 {
-                    if (openList[i].FCost < currentNode.FCost || openList[i].FCost == currentNode.FCost && openList[i].HCost < currentNode.HCost)
+                    if (currentNode == null || node.FCost < currentNode.FCost || (node.FCost == currentNode.FCost && node.HCost < currentNode.HCost))
                     {
-                        currentNode = openList[i];
+                        currentNode = node;
                     }
                 }
 
-                openList.Remove(currentNode);
-                closedList.Add(currentNode);
+                if (currentNode == null) break;
 
-                if (currentNode.Position.Equals(endNode.Position))
+                openList.Remove(currentNode.Position);
+                closedList.Add(currentNode.Position);
+
+                if (currentNode.Position.Equals(endPos))
                 {
                     return RetracePath(startNode, currentNode);
                 }
 
                 foreach (var neighbourPos in GetNeighbours(board, currentNode.Position))
                 {
-                    if (closedList.Any(n => n.Position.Equals(neighbourPos)))
+                    if (closedList.Contains(neighbourPos))
                     {
                         continue;
                     }
@@ -47,19 +54,20 @@ namespace Undermarch.Simulation.Pathfinding
                         continue;
                     }
 
-                    var neighbourNode = new Node(neighbourPos)
+                    int newMovementCostToNeighbour = currentNode.GCost + GetDistance(currentNode.Position, neighbourPos);
+                    
+                    if (!openList.TryGetValue(neighbourPos, out Node neighbourNode) || newMovementCostToNeighbour < neighbourNode.GCost)
                     {
-                        GCost = currentNode.GCost + GetDistance(currentNode, new Node(neighbourPos)),
-                        HCost = GetDistance(new Node(neighbourPos), endNode),
-                        Parent = currentNode
-                    };
-
-                    if (openList.Any(n => n.Position.Equals(neighbourPos) && n.FCost < neighbourNode.FCost))
-                    {
-                        continue;
+                        if (neighbourNode == null)
+                        {
+                            neighbourNode = new Node(neighbourPos);
+                            openList[neighbourPos] = neighbourNode;
+                        }
+                        
+                        neighbourNode.GCost = newMovementCostToNeighbour;
+                        neighbourNode.HCost = GetDistance(neighbourPos, endPos);
+                        neighbourNode.Parent = currentNode;
                     }
-
-                    openList.Add(neighbourNode);
                 }
             }
 
@@ -82,31 +90,25 @@ namespace Undermarch.Simulation.Pathfinding
 
         private static IEnumerable<TilePos> GetNeighbours(IBoard board, TilePos pos)
         {
-            var neighbours = new List<TilePos>();
-            for (int x = -1; x <= 1; x++)
-            {
-                for (int y = -1; y <= 1; y++)
-                {
-                    if (x == 0 && y == 0) continue;
-                    
-                    // No diagonal movement for now to keep it simple
-                    if (System.Math.Abs(x) == System.Math.Abs(y)) continue;
+            TilePos[] potentials = {
+                new TilePos(pos.x + 1, pos.y),
+                new TilePos(pos.x - 1, pos.y),
+                new TilePos(pos.x, pos.y + 1),
+                new TilePos(pos.x, pos.y - 1)
+            };
 
-                    var neighbourPos = new TilePos(pos.x + x, pos.y + y);
-                    if (board.InBounds(neighbourPos) && !board.HasWallAt(neighbourPos))
-                    {
-                        neighbours.Add(neighbourPos);
-                    }
+            foreach (var neighbourPos in potentials)
+            {
+                if (board.InBounds(neighbourPos) && !board.HasWallAt(neighbourPos))
+                {
+                    yield return neighbourPos;
                 }
             }
-            return neighbours;
         }
 
-        private static int GetDistance(Node nodeA, Node nodeB)
+        private static int GetDistance(TilePos posA, TilePos posB)
         {
-            int dstX = System.Math.Abs(nodeA.Position.x - nodeB.Position.x);
-            int dstY = System.Math.Abs(nodeA.Position.y - nodeB.Position.y);
-            return dstX + dstY; // Manhattan distance
+            return System.Math.Abs(posA.x - posB.x) + System.Math.Abs(posA.y - posB.y);
         }
     }
 }

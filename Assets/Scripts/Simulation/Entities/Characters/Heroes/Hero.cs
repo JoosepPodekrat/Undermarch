@@ -31,6 +31,20 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
 
         public override void Act(IBoard board)
         {
+            if (isHealer)
+            {
+                this.currentMana += this.manaRegen;
+                var pos = board.GetPositionOf(this);
+                var ally = FindWoundedAlly(board, pos);
+
+                if (ally != null)
+                {
+                    int healAmount = effectiveIntelligence;
+                    if (Heal(ally, healAmount))
+                        return; // Healer spent its action
+                }
+            }
+
             TilePos currentPos = board.GetPositionOf(this);
 
             // 1. Combat interrupt (always highest priority)
@@ -272,9 +286,26 @@ namespace Undermarch.Simulation.Entities.Characters.Heroes
             int steps = System.Math.Min(2, path.Count);
             for (int i = 0; i < steps; i++)
             {
-                HandleMove(board, currentPos, path[i]);
-                currentPos = path[i]; // update currentPos for next step
-                                      // Check if reached exit
+                if (HandleMove(board, currentPos, path[i]))
+                {
+                    // Only update currentPos if we actually moved to the next step
+                    if (board.GetPositionOf(this).Equals(path[i]))
+                    {
+                        currentPos = path[i];
+                    }
+                    else
+                    {
+                        // Action taken (attack/heal) but stayed put
+                        break;
+                    }
+                }
+                else
+                {
+                    // Blocked (e.g. by ally)
+                    break;
+                }
+
+                // Check if reached exit
                 if (currentPos.Equals(exitPos))
                 {
                     board.RemoveEntity(currentPos);

@@ -414,7 +414,7 @@ namespace Undermarch.Simulation.Levels
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
 
-            // Wave 1 – Light scouting party
+            // Wave 1 ï¿½ Light scouting party
             var wave1 = CreateHeroParty(new List<Character>
     {
         CharacterDatabase.peasant,
@@ -424,7 +424,7 @@ namespace Undermarch.Simulation.Levels
             wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
 
-            // Wave 2 – Mobility & magic
+            // Wave 2 ï¿½ Mobility & magic
             var wave2 = CreateHeroParty(new List<Character>
     {
         CharacterDatabase.rogue,
@@ -434,7 +434,7 @@ namespace Undermarch.Simulation.Levels
             wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
 
-            // Wave 3 – Sustained fight
+            // Wave 3 ï¿½ Sustained fight
             var wave3 = CreateHeroParty(new List<Character>
     {
         CharacterDatabase.warrior,
@@ -445,7 +445,7 @@ namespace Undermarch.Simulation.Levels
             wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
 
-            // Wave 4 – Burst threat
+            // Wave 4 ï¿½ Burst threat
             var wave4 = CreateHeroParty(new List<Character>
     {
         CharacterDatabase.rogue,
@@ -456,7 +456,7 @@ namespace Undermarch.Simulation.Levels
             wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
 
-            // Wave 5 – Heavy frontline
+            // Wave 5 ï¿½ Heavy frontline
             var wave5 = CreateHeroParty(new List<Character>
     {
         CharacterDatabase.knight,
@@ -466,7 +466,7 @@ namespace Undermarch.Simulation.Levels
             wave5.TicksUntilNextWave = 20;
             ScheduleWave(wave5, spawner);
 
-            // Wave 6 – Elite casters & support
+            // Wave 6 ï¿½ Elite casters & support
             var wave6 = CreateHeroParty(new List<Character>
     {
         CharacterDatabase.Mage,
@@ -476,7 +476,7 @@ namespace Undermarch.Simulation.Levels
             wave6.TicksUntilNextWave = 20;
             ScheduleWave(wave6, spawner);
 
-            // Wave 7 – Mini-boss mixed elite group
+            // Wave 7 ï¿½ Mini-boss mixed elite group
             var wave7 = CreateHeroParty(new List<Character>
     {
         CharacterDatabase.knight,
@@ -613,13 +613,16 @@ namespace Undermarch.Simulation.Levels
             wave9.TicksUntilNextWave = 40;
             ScheduleWave(wave9, spawner);
 
-            var wave10 = CreateHeroParty(new List<Character> { CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant,
-            CharacterDatabase.peasant,CharacterDatabase.peasant}, entrance);
-            wave10.TicksUntilNextWave = 10;
-            ScheduleWave(wave10, spawner);
-            ScheduleWave(wave10, spawner);
-            ScheduleWave(wave10, spawner);
-            ScheduleWave(wave10, spawner);
+            for (int i = 0; i < 4; i++)
+            {
+                var wave10 = CreateHeroParty(new List<Character> { 
+                    CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, 
+                    CharacterDatabase.peasant, CharacterDatabase.peasant, CharacterDatabase.peasant, 
+                    CharacterDatabase.peasant 
+                }, entrance);
+                wave10.TicksUntilNextWave = 10;
+                ScheduleWave(wave10, spawner);
+            }
 
 
             var wave11 = CreateHeroParty(new List<Character> { CharacterDatabase.isekai}, entrance);
