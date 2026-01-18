@@ -831,11 +831,23 @@ namespace Undermarch.Presentation.Controllers
         {
             Character previewCharacter = null;
 
+            int cost = 0;
+            if (placementController != null && placementController.SelectedDefinition != null)
+            {
+                cost = placementController.SelectedDefinition.goldCost;
+            }
+
             // Create a temporary character based on the placement type
             switch (placementType)
             {
                 case PlacementType.Slime:
                     previewCharacter = CharacterDatabase.slimeMonster.Clone();
+                    break;
+                case PlacementType.GreenSlime:
+                    previewCharacter = CharacterDatabase.strongSlime.Clone();
+                    break;
+                case PlacementType.BlueSlime:
+                    previewCharacter = CharacterDatabase.strongSlime.Clone(); 
                     break;
                 case PlacementType.Archer:
                     previewCharacter = CharacterDatabase.archerMonster.Clone();
@@ -843,13 +855,30 @@ namespace Undermarch.Presentation.Controllers
                 case PlacementType.Goblin:
                     previewCharacter = CharacterDatabase.goblin1.Clone();
                     break;
+                case PlacementType.RedSpider:
+                    previewCharacter = CharacterDatabase.redSpider.Clone();
+                    break;
+                case PlacementType.PurpleSpider:
+                    previewCharacter = CharacterDatabase.purpleSpider.Clone();
+                    break;
+                case PlacementType.RedDemon:
+                    previewCharacter = CharacterDatabase.weakerDemon.Clone();
+                    break;
+                case PlacementType.PurpleDemon:
+                    previewCharacter = CharacterDatabase.strongerDemon.Clone();
+                    break;
+                
                 case PlacementType.SpikeTrap:
-                    // Traps don't have character stats
-                    ShowTrapStats("Spike Trap", 30, "Damages enemies that step on it");
+                    ShowTrapStats("Spike Trap", cost, "Damages enemies that step on it");
                     return;
                 case PlacementType.BearTrap:
-                    // Traps don't have character stats
-                    ShowTrapStats("Bear Trap", 50, "Immobilizes and damages enemies");
+                    ShowTrapStats("Bear Trap", cost, "Immobilizes and damages enemies");
+                    return;
+                case PlacementType.GasTrap:
+                    ShowTrapStats("Gas Trap", cost, "Releases poison gas cloud");
+                    return;
+                case PlacementType.MetalSpikeTrap:
+                    ShowTrapStats("Metal Spike Trap", cost, "Heavy physical damage");
                     return;
             }
 
@@ -861,6 +890,12 @@ namespace Undermarch.Presentation.Controllers
                 
                 // Show in the info panel
                 ShowCharacterInfo(previewCharacter);
+
+                // OVERRIDE usage of HP text to show Cost + HP for buildables
+                if (charHPText != null)
+                {
+                    charHPText.text = $"Cost: {cost} Gold  |  HP: {previewCharacter.maxHP}";
+                }
                 
                 // Mark as preview (not a placed character)
                 selectedCharacter = null;

@@ -28,6 +28,7 @@ namespace Undermarch.Presentation.Controllers
 
         // Public property to expose selected type for UI
         public PlacementType SelectedType => _selectedType;
+        public BuildableDefinition SelectedDefinition => _selectedDefinition;
 
         public void SelectBuildable(BuildableDefinition buildable)
         {
