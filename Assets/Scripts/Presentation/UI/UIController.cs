@@ -10,6 +10,9 @@ public class MenuManager : MonoBehaviour
     public GameObject optionsPanel;
     public GameObject levelPanel;
     public GameObject newGamePanel;
+    [Header("Slideshow Panel")]
+    public GameObject slideshowPanel;
+
 
     public void OpenOptions()
     {
@@ -24,8 +27,10 @@ public class MenuManager : MonoBehaviour
     public void OpenMainMenu()
     {
         subMenus.SetActive(false);
+        slideshowPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
     }
+
 
     /// <summary>
     /// Opens the level selector panel. Called by New Game button.
@@ -63,4 +68,13 @@ public class MenuManager : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
+    public void OpenSlideshow()
+    {
+        mainMenuPanel.SetActive(false); // hide main menu
+        subMenus.SetActive(false);      // hide other panels
+        slideshowPanel.SetActive(true); // show slideshow panel
+    }
+   
+
+
 }
