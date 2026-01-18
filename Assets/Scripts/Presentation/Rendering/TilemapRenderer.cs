@@ -262,13 +262,26 @@ namespace Undermarch.Presentation.Rendering
 
             // Interactable Layer (Traps, Chests)
             var interactable = _board.GetInteractableAt(pos);
-            if (interactable is Undermarch.Simulation.Entities.Traps.BearTrap)
+            if (interactable is Trap trap)
             {
-                interactableTilemap.SetTile(cellPos, bearTrapTile);
-            }
-            else if (interactable is Trap)
-            {
-                interactableTilemap.SetTile(cellPos, trapTile);
+                switch (trap.Name)
+                {
+                    case "Bear Trap":
+                        interactableTilemap.SetTile(cellPos, bearTrapTile);
+                        break;
+                    case "Gas Trap":
+                        interactableTilemap.SetTile(cellPos, gasTrapTile);
+                        break;
+                    case "Spike Trap":
+                        interactableTilemap.SetTile(cellPos, woodenSpikeTrapTile);
+                        break;
+                    case "Metal Spike Trap":
+                        interactableTilemap.SetTile(cellPos, ironSpikeTrapTile);
+                        break;
+                    default:
+                        interactableTilemap.SetTile(cellPos, trapTile);
+                        break;
+                }
             }
             else if (interactable is Chest chest && !chest.Looted)
             {
@@ -374,26 +387,11 @@ namespace Undermarch.Presentation.Rendering
                     case "Red Spider":
                         tile = redSpiderTile;
                         break;
-                    case "Purpl eSpider":
+                    case "Purple Spider":
                         tile = purpleSpiderTile;
                         break;
                     case "DungeonMaster":
                         tile = dungeonMasterTile;
-                        break;
-                    case "WoodenSpikeTrap":
-                        tile = woodenSpikeTrapTile;
-                        break;
-                    case "IronSpikeTrap":
-                        tile = ironSpikeTrapTile;
-                        break;
-                    case "Bear Trap":
-                        tile = bearTrapTile;
-                        break;
-                    case "GasTrap":
-                        tile = gasTrapTile;
-                        break;
-                    case "PressurePlate":
-                        tile = pressurePlateTile;
                         break;
                     default:
                         Debug.LogWarning($"TilemapRenderer: No tile mapped for '{character.Name}'");
