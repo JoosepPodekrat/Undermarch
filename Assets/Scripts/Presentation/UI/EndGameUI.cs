@@ -1,5 +1,6 @@
 using TMPro;
 using Undermarch.Presentation.Managers;
+using Undermarch.Presentation.Sounds;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,16 +68,19 @@ namespace Undermarch.Presentation.UI
 
         public void OnClick_PlayAgain()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             GameManager.Instance.RestartGame();
         }
 
         public void OnClick_MainMenu()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             GameManager.Instance.GoToMainMenu();
         }
 
         public void OnClick_NextLevel()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             if (isWin && GameManager.Instance != null)
             {
                 GameManager.Instance.LoadNextLevel();

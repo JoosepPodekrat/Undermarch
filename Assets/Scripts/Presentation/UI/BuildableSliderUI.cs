@@ -5,6 +5,7 @@ using TMPro;
 using Undermarch.Data;
 using Undermarch.Presentation.Controllers;
 using Undermarch.Presentation.Managers;
+using Undermarch.Presentation.Sounds;
 using Undermarch.Simulation.Interfaces;
 
 namespace Undermarch.Presentation.UI
@@ -360,6 +361,7 @@ namespace Undermarch.Presentation.UI
 
         private void OnLeftArrowClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             if (currentStartIndex > 0)
             {
                 currentStartIndex--;
@@ -370,6 +372,7 @@ namespace Undermarch.Presentation.UI
 
         private void OnRightArrowClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             if (currentStartIndex + visibleSlots < availableBuildables.Length)
             {
                 currentStartIndex++;
@@ -394,6 +397,7 @@ namespace Undermarch.Presentation.UI
                 return;
             }
 
+            UIAudioManager.Instance?.PlaySelectSound();
             selectedSlotIndex = buildableIndex;
             SelectBuildable(buildable);
             UpdateDisplay();

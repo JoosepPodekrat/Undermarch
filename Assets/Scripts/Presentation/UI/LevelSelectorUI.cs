@@ -1,5 +1,6 @@
-﻿﻿using TMPro;
+﻿﻿﻿using TMPro;
 using Undermarch.Data;
+using Undermarch.Presentation.Sounds;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -134,6 +135,7 @@ namespace Undermarch.Presentation.UI
 
         private void OnLevelSelected(int levelIndex)
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             Debug.Log($"LevelSelectorUI: Level {levelIndex} selected.");
             SelectedLevelIndex = levelIndex;
 
@@ -143,6 +145,8 @@ namespace Undermarch.Presentation.UI
 
         private void OnBackButtonClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
+            
             // Tell MenuManager to go back to main menu
             var menuManager = FindFirstObjectByType<MenuManager>();
             if (menuManager != null)

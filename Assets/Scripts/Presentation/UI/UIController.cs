@@ -1,4 +1,5 @@
 using UnityEngine;
+using Undermarch.Presentation.Sounds;
 
 public class MenuManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class MenuManager : MonoBehaviour
 
     public void OpenOptions()
     {
+        UIAudioManager.Instance?.PlayButtonClick();
+        
         mainMenuPanel.SetActive(false);
         subMenus.SetActive(true);
 
@@ -23,6 +26,8 @@ public class MenuManager : MonoBehaviour
 
     public void OpenMainMenu()
     {
+        UIAudioManager.Instance?.PlayButtonClick();
+        
         subMenus.SetActive(false);
         mainMenuPanel.SetActive(true);
     }
@@ -32,6 +37,8 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void OpenLevelSelector()
     {
+        UIAudioManager.Instance?.PlayButtonClick();
+        
         mainMenuPanel.SetActive(false);
         subMenus.SetActive(true);
 
@@ -55,6 +62,8 @@ public class MenuManager : MonoBehaviour
     
     public void QuitGame()
     {
+        UIAudioManager.Instance?.PlayButtonClick();
+        
         Debug.Log("Quit button pressed");
 
         Application.Quit();

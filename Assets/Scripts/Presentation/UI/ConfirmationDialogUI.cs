@@ -1,5 +1,6 @@
-﻿using System;
+﻿﻿using System;
 using TMPro;
+using Undermarch.Presentation.Sounds;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -90,6 +91,7 @@ namespace Undermarch.Presentation.UI
 
         private void OnYesClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             var callback = onConfirmCallback;
             Hide();
             callback?.Invoke();
@@ -97,6 +99,7 @@ namespace Undermarch.Presentation.UI
 
         private void OnNoClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             var callback = onCancelCallback;
             Hide();
             callback?.Invoke();

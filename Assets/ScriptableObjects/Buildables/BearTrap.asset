@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: BearTrap
   m_EditorClassIdentifier: Game.Data::Undermarch.Data.BuildableDefinition
   displayName: Bear trap
-  icon: {fileID: 1172189767636607299, guid: f7d6c195daf3cbf4d8d32eb7c96a3d72, type: 3}
+  icon: {fileID: 8510158601036434744, guid: 6a5816be4862da442acc26d3835fd64c, type: 3}
   buttonColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
   placementType: 5
   goldCost: 50
   requiresPhase2: 0
   description: 
+  extraCosts: []

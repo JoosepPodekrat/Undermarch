@@ -4,6 +4,7 @@ using TMPro;
 using System.Linq;
 using Undermarch;
 using Undermarch.Presentation.Managers;
+using Undermarch.Presentation.Sounds;
 using Undermarch.Presentation.UI;
 using Undermarch.Simulation.Interfaces;
 using Undermarch.Simulation.Core;
@@ -355,6 +356,7 @@ namespace Undermarch.Presentation.Controllers
 
         private void OnMenuClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             Debug.Log("HUD_CLICK: Menu Clicked");
             if (confirmationDialog != null)
             {
@@ -382,6 +384,7 @@ namespace Undermarch.Presentation.Controllers
         
         private void OnStartCombatClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             Debug.Log("HUD_CLICK: Start Combat Clicked");
             if (GameManager.Instance)
             {
@@ -415,6 +418,7 @@ namespace Undermarch.Presentation.Controllers
 
         private void OnPauseClicked()
         {
+            UIAudioManager.Instance?.PlayButtonClick();
             Debug.Log("HUD_CLICK: Pause Clicked");
             TogglePause();
         }

@@ -1,3 +1,4 @@
+using Undermarch.Presentation.Sounds;
 using Undermarch.Presentation.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +20,9 @@ namespace Undermarch.Presentation.Bootstrap
             }
 
             Debug.Log($"Bootstrapper: Level {LevelSelectorUI.SelectedLevelIndex} selected. Loading game scenes...");
+            
+            // Stop menu music when entering a level
+            UIAudioManager.Instance?.StopMusic();
 
             bool simulationSceneLoaded = IsSceneLoaded("Simulation");
             Debug.Log($"Bootstrapper: IsSceneLoaded('Simulation') returned {simulationSceneLoaded}.");
@@ -36,6 +40,21 @@ namespace Undermarch.Presentation.Bootstrap
         private void LoadMainMenu()
         {
             SceneManager.LoadScene("New UI", LoadSceneMode.Single);
+            
+            // Start menu music after scene loads
+            SceneManager.sceneLoaded += OnMainMenuLoaded;
+        }
+        
+        private void OnMainMenuLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "New UI")
+            {
+                // Play menu music
+                UIAudioManager.Instance?.PlayMenuMusic();
+                
+                // Unsubscribe to avoid repeated calls
+                SceneManager.sceneLoaded -= OnMainMenuLoaded;
+            }
         }
 
         private void LoadCoreScenes()

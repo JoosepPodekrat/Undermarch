@@ -1,4 +1,5 @@
 using Undermarch.Presentation.Managers;
+using Undermarch.Presentation.Sounds;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Entities.Traps;
 using Undermarch.Simulation.Events;
@@ -327,6 +328,9 @@ namespace Undermarch.Presentation.Controllers
 
                 if (placed)
                 {
+                    // Play placement sound
+                    UIAudioManager.Instance?.PlayPlacementSound();
+                    
                     // keep selection to allow multiple placements, but maybe check cost again next frame
                     // For now, let's keep it selected until right click deselect
                     // If we want to deselect after one placement: 
