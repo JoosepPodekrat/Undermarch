@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using Undermarch.Simulation.Levels;
 
 namespace Undermarch.Simulation.Levels

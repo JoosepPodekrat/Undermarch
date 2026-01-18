@@ -1,11 +1,7 @@
 using System.Collections.Generic;
 using Undermarch.Simulation.Grid;       // For TilePos
 using Undermarch.Simulation.Entities;   // For Character
-using Undermarch.Simulation.Combat; 
-
-
-using Undermarch.Simulation.Entities;
-
+using Undermarch.Simulation.Combat;     // For Faction
 namespace Undermarch.Simulation.Interfaces
 {
     public interface IBoard

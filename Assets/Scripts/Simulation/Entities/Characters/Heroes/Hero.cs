@@ -4,7 +4,6 @@ using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Grid;
 using Undermarch.Simulation.Pathfinding;
 using Undermarch.Simulation.Interfaces;
-using Undermarch.Simulation.Core;
 using ResourceType = Undermarch.Simulation.Interfaces.ResourceType;
 
 namespace Undermarch.Simulation.Entities.Characters.Heroes

@@ -1,4 +1,3 @@
-using log4net.Core;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Undermarch.Simulation.Core;
