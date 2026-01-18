@@ -2,7 +2,7 @@ using UnityEngine;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Events;
 
-namespace Undermarch.Presentation.Controllers
+namespace Undermarch.Presentation.Sounds
 {
     // Simple wrapper for logging so we don't get errors
     public static class SimulationLog
@@ -13,6 +13,10 @@ namespace Undermarch.Presentation.Controllers
         }
     }
 
+    /// <summary>
+    /// Handles character-related sound effects (grunts, hurt sounds, etc).
+    /// Respects the global SFX enabled settings from UIAudioManager.
+    /// </summary>
     public class AudioController : MonoBehaviour
     {
         [Header("Character Sounds")]
@@ -106,6 +110,18 @@ namespace Undermarch.Presentation.Controllers
                 return;
             }
 
+            // Check if SFX is enabled globally
+            if (UIAudioManager.Instance != null && !UIAudioManager.Instance.IsSFXEnabled())
+            {
+                return; // SFX is disabled, don't play
+            }
+
+            // Apply global SFX volume multiplier
+            float globalSfxVolume = UIAudioManager.Instance != null 
+                ? UIAudioManager.Instance.GetSFXVolume() 
+                : 1f;
+            
+            s.source.volume = s.volume * globalSfxVolume;
             s.source.Play();
             SimulationLog.Log($"AudioController: Playing '{s.name}'");
         }

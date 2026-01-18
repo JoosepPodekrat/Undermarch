@@ -34,9 +34,17 @@ namespace Undermarch.Presentation.Sounds
         [Range(0f, 1f)]
         public float musicVolume = 0.5f;
 
+        // Mute states (separate from volume so we can restore)
+        private bool sfxEnabled = true;
+        private bool musicEnabled = true;
+
         // Audio sources
         private AudioSource sfxSource;
         private AudioSource musicSource;
+
+        // PlayerPrefs keys
+        private const string PREF_SFX_ENABLED = "SFXEnabled";
+        private const string PREF_MUSIC_ENABLED = "MusicEnabled";
 
         private void Awake()
         {
@@ -77,6 +85,10 @@ namespace Undermarch.Presentation.Sounds
             // Load master volume from PlayerPrefs
             float savedVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
             SetMasterVolume(savedVolume);
+
+            // Load SFX and Music enabled states
+            sfxEnabled = PlayerPrefs.GetInt(PREF_SFX_ENABLED, 1) == 1;
+            musicEnabled = PlayerPrefs.GetInt(PREF_MUSIC_ENABLED, 1) == 1;
         }
 
         #region Public Methods - Sound Playback
@@ -111,6 +123,7 @@ namespace Undermarch.Presentation.Sounds
         public void PlaySFX(AudioClip clip)
         {
             if (clip == null || sfxSource == null) return;
+            if (!sfxEnabled) return; // Don't play if SFX is disabled
             
             sfxSource.volume = sfxVolume;
             sfxSource.PlayOneShot(clip);
@@ -131,7 +144,7 @@ namespace Undermarch.Presentation.Sounds
                 return; // Already playing
 
             musicSource.clip = menuMusicClip;
-            musicSource.volume = musicVolume;
+            musicSource.volume = musicEnabled ? musicVolume : 0f;
             musicSource.loop = loopMenuMusic;
             musicSource.Play();
         }
@@ -187,15 +200,84 @@ namespace Undermarch.Presentation.Sounds
         }
 
         /// <summary>
+        /// Get current SFX volume.
+        /// </summary>
+        public float GetSFXVolume()
+        {
+            return sfxVolume;
+        }
+
+        /// <summary>
         /// Set music volume (0-1).
         /// </summary>
         public void SetMusicVolume(float volume)
         {
             musicVolume = Mathf.Clamp01(volume);
-            if (musicSource != null)
+            if (musicSource != null && musicEnabled)
             {
                 musicSource.volume = musicVolume;
             }
+        }
+
+        #endregion
+
+        #region Public Methods - Enable/Disable Toggle
+
+        /// <summary>
+        /// Enable or disable SFX. When disabled, no SFX will play.
+        /// </summary>
+        public void SetSFXEnabled(bool enabled)
+        {
+            sfxEnabled = enabled;
+            PlayerPrefs.SetInt(PREF_SFX_ENABLED, enabled ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+
+        /// <summary>
+        /// Toggle SFX enabled state.
+        /// </summary>
+        public void ToggleSFX()
+        {
+            SetSFXEnabled(!sfxEnabled);
+        }
+
+        /// <summary>
+        /// Check if SFX is enabled.
+        /// </summary>
+        public bool IsSFXEnabled()
+        {
+            return sfxEnabled;
+        }
+
+        /// <summary>
+        /// Enable or disable music. When disabled, music volume is set to 0.
+        /// </summary>
+        public void SetMusicEnabled(bool enabled)
+        {
+            musicEnabled = enabled;
+            PlayerPrefs.SetInt(PREF_MUSIC_ENABLED, enabled ? 1 : 0);
+            PlayerPrefs.Save();
+
+            if (musicSource != null)
+            {
+                musicSource.volume = enabled ? musicVolume : 0f;
+            }
+        }
+
+        /// <summary>
+        /// Toggle music enabled state.
+        /// </summary>
+        public void ToggleMusic()
+        {
+            SetMusicEnabled(!musicEnabled);
+        }
+
+        /// <summary>
+        /// Check if music is enabled.
+        /// </summary>
+        public bool IsMusicEnabled()
+        {
+            return musicEnabled;
         }
 
         #endregion

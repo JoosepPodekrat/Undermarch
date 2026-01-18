@@ -1296,6 +1296,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Presentation::Undermarch.Presentation.UI.OptionsController
   volumeSlider: {fileID: 1724073328}
+  sfxToggle: {fileID: 985006421}
+  musicToggle: {fileID: 2131275940}
 --- !u!1 &909961047
 GameObject:
   m_ObjectHideFlags: 0

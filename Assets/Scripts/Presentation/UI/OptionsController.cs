@@ -6,7 +6,7 @@ namespace Undermarch.Presentation.UI
 {
     /// <summary>
     /// Controls the options menu functionality.
-    /// Wire up the volume slider in the Inspector.
+    /// Wire up the volume slider and toggles in the Inspector.
     /// </summary>
     public class OptionsController : MonoBehaviour
     {
@@ -14,17 +14,44 @@ namespace Undermarch.Presentation.UI
         [Tooltip("The master volume slider")]
         public Slider volumeSlider;
 
+        [Header("Audio Toggles")]
+        [Tooltip("Toggle for SFX on/off (checkmark style)")]
+        public Toggle sfxToggle;
+        
+        [Tooltip("Toggle for Music on/off (checkmark style)")]
+        public Toggle musicToggle;
+
         private void Start()
         {
             SetupVolumeSlider();
+            SetupToggles();
         }
 
         private void OnEnable()
         {
-            // Refresh slider value when options panel is opened
-            if (volumeSlider != null && UIAudioManager.Instance != null)
+            // Refresh all controls when options panel is opened
+            RefreshControls();
+        }
+
+        private void RefreshControls()
+        {
+            if (UIAudioManager.Instance == null) return;
+
+            // Refresh slider
+            if (volumeSlider != null)
             {
-                volumeSlider.value = UIAudioManager.Instance.GetMasterVolume();
+                volumeSlider.SetValueWithoutNotify(UIAudioManager.Instance.GetMasterVolume());
+            }
+
+            // Refresh toggles to match current state (without triggering callbacks)
+            if (sfxToggle != null)
+            {
+                sfxToggle.SetIsOnWithoutNotify(UIAudioManager.Instance.IsSFXEnabled());
+            }
+
+            if (musicToggle != null)
+            {
+                musicToggle.SetIsOnWithoutNotify(UIAudioManager.Instance.IsMusicEnabled());
             }
         }
 
@@ -48,6 +75,33 @@ namespace Undermarch.Presentation.UI
             volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
         }
 
+        private void SetupToggles()
+        {
+            // Setup SFX toggle
+            if (sfxToggle != null)
+            {
+                // Set initial state from saved settings
+                if (UIAudioManager.Instance != null)
+                {
+                    sfxToggle.SetIsOnWithoutNotify(UIAudioManager.Instance.IsSFXEnabled());
+                }
+                
+                sfxToggle.onValueChanged.AddListener(OnSFXToggleChanged);
+            }
+
+            // Setup Music toggle
+            if (musicToggle != null)
+            {
+                // Set initial state from saved settings
+                if (UIAudioManager.Instance != null)
+                {
+                    musicToggle.SetIsOnWithoutNotify(UIAudioManager.Instance.IsMusicEnabled());
+                }
+                
+                musicToggle.onValueChanged.AddListener(OnMusicToggleChanged);
+            }
+        }
+
         private void OnVolumeChanged(float value)
         {
             if (UIAudioManager.Instance != null)
@@ -63,12 +117,46 @@ namespace Undermarch.Presentation.UI
             }
         }
 
+        private void OnSFXToggleChanged(bool isOn)
+        {
+            if (UIAudioManager.Instance != null)
+            {
+                UIAudioManager.Instance.SetSFXEnabled(isOn);
+                
+                // Play click sound to give feedback (if SFX was just enabled)
+                if (isOn)
+                {
+                    UIAudioManager.Instance.PlayButtonClick();
+                }
+            }
+        }
+
+        private void OnMusicToggleChanged(bool isOn)
+        {
+            UIAudioManager.Instance?.PlayButtonClick();
+            
+            if (UIAudioManager.Instance != null)
+            {
+                UIAudioManager.Instance.SetMusicEnabled(isOn);
+            }
+        }
+
         private void OnDestroy()
         {
-            // Clean up listener
+            // Clean up listeners
             if (volumeSlider != null)
             {
                 volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
+            }
+
+            if (sfxToggle != null)
+            {
+                sfxToggle.onValueChanged.RemoveListener(OnSFXToggleChanged);
+            }
+
+            if (musicToggle != null)
+            {
+                musicToggle.onValueChanged.RemoveListener(OnMusicToggleChanged);
             }
         }
     }
