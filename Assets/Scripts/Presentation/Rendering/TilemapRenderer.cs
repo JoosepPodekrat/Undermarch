@@ -65,6 +65,7 @@ namespace Undermarch.Presentation.Rendering
         public TileBase goblinTile;
         public TileBase skeletonTile;
         public TileBase slimeTile;
+        public TileBase strongSlimeTile;
         public TileBase archerTile;
         [Header("Demons")]
         public TileBase redDemonTile;
@@ -377,6 +378,9 @@ namespace Undermarch.Presentation.Rendering
                         break;
                     case "Slime":
                         tile = slimeTile;
+                        break;
+                    case "Strong Slime":
+                        tile = strongSlimeTile ?? slimeTile; // Use strongSlimeTile if assigned, else fallback to standard slime
                         break;
                     case "Red Demon":
                         tile = redDemonTile;

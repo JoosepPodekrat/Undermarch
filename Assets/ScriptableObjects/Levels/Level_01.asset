@@ -16,7 +16,6 @@ MonoBehaviour:
   levelIndex: 1
   loaderType: 1
   availableBuildables:
-  - {fileID: 11400000, guid: accf783b648cd3b4993fe43903f4e411, type: 2}
   - {fileID: 11400000, guid: 531e601dcb0cd0344883312588f72b4a, type: 2}
   - {fileID: 11400000, guid: 1576897589f805a4fbb2e534058721d3, type: 2}
   - {fileID: 11400000, guid: 06d49e187e29a2a43b80fc42e5535026, type: 2}

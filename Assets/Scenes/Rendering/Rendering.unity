@@ -905,6 +905,7 @@ MonoBehaviour:
   goblinTile: {fileID: 11400000, guid: 4547850f36cce2048973979181a81841, type: 2}
   skeletonTile: {fileID: 11400000, guid: 0a6b2d25349e7b945973629ec437de9e, type: 2}
   slimeTile: {fileID: 11400000, guid: 2ab735c6809034c4da1fc0d0926e7215, type: 2}
+  strongSlimeTile: {fileID: 11400000, guid: 4d58554a68faf5f449e8e64bbaaad13c, type: 2}
   archerTile: {fileID: 0}
   redDemonTile: {fileID: 11400000, guid: b22982c4ca5fd27428927e84c501c4b8, type: 2}
   purpleDemonTile: {fileID: 11400000, guid: 7e78eae6aeae29c47bc2ee6626729b22, type: 2}
