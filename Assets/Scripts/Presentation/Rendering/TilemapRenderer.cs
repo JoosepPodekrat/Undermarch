@@ -478,6 +478,28 @@ namespace Undermarch.Presentation.Rendering
                 case PlacementType.BearTrap:
                     tile = bearTrapTile;
                     break;
+                case PlacementType.MetalSpikeTrap:
+                    tile = ironSpikeTrapTile;
+                    break;
+                case PlacementType.GasTrap:
+                    tile = gasTrapTile;
+                    break;
+                case PlacementType.RedDemon:
+                    tile = redDemonTile;
+                    break;
+                case PlacementType.PurpleDemon:
+                    tile = purpleDemonTile;
+                    break;
+                case PlacementType.RedSpider:
+                    tile = redSpiderTile;
+                    break;
+                case PlacementType.PurpleSpider:
+                    tile = purpleSpiderTile;
+                    break;
+                case PlacementType.GreenSlime:
+                case PlacementType.BlueSlime:
+                    tile = slimeTile;
+                    break;
                 default:
                     tile = defaultEntityTile; // Use fallback for unmapped placement types
                     break;

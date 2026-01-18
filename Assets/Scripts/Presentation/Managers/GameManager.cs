@@ -68,14 +68,14 @@ namespace Undermarch.Presentation.Managers
         private void Start()
         {
             // Ensure PlacementController exists
-            if (FindObjectOfType<PlacementController>() == null)
+            if (FindFirstObjectByType<PlacementController>() == null)
             {
                 var pcObj = new GameObject("PlacementController");
                 pcObj.AddComponent<PlacementController>();
             }
 
             // Ensure HUDController exists
-            var hud = FindObjectOfType<HUDController>();
+            var hud = FindFirstObjectByType<HUDController>();
             if (hud == null)
             {
                 var hudObj = new GameObject("HUDController");

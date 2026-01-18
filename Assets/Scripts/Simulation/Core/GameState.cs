@@ -12,47 +12,7 @@ namespace Undermarch.Simulation.Core
 
         public event Action OnResourcesChanged;
 
-        // Example: placement costs using multiple resources
-        public readonly Dictionary<string, Dictionary<ResourceType, int>> PlacementCosts = new()
-        {
-            {
-                "SlimeMonster",
-                new Dictionary<ResourceType, int>
-                {
-                    { ResourceType.Gold, 30 }
-                }
-            },
-            {
-                "ArcherMonster",
-                new Dictionary<ResourceType, int>
-                {
-                    { ResourceType.Gold, 80 },
-                    { ResourceType.Wood, 20 }
-                }
-            },
-            {
-                "SpikeTrap",
-                new Dictionary<ResourceType, int>
-                {
-                    { ResourceType.Gold, 30 },
-                    { ResourceType.Steel, 10 }
-                }
-            },
-            {
-                "Goblin",
-                new Dictionary<ResourceType, int>
-                {
-                    { ResourceType.Gold, 50 }
-                }
-            },
-            {
-                "BearTrap",
-                new Dictionary<ResourceType, int>
-                {
-                    { ResourceType.Gold, 50 }
-                }
-            }
-        };
+
 
         public GameState(int startingGold = 200)
         {

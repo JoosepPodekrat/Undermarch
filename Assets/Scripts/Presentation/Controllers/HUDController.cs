@@ -64,7 +64,8 @@ namespace Undermarch.Presentation.Controllers
             Debug.Log("HUDController: Awake started.");
 
             // 1. EventSystem Check
-            var eventSystem = FindObjectOfType<EventSystem>();
+            // 1. EventSystem Check
+            var eventSystem = FindFirstObjectByType<EventSystem>();
             if (eventSystem == null)
             {
                 Debug.Log("HUDController: No EventSystem found. Creating one.");
@@ -133,8 +134,9 @@ namespace Undermarch.Presentation.Controllers
             FindAndLog("BottomHUD/BuildableSlider", ref buildableSlider, "buildableSlider");
 
             if (placementController == null)
+            if (placementController == null)
             {
-                placementController = FindObjectOfType<PlacementController>();
+                placementController = FindFirstObjectByType<PlacementController>();
                 Debug.Log($"HUDController: PlacementController found: {placementController != null}");
             }
         }
@@ -158,7 +160,7 @@ namespace Undermarch.Presentation.Controllers
             }
 
             // Find or create confirmation dialog
-            confirmationDialog = FindObjectOfType<ConfirmationDialogUI>();
+            confirmationDialog = FindFirstObjectByType<ConfirmationDialogUI>();
             if (confirmationDialog == null)
             {
                 Debug.Log("HUDController: Creating confirmation dialog...");

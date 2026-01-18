@@ -9,20 +9,31 @@ namespace Undermarch.Presentation.Controllers
 
         public void OnClick_SelectSlime()
         {
-            if (placementController != null)
-            {
-                placementController.SelectSlime();
-
-            }
+            SelectByType(Data.PlacementType.Slime);
         }
 
         public void OnClick_SelectSpikeTrap()
         {
-            if (placementController != null)
-            {
-                placementController.SelectSpikeTrap();
+            SelectByType(Data.PlacementType.SpikeTrap);
+        }
 
+        private void SelectByType(Data.PlacementType type)
+        {
+            if (placementController == null) return;
+
+            var levelData = GameManager.Instance.CurrentLevelData;
+            if (levelData != null && levelData.availableBuildables != null)
+            {
+                foreach (var buildable in levelData.availableBuildables)
+                {
+                    if (buildable.placementType == type)
+                    {
+                        placementController.SelectBuildable(buildable);
+                        return;
+                    }
+                }
             }
+            Debug.LogWarning($"UIController: Could not find buildable definition for {type} in current level.");
         }
 
         public void OnClick_StartCombat()

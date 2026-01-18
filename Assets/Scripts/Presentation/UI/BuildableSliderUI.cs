@@ -410,7 +410,7 @@ namespace Undermarch.Presentation.UI
         {
             if (placementController == null)
             {
-                placementController = FindObjectOfType<PlacementController>();
+                placementController = FindFirstObjectByType<PlacementController>();
                 if (placementController == null)
                 {
                     Debug.LogError("BuildableSliderUI: No PlacementController found!");
@@ -420,61 +420,7 @@ namespace Undermarch.Presentation.UI
 
             Debug.Log($"BuildableSliderUI: Selected {buildable.displayName} (Cost: {buildable.goldCost}G)");
 
-            switch (buildable.placementType)
-            {
-                case PlacementType.Slime:
-                    placementController.SelectSlime();
-                    break;
-                case PlacementType.Archer:
-                    placementController.SelectArcher();
-                    break;
-                case PlacementType.Goblin:
-                    placementController.SelectGoblin();
-                    break;
-                case PlacementType.SpikeTrap:
-                    placementController.SelectSpikeTrap();
-                    break;
-                case PlacementType.BearTrap:
-                    placementController.SelectBearTrap();
-                    break;
-                case PlacementType.MetalSpikeTrap:
-                    placementController.SelectMetalSpikeTrap();
-                    break;
-
-                case PlacementType.GasTrap:
-                    placementController.SelectGasTrap();
-                    break;
-
-                case PlacementType.RedDemon:
-                    placementController.SelectRedDemon();
-                    break;
-
-                case PlacementType.PurpleDemon:
-                    placementController.SelectPurpleDemon();
-                    break;
-
-                case PlacementType.RedSpider:
-                    placementController.SelectRedSpider();
-                    break;
-
-                case PlacementType.PurpleSpider:
-                    placementController.SelectPurpleSpider();
-                    break;
-
-                case PlacementType.GreenSlime:
-                    placementController.SelectGreenSlime();
-                    break;
-
-                case PlacementType.BlueSlime:
-                    placementController.SelectBlueSlime();
-                    break;
-
-                default:
-                    Debug.LogWarning(
-                        $"BuildableSliderUI: Unknown placement type {buildable.placementType}"
-                    );
-                    break;
-            }
+            placementController.SelectBuildable(buildable);
         }
 
         /// <summary>

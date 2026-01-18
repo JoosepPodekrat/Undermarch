@@ -24,78 +24,24 @@ namespace Undermarch.Presentation.Controllers
         private Vector2 _rightMouseStartPos;
         private bool _isRightClicking;
 
+        private BuildableDefinition _selectedDefinition;
+
         // Public property to expose selected type for UI
         public PlacementType SelectedType => _selectedType;
 
+        public void SelectBuildable(BuildableDefinition buildable)
+        {
+            if (buildable == null)
+            {
+                _selectedType = PlacementType.None;
+                _selectedDefinition = null;
+                return;
+            }
 
-        public void SelectSlime()
-        {
-            _selectedType = PlacementType.Slime;
-            Debug.Log("PlacementController: Selected: Slime (Cost: 50 gold)");
-        }
-
-        public void SelectArcher()
-        {
-            _selectedType = PlacementType.Archer;
-            Debug.Log("PlacementController: Selected: Archer (Cost: 80 gold)");
-        }
-
-        public void SelectGoblin()
-        {
-            _selectedType = PlacementType.Goblin;
-            Debug.Log("PlacementController: Selected: Goblin (Cost: 50 gold)");
-        }
-
-        public void SelectSpikeTrap()
-        {
-            _selectedType = PlacementType.SpikeTrap;
-            Debug.Log("PlacementController: Selected: Spike Trap (Cost: 30 gold)");
-        }
-        public void SelectBearTrap()
-        {
-            _selectedType = PlacementType.BearTrap;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-
-        public void SelectMetalSpikeTrap()
-        {
-            _selectedType = PlacementType.MetalSpikeTrap;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-        public void SelectGasTrap()
-        {
-            _selectedType = PlacementType.GasTrap;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-        public void SelectRedDemon()
-        {
-            _selectedType = PlacementType.RedDemon;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-        public void SelectPurpleDemon()
-        {
-            _selectedType = PlacementType.PurpleDemon;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-        public void SelectRedSpider()
-        {
-            _selectedType = PlacementType.RedSpider;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-        public void SelectPurpleSpider()
-        {
-            _selectedType = PlacementType.PurpleSpider;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-        public void SelectGreenSlime()
-        {
-            _selectedType = PlacementType.GreenSlime;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
-        }
-        public void SelectBlueSlime()
-        {
-            _selectedType = PlacementType.BlueSlime;
-            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+            _selectedType = buildable.placementType;
+            _selectedDefinition = buildable;
+            
+            Debug.Log($"PlacementController: Selected: {buildable.displayName} (Cost: {buildable.goldCost})");
         }
 
         private void Start()
@@ -129,6 +75,7 @@ namespace Undermarch.Presentation.Controllers
                 if (Vector2.Distance(_rightMouseStartPos, Mouse.current.position.ReadValue()) < 10f)
                 {
                     _selectedType = PlacementType.None;
+                    _selectedDefinition = null;
                     if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
                     return;
                 }
@@ -189,23 +136,41 @@ namespace Undermarch.Presentation.Controllers
                 if (!isValid)
                 {
                     _selectedType = PlacementType.None;
+                    _selectedDefinition = null;
                     if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
                     return;
                 }
 
                 bool placed = false;
                 var gameState = GameManager.Instance.GameState;
+
+                // Calculate total cost from definition
+                System.Collections.Generic.Dictionary<Undermarch.Simulation.Interfaces.ResourceType, int> totalCost = new ();
+                if (_selectedDefinition.goldCost > 0)
+                {
+                    totalCost.Add(Undermarch.Simulation.Interfaces.ResourceType.Gold, _selectedDefinition.goldCost);
+                }
+                if (_selectedDefinition.extraCosts != null)
+                {
+                    foreach(var extra in _selectedDefinition.extraCosts)
+                    {
+                        if (totalCost.ContainsKey(extra.type))
+                            totalCost[extra.type] += extra.amount;
+                        else
+                            totalCost.Add(extra.type, extra.amount);
+                    }
+                }
+
+                if (!gameState.CanAfford(totalCost))
+                {
+                    Debug.Log("Not enough resources!");
+                    return; // Early exit if can't afford
+                }
+
                 switch (_selectedType)
                 {
                     case PlacementType.Slime:
                         {
-                            var cost = gameState.PlacementCosts["SlimeMonster"];
-                            if (!gameState.CanAfford(cost))
-                            {
-                                Debug.Log("Not enough resources to place Slime!");
-                                break;
-                            }
-
                             var slime = CharacterDatabase.slimeMonster.Clone();
                             slime.spawnSound = "slimeSound";
                             slime.hurtSound = "slimeSound";
@@ -214,8 +179,8 @@ namespace Undermarch.Presentation.Controllers
 
                             GameManager.Instance.Board.AddEntity(tilePos, slime);
                             CharacterEvents.RaiseSpawn(slime);
-                            gameState.SpendResources(cost);
-
+                            
+                            gameState.SpendResources(totalCost); // Spend calculated cost
                             audioController.PlaySlimeSound();
                             placed = true;
                             Debug.Log($"Placed Slime at {tilePos.x},{tilePos.y}");
@@ -224,14 +189,10 @@ namespace Undermarch.Presentation.Controllers
 
                     case PlacementType.Archer:
                         {
-                            var cost = gameState.PlacementCosts["ArcherMonster"];
-                            if (!gameState.CanAfford(cost))
-                                break;
-
                             var archer = CharacterDatabase.archerMonster.Clone();
                             GameManager.Instance.Board.AddEntity(tilePos, archer);
                             CharacterEvents.RaiseSpawn(archer);
-                            gameState.SpendResources(cost);
+                            gameState.SpendResources(totalCost);
 
                             placed = true;
                             Debug.Log($"Placed Archer at {tilePos.x},{tilePos.y}");
@@ -240,14 +201,10 @@ namespace Undermarch.Presentation.Controllers
 
                     case PlacementType.Goblin:
                         {
-                            var cost = gameState.PlacementCosts["Goblin"];
-                            if (!gameState.CanAfford(cost))
-                                break;
-
                             var goblin = CharacterDatabase.goblin1.Clone();
                             GameManager.Instance.Board.AddEntity(tilePos, goblin);
                             CharacterEvents.RaiseSpawn(goblin);
-                            gameState.SpendResources(cost);
+                            gameState.SpendResources(totalCost);
 
                             placed = true;
                             Debug.Log($"Placed Goblin at {tilePos.x},{tilePos.y}");
@@ -256,12 +213,8 @@ namespace Undermarch.Presentation.Controllers
 
                     case PlacementType.SpikeTrap:
                         {
-                            var cost = gameState.PlacementCosts["SpikeTrap"];
-                            if (!gameState.CanAfford(cost))
-                                break;
-
                             GameManager.Instance.Board.AddInteractable(tilePos, new SpikeTrap());
-                            gameState.SpendResources(cost);
+                            gameState.SpendResources(totalCost);
 
                             placed = true;
                             Debug.Log($"Placed Spike Trap at {tilePos.x},{tilePos.y}");
@@ -270,27 +223,117 @@ namespace Undermarch.Presentation.Controllers
 
                     case PlacementType.BearTrap:
                         {
-                            var cost = gameState.PlacementCosts["BearTrap"];
-                            if (!gameState.CanAfford(cost))
-                                break;
-
                             GameManager.Instance.Board.AddInteractable(tilePos, new BearTrap());
-                            gameState.SpendResources(cost);
+                            gameState.SpendResources(totalCost);
 
                             placed = true;
                             Debug.Log($"Placed Bear Trap at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.MetalSpikeTrap:
+                        {
+                            GameManager.Instance.Board.AddInteractable(tilePos, new MetalSpikeTrap());
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Metal Spike Trap at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.GasTrap:
+                        {
+                            GameManager.Instance.Board.AddInteractable(tilePos, new GasTrap());
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Gas Trap at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.RedDemon:
+                        {
+                            var demon = CharacterDatabase.weakerDemon.Clone();
+                            GameManager.Instance.Board.AddEntity(tilePos, demon);
+                            CharacterEvents.RaiseSpawn(demon);
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Red Demon at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.PurpleDemon:
+                        {
+                            var demon = CharacterDatabase.strongerDemon.Clone();
+                            GameManager.Instance.Board.AddEntity(tilePos, demon);
+                            CharacterEvents.RaiseSpawn(demon);
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Purple Demon at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.RedSpider:
+                        {
+                            var spider = CharacterDatabase.redSpider.Clone();
+                            GameManager.Instance.Board.AddEntity(tilePos, spider);
+                            CharacterEvents.RaiseSpawn(spider);
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Red Spider at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.PurpleSpider:
+                        {
+                            var spider = CharacterDatabase.purpleSpider.Clone();
+                            GameManager.Instance.Board.AddEntity(tilePos, spider);
+                            CharacterEvents.RaiseSpawn(spider);
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Purple Spider at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.GreenSlime:
+                        {
+                            var slime = CharacterDatabase.strongSlime.Clone();
+                            GameManager.Instance.Board.AddEntity(tilePos, slime);
+                            CharacterEvents.RaiseSpawn(slime);
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Green Slime at {tilePos.x},{tilePos.y}");
+                            break;
+                        }
+
+                    case PlacementType.BlueSlime:
+                        {
+                            var slime = CharacterDatabase.strongSlime.Clone(); // Or another variant if available
+                            GameManager.Instance.Board.AddEntity(tilePos, slime);
+                            CharacterEvents.RaiseSpawn(slime);
+                            gameState.SpendResources(totalCost);
+
+                            placed = true;
+                            Debug.Log($"Placed Blue Slime at {tilePos.x},{tilePos.y}");
                             break;
                         }
                 }
 
                 if (placed)
                 {
-                    _selectedType = PlacementType.None;
-                    if (_tilemapRenderer != null)
-                        _tilemapRenderer.ClearPreview();
+                    // keep selection to allow multiple placements, but maybe check cost again next frame
+                    // For now, let's keep it selected until right click deselect
+                    // If we want to deselect after one placement: 
+                    // _selectedType = PlacementType.None; 
+                    // _selectedDefinition = null;
+                    // if (_tilemapRenderer != null) _tilemapRenderer.ClearPreview();
                 }
             }
         }
     }
 }
-

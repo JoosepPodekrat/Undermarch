@@ -33,5 +33,14 @@ namespace Undermarch.Data
         [Tooltip("Optional description shown on hover or selection")]
         [TextArea(2, 4)]
         public string description = "";
+        [Tooltip("Additional resource costs (e.g. Steel, Wood)")]
+        public ResourceCost[] extraCosts;
+    }
+
+    [System.Serializable]
+    public struct ResourceCost
+    {
+        public Undermarch.Simulation.Interfaces.ResourceType type;
+        public int amount;
     }
 }
