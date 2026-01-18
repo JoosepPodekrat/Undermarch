@@ -353,14 +353,14 @@ namespace Undermarch.Simulation.Entities
         };
         public static readonly Monster redSpider = new Monster
         {
-            Name = "Purple Demon",
+            Name = "Red Spider",
             faction = Faction.Defender,
-            strength = 20,
+            strength = 15,
             stamina = 20,
-            agility = 15,
+            agility = 25,
             intelligence = 13,
             spirit = 15,
-            charWeapon = ItemDatabase.ironSword,
+            charWeapon = ItemDatabase.warriorAxe,
             charArmor = ItemDatabase.leatherArmor,
             charHelmet = ItemDatabase.leatherCap,
             charAccessory = ItemDatabase.charmOfFocus
@@ -368,14 +368,14 @@ namespace Undermarch.Simulation.Entities
         };
         public static readonly Monster purpleSpider = new Monster
         {
-            Name = "Purple Demon",
+            Name = "Purple Spider",
             faction = Faction.Defender,
-            strength = 20,
+            strength = 25,
             stamina = 20,
-            agility = 15,
+            agility = 35,
             intelligence = 13,
             spirit = 15,
-            charWeapon = ItemDatabase.ironSword,
+            charWeapon = ItemDatabase.warriorAxe,
             charArmor = ItemDatabase.leatherArmor,
             charHelmet = ItemDatabase.leatherCap,
             charAccessory = ItemDatabase.charmOfFocus

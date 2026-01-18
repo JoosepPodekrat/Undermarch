@@ -7,6 +7,15 @@ namespace Undermarch.Data
         Archer,
         Goblin,
         SpikeTrap,
-        BearTrap
+        BearTrap,
+        GasTrap,
+        MetalSpikeTrap,
+        RedSpider,
+        PurpleSpider,
+        RedDemon,
+        PurpleDemon,
+        BlueSlime,
+        GreenSlime,
+
     }
 }

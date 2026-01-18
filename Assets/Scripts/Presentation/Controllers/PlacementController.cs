@@ -51,10 +51,50 @@ namespace Undermarch.Presentation.Controllers
             _selectedType = PlacementType.SpikeTrap;
             Debug.Log("PlacementController: Selected: Spike Trap (Cost: 30 gold)");
         }
-
         public void SelectBearTrap()
         {
             _selectedType = PlacementType.BearTrap;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+
+        public void SelectMetalSpikeTrap()
+        {
+            _selectedType = PlacementType.MetalSpikeTrap;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+        public void SelectGasTrap()
+        {
+            _selectedType = PlacementType.GasTrap;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+        public void SelectRedDemon()
+        {
+            _selectedType = PlacementType.RedDemon;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+        public void SelectPurpleDemon()
+        {
+            _selectedType = PlacementType.PurpleDemon;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+        public void SelectRedSpider()
+        {
+            _selectedType = PlacementType.RedSpider;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+        public void SelectPurpleSpider()
+        {
+            _selectedType = PlacementType.PurpleSpider;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+        public void SelectGreenSlime()
+        {
+            _selectedType = PlacementType.GreenSlime;
+            Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
+        }
+        public void SelectBlueSlime()
+        {
+            _selectedType = PlacementType.BlueSlime;
             Debug.Log("PlacementController: Selected: Bear Trap (Cost: 50 gold)");
         }
 

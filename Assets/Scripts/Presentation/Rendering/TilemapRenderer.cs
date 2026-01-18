@@ -365,16 +365,16 @@ namespace Undermarch.Presentation.Rendering
                     case "Slime":
                         tile = slimeTile;
                         break;
-                    case "WeakerDemon":
+                    case "Red Demon":
                         tile = redDemonTile;
                         break;
-                    case "StrongDemon":
+                    case "Purple Demon":
                         tile = purpleDemonTile;
                         break;
-                    case "RedSpider":
+                    case "Red Spider":
                         tile = redSpiderTile;
                         break;
-                    case "PurpleSpider":
+                    case "Purpl eSpider":
                         tile = purpleSpiderTile;
                         break;
                     case "DungeonMaster":

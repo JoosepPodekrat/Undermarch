@@ -15,3 +15,9 @@ MonoBehaviour:
   displayName: Level 3
   levelIndex: 3
   loaderType: 3
+  availableBuildables:
+  - {fileID: 11400000, guid: 06d49e187e29a2a43b80fc42e5535026, type: 2}
+  - {fileID: 11400000, guid: 439152d7a8da5c84faf149932e17f0c3, type: 2}
+  - {fileID: 11400000, guid: 80ccb3ac1d0f1fe46828b2c430947cfd, type: 2}
+  - {fileID: 11400000, guid: af17f2908c0fff548994b3a247d8125f, type: 2}
+  - {fileID: 11400000, guid: 3054ddfb0951abd4ba9bc87a333a0ac7, type: 2}
