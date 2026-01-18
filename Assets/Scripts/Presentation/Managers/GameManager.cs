@@ -43,6 +43,14 @@ namespace Undermarch.Presentation.Managers
 
         private int currentLevelIndex = -1;
 
+        /// <summary>
+        /// Gets the current level's data including available buildables.
+        /// </summary>
+        public LevelDataSO CurrentLevelData => 
+            levelRegistry != null && currentLevelIndex >= 0 && currentLevelIndex < levelRegistry.LevelCount
+                ? levelRegistry.GetLevel(currentLevelIndex)
+                : null;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)

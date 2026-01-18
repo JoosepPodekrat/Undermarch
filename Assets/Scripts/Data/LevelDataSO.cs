@@ -17,6 +17,10 @@ namespace Undermarch.Data
         [Tooltip("Which level loader method to use")]
         public LevelLoaderType loaderType = LevelLoaderType.LevelOne;
 
+        [Header("Available Buildables")]
+        [Tooltip("List of buildables available in this level. Order determines display order in the slider UI.")]
+        public BuildableDefinition[] availableBuildables;
+
         /// <summary>
         /// Loads this level onto the given board.
         /// </summary>

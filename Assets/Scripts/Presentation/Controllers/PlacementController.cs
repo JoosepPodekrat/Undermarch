@@ -8,19 +8,14 @@ using UnityEngine.InputSystem;
 using Undermarch.Simulation.Interfaces;
 using Undermarch.Presentation.Rendering;
 
+using Undermarch.Presentation.Rendering;
+using Undermarch.Data;
+
 namespace Undermarch.Presentation.Controllers
 {
     public class PlacementController : MonoBehaviour
     {
-        public enum PlacementType
-        {
-            None,
-            Slime,
-            Archer,
-            Goblin,
-            SpikeTrap,
-            BearTrap
-        }
+        // PlacementType moved to Undermarch.Data namespace
 
         private PlacementType _selectedType = PlacementType.None;
         private AudioController audioController;

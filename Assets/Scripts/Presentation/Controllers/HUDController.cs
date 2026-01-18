@@ -9,6 +9,7 @@ using Undermarch.Simulation.Interfaces;
 using Undermarch.Simulation.Core;
 using Undermarch.Simulation.Entities;
 using Undermarch.Simulation.Grid;
+using Undermarch.Data;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem;
@@ -28,15 +29,8 @@ namespace Undermarch.Presentation.Controllers
         public TextMeshProUGUI startButtonText;
         public Button pauseButton;
 
-        [Header("Bottom HUD")]
-        public Button buildSlimeButton;
-        public TextMeshProUGUI slimePriceText;
-        public Button buildTrapButton;
-        public TextMeshProUGUI trapPriceText;
-        public Button buildGoblinButton;
-        public TextMeshProUGUI goblinPriceText;
-        public Button buildBearTrapButton;
-        public TextMeshProUGUI bearTrapPriceText;
+        [Header("Bottom HUD - Buildable Slider")]
+        private BuildableSliderUI buildableSlider;
 
         [Header("References")]
         public PlacementController placementController;
@@ -135,34 +129,7 @@ namespace Undermarch.Presentation.Controllers
                     Debug.LogError("HUDController: Could not find StartButton Text child!");
             }
 
-            FindAndLog("BottomHUD/PlaceSlimeButton", ref buildSlimeButton, "buildSlimeButton");
-            FindAndLog("BottomHUD/PlaceTrapButton", ref buildTrapButton, "buildTrapButton");
-            FindAndLog("BottomHUD/PlaceGoblinButton", ref buildGoblinButton, "buildGoblinButton");
-            FindAndLog("BottomHUD/PlaceBearTrapButton", ref buildBearTrapButton, "buildBearTrapButton");
-
-            if (buildSlimeButton != null && slimePriceText == null)
-            {
-                slimePriceText = buildSlimeButton.transform.Find("SlimePriceText")?.GetComponent<TextMeshProUGUI>();
-                if(slimePriceText == null) Debug.LogError("HUDController: Could not find SlimePriceText child!");
-            }
-
-            if (buildTrapButton != null && trapPriceText == null)
-            {
-                trapPriceText = buildTrapButton.transform.Find("TrapPriceText")?.GetComponent<TextMeshProUGUI>();
-                if(trapPriceText == null) Debug.LogError("HUDController: Could not find TrapPriceText child!");
-            }
-
-            if (buildGoblinButton != null && goblinPriceText == null)
-            {
-                goblinPriceText = buildGoblinButton.transform.Find("GoblinPriceText")?.GetComponent<TextMeshProUGUI>();
-                if(goblinPriceText == null) Debug.LogError("HUDController: Could not find GoblinPriceText child!");
-            }
-
-            if (buildBearTrapButton != null && bearTrapPriceText == null)
-            {
-                bearTrapPriceText = buildBearTrapButton.transform.Find("BearTrapPriceText")?.GetComponent<TextMeshProUGUI>();
-                if(bearTrapPriceText == null) Debug.LogError("HUDController: Could not find BearTrapPriceText child!");
-            }
+            FindAndLog("BottomHUD/BuildableSlider", ref buildableSlider, "buildableSlider");
 
             if (placementController == null)
             {
@@ -179,10 +146,15 @@ namespace Undermarch.Presentation.Controllers
             BindButton(menuButton, OnMenuClicked, "MenuButton");
             BindButton(startCombatButton, OnStartCombatClicked, "StartCombatButton");
             BindButton(pauseButton, OnPauseClicked, "PauseButton");
-            BindButton(buildSlimeButton, OnBuildSlimeClicked, "BuildSlimeButton");
-            BindButton(buildTrapButton, OnBuildTrapClicked, "BuildTrapButton");
-            BindButton(buildGoblinButton, OnBuildGoblinClicked, "BuildGoblinButton");
-            BindButton(buildBearTrapButton, OnBuildBearTrapClicked, "BuildBearTrapButton");
+            // Initialize slider
+            if (buildableSlider != null && GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+            {
+                buildableSlider.Initialize(GameManager.Instance.CurrentLevelData.availableBuildables);
+            }
+            else
+            {
+                Debug.LogWarning("HUDController: Could not initialize slider. Missing reference or level data.");
+            }
 
             // Find or create confirmation dialog
             confirmationDialog = FindObjectOfType<ConfirmationDialogUI>();
@@ -199,13 +171,7 @@ namespace Undermarch.Presentation.Controllers
 
                 if (gameState != null)
                 {
-                    // These values should eventually come from a data source,
-                    // but for now we keep your existing numbers
-                    slimePriceText.text = "50 G";
-                    trapPriceText.text = "30 G";
-                    goblinPriceText.text = "50 G";
-                    bearTrapPriceText.text = "50 G";
-
+                    // Resource display listener
                     gameState.OnResourcesChanged += UpdateResourceDisplay;
                 }
             }
@@ -250,13 +216,7 @@ namespace Undermarch.Presentation.Controllers
             UpdateTurnIndicator();
             UpdateWaveInfo();
 
-            if (GameManager.Instance != null)
-            {
-                bool isPhase2 = GameManager.Instance.CurrentPhase == GamePhase.BuildingPhase2 || GameManager.Instance.IsSecondStage;
-
-                UpdateButtonState(buildGoblinButton, isPhase2, "Goblin", goblinPriceText);
-                UpdateButtonState(buildBearTrapButton, isPhase2, "Bear Trap", bearTrapPriceText);
-            }
+            // Phase update handled by slider UI
 
             // NOTE: Old debug code commented out - it was interfering with click detection
             // // DEBUG: Check for clicks and UI hits
@@ -291,25 +251,7 @@ namespace Undermarch.Presentation.Controllers
             UpdatePlacementPreviewStats();
         }
 
-        private void UpdateButtonState(Button btn, bool unlocked, string name, TextMeshProUGUI priceText)
-        {
-            if (btn == null) return;
-            
-            btn.gameObject.SetActive(true);
-            btn.interactable = unlocked;
 
-            var nameText = btn.transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
-            if (nameText != null)
-            {
-                nameText.text = unlocked ? name : "LOCKED";
-                nameText.color = unlocked ? Color.white : Color.gray;
-            }
-            
-            if (priceText != null)
-            {
-                priceText.gameObject.SetActive(unlocked);
-            }
-        }
 
         private void OnDestroy()
         {
@@ -474,49 +416,7 @@ namespace Undermarch.Presentation.Controllers
             TogglePause();
         }
 
-        private void OnBuildSlimeClicked()
-        {
-            Debug.Log("HUD_CLICK: Build Slime Clicked");
-            if (placementController) 
-            {
-                placementController.SelectSlime();
-                Debug.Log("HUD_CLICK: Called SelectSlime on PlacementController");
-            }
-            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
-        }
 
-        private void OnBuildTrapClicked()
-        {
-            Debug.Log("HUD_CLICK: Build Trap Clicked");
-            if (placementController) 
-            {
-                placementController.SelectSpikeTrap();
-                Debug.Log("HUD_CLICK: Called SelectSpikeTrap on PlacementController");
-            }
-            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
-        }
-
-        private void OnBuildGoblinClicked()
-        {
-            Debug.Log("HUD_CLICK: Build Goblin Clicked");
-            if (placementController) 
-            {
-                placementController.SelectGoblin();
-                Debug.Log("HUD_CLICK: Called SelectGoblin on PlacementController");
-            }
-            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
-        }
-
-        private void OnBuildBearTrapClicked()
-        {
-            Debug.Log("HUD_CLICK: Build Bear Trap Clicked");
-            if (placementController) 
-            {
-                placementController.SelectBearTrap();
-                Debug.Log("HUD_CLICK: Called SelectBearTrap on PlacementController");
-            }
-            else Debug.LogError("HUD_CLICK: PlacementController is NULL!");
-        }
 
         public void BuildHUD()
         {
@@ -552,10 +452,7 @@ namespace Undermarch.Presentation.Controllers
             menuButton = null;
             startCombatButton = null;
             pauseButton = null;
-            buildSlimeButton = null;
-            buildTrapButton = null;
-            slimePriceText = null;
-            trapPriceText = null;
+            buildableSlider = null;
 
             RefreshReferences();
 
@@ -646,11 +543,30 @@ namespace Undermarch.Presentation.Controllers
             GameObject bottomPanel = CreatePanel(canvasObj.transform, "BottomHUD", new Color(0.18f, 0.18f, 0.18f, 1f), 140, false);
             SetupHorizontalLayout(bottomPanel, 20, 40, TextAnchor.MiddleCenter);
 
-            // Bottom Elements
-            CreateBuildButton(bottomPanel.transform, "PlaceSlimeButton", "Slime", "50 G");
-            CreateBuildButton(bottomPanel.transform, "PlaceTrapButton", "Trap", "30 G");
-            CreateBuildButton(bottomPanel.transform, "PlaceGoblinButton", "Goblin", "50 G");
-            CreateBuildButton(bottomPanel.transform, "PlaceBearTrapButton", "Bear Trap", "50 G");
+            // Bottom Elements - Slider
+            // Configure parent layout to allow expansion
+            var bottomLayout = bottomPanel.GetComponent<HorizontalLayoutGroup>();
+            if (bottomLayout != null)
+            {
+                bottomLayout.childControlWidth = true;
+                bottomLayout.childForceExpandWidth = true;
+                bottomLayout.childControlHeight = true;
+                bottomLayout.childForceExpandHeight = true;
+            }
+
+            // Create slider container
+            GameObject sliderObj = new GameObject("BuildableSlider", typeof(RectTransform));
+            sliderObj.transform.SetParent(bottomPanel.transform, false);
+
+            // Add layout element to expand
+            LayoutElement sliderLE = sliderObj.AddComponent<LayoutElement>();
+            sliderLE.flexibleWidth = 1;
+            sliderLE.flexibleHeight = 1;
+
+            // Add the slider component
+            buildableSlider = sliderObj.AddComponent<BuildableSliderUI>();
+            
+            Debug.Log("HUDController: Created BuildableSlider.");
 
             // 4. Character Info Panel (right side, initially hidden)
             CreateCharacterInfoPanel(canvasObj.transform);
@@ -726,34 +642,8 @@ namespace Undermarch.Presentation.Controllers
             return obj;
         }
 
-        void CreateBuildButton(Transform parent, string name, string label, string price)
-        {
-            GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
-            obj.transform.SetParent(parent, false);
-
-            Image img = obj.GetComponent<Image>();
-            img.color = new Color(0.1f, 0.1f, 0.1f);
-            img.raycastTarget = true; // Ensure buttons are clickable
-
-            RectTransform rt = obj.GetComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(100, 100);
-
-            var vGroup = obj.AddComponent<VerticalLayoutGroup>();
-            vGroup.childAlignment = TextAnchor.MiddleCenter;
-            vGroup.padding = new RectOffset(5, 5, 5, 5);
-
-            CreateText(obj.transform, "NameText", label, 18, Color.white, false);
             
-            string priceTextName = "PriceText";
-            if (name == "PlaceSlimeButton") priceTextName = "SlimePriceText";
-            else if (name == "PlaceTrapButton") priceTextName = "TrapPriceText";
-            else if (name == "PlaceGoblinButton") priceTextName = "GoblinPriceText";
-            else if (name == "PlaceBearTrapButton") priceTextName = "BearTrapPriceText";
 
-            CreateText(obj.transform, priceTextName, price, 16, Color.yellow, false);
-            
-            Debug.Log($"HUDController: Created BuildButton '{name}' under {parent.name}");
-        }
 
         void CreateText(Transform parent, string name, string content, float fontSize, Color color, bool bold)
         {
@@ -900,7 +790,7 @@ namespace Undermarch.Presentation.Controllers
 
         #region Character Info Panel
 
-        private PlacementController.PlacementType _lastShownPlacementType = PlacementController.PlacementType.None;
+        private PlacementType _lastShownPlacementType = PlacementType.None;
 
         void UpdatePlacementPreviewStats()
         {
@@ -909,7 +799,7 @@ namespace Undermarch.Presentation.Controllers
             var selectedType = placementController.SelectedType;
 
             // If a placement type is selected, show its stats
-            if (selectedType != PlacementController.PlacementType.None)
+            if (selectedType != PlacementType.None)
             {
                 // Only update if the selection changed
                 if (selectedType != _lastShownPlacementType)
@@ -921,9 +811,9 @@ namespace Undermarch.Presentation.Controllers
             else
             {
                 // Clear if we were showing placement stats
-                if (_lastShownPlacementType != PlacementController.PlacementType.None)
+                if (_lastShownPlacementType != PlacementType.None)
                 {
-                    _lastShownPlacementType = PlacementController.PlacementType.None;
+                    _lastShownPlacementType = PlacementType.None;
                     // Don't close the panel if we're showing a placed character
                     if (selectedCharacter == null)
                     {
@@ -933,27 +823,27 @@ namespace Undermarch.Presentation.Controllers
             }
         }
 
-        void ShowPlacementStats(PlacementController.PlacementType placementType)
+        void ShowPlacementStats(PlacementType placementType)
         {
             Character previewCharacter = null;
 
             // Create a temporary character based on the placement type
             switch (placementType)
             {
-                case PlacementController.PlacementType.Slime:
+                case PlacementType.Slime:
                     previewCharacter = CharacterDatabase.slimeMonster.Clone();
                     break;
-                case PlacementController.PlacementType.Archer:
+                case PlacementType.Archer:
                     previewCharacter = CharacterDatabase.archerMonster.Clone();
                     break;
-                case PlacementController.PlacementType.Goblin:
+                case PlacementType.Goblin:
                     previewCharacter = CharacterDatabase.goblin1.Clone();
                     break;
-                case PlacementController.PlacementType.SpikeTrap:
+                case PlacementType.SpikeTrap:
                     // Traps don't have character stats
                     ShowTrapStats("Spike Trap", 30, "Damages enemies that step on it");
                     return;
-                case PlacementController.PlacementType.BearTrap:
+                case PlacementType.BearTrap:
                     // Traps don't have character stats
                     ShowTrapStats("Bear Trap", 50, "Immobilizes and damages enemies");
                     return;
@@ -1150,7 +1040,7 @@ namespace Undermarch.Presentation.Controllers
                 Debug.Log("CharacterInfo: Escape pressed, closing panel");
                 CloseCharacterInfo();
                 // Also clear placement selection
-                _lastShownPlacementType = PlacementController.PlacementType.None;
+                _lastShownPlacementType = PlacementType.None;
                 return;
             }
 
@@ -1166,7 +1056,7 @@ namespace Undermarch.Presentation.Controllers
                     {
                         Debug.Log("CharacterInfo: Click inside panel, closing");
                         CloseCharacterInfo();
-                        _lastShownPlacementType = PlacementController.PlacementType.None;
+                        _lastShownPlacementType = PlacementType.None;
                         return;
                     }
                 }
@@ -1180,7 +1070,7 @@ namespace Undermarch.Presentation.Controllers
                 {
                     ShowCharacterInfo(clicked);
                     // Clear placement preview tracking since we're now showing a real character
-                    _lastShownPlacementType = PlacementController.PlacementType.None;
+                    _lastShownPlacementType = PlacementType.None;
                 }
                 else
                 {
@@ -1190,12 +1080,12 @@ namespace Undermarch.Presentation.Controllers
                     {
                         ShowTrapInfo(trap);
                         // Clear placement preview tracking since we're now showing a placed trap
-                        _lastShownPlacementType = PlacementController.PlacementType.None;
+                        _lastShownPlacementType = PlacementType.None;
                     }
                     else
                     {
                         // Clicked on empty space - only close if not showing a placement preview
-                        if (placementController == null || placementController.SelectedType == PlacementController.PlacementType.None)
+                        if (placementController == null || placementController.SelectedType == PlacementType.None)
                         {
                             CloseCharacterInfo();
                         }

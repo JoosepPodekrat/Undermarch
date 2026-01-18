@@ -9,6 +9,7 @@ using Undermarch.Simulation.Entities.Characters.Heroes;
 using Undermarch.Simulation.Entities.Characters.Monsters;
 using Undermarch.Simulation.Events;
 using Undermarch.Simulation.Grid;
+using Undermarch.Data;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -445,7 +446,7 @@ namespace Undermarch.Presentation.Rendering
             _lastPreviewPos = null;
         }
 
-        public void DrawPreview(TilePos pos, PlacementController.PlacementType type, bool isValid)
+        public void DrawPreview(TilePos pos, PlacementType type, bool isValid)
         {
             if (previewTilemap == null) return;
 
@@ -462,19 +463,19 @@ namespace Undermarch.Presentation.Rendering
             TileBase tile = null;
             switch (type)
             {
-                case PlacementController.PlacementType.Slime:
+                case PlacementType.Slime:
                     tile = slimeTile;
                     break;
-                case PlacementController.PlacementType.Archer:
+                case PlacementType.Archer:
                     tile = archerTile ?? peasantTile; // Fallback if archerTile is missing
                     break;
-                case PlacementController.PlacementType.Goblin:
+                case PlacementType.Goblin:
                     tile = goblinTile;
                     break;
-                case PlacementController.PlacementType.SpikeTrap:
+                case PlacementType.SpikeTrap:
                     tile = woodenSpikeTrapTile; // Assumption based on context
                     break;
-                case PlacementController.PlacementType.BearTrap:
+                case PlacementType.BearTrap:
                     tile = bearTrapTile;
                     break;
                 default:
