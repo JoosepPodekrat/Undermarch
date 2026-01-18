@@ -125,6 +125,7 @@ namespace Undermarch.Simulation.Entities
         {
             Name = "Priestess",
             faction = Faction.Hero,
+            isHealer = true,
             strength = 0,
             stamina = 4,
             agility = 5,
@@ -142,6 +143,7 @@ namespace Undermarch.Simulation.Entities
         {
             Name = "High Priestess",
             faction = Faction.Hero,
+            isHealer = true,
             strength = 3,
             stamina = 10,
             agility = 8,
@@ -159,6 +161,7 @@ namespace Undermarch.Simulation.Entities
         {
             Name = "Holy Priestess",
             faction = Faction.Hero,
+            isHealer= true,
             strength = 5,
             stamina = 15,
             agility = 10,

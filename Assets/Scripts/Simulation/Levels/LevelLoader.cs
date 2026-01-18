@@ -267,7 +267,7 @@ namespace Undermarch.Simulation.Levels
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
             var wave1 = CreateHeroParty(new List<Character> {
-                CharacterDatabase.priestess
+                CharacterDatabase.priestess, CharacterDatabase.peasant
             }, entrance);
             wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);

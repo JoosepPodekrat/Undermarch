@@ -133,6 +133,19 @@ namespace Undermarch
             agility = 3,
             spirit = 3,
         };
+        public static readonly Weapon darkDagger = new Weapon
+        {
+            name = "Sacrificial Dagger",
+            description = "A Dagger cloaked in blood",
+            damage = 10,
+            damageType = DamageType.Dark,
+            strength = 0,
+            stamina = 0,
+            intelligence = 0,
+            agility = 0,
+            spirit = 0,
+        };
+
 
         // =============================
         // Armors

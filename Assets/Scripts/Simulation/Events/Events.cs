@@ -14,5 +14,12 @@ namespace Undermarch.Simulation.Events
         public static void RaiseDeath(Character c) => OnCharacterDied?.Invoke(c);
         public static void RaiseAttack(Character c) => OnCharacterAttacked?.Invoke(c);
         public static void RaiseHurt(Character c) => OnCharacterHurt?.Invoke(c);
+        public static event Action<Character, Character, int> OnHeal;
+
+        public static void RaiseHeal(Character healer, Character target, int amount)
+        {
+            OnHeal?.Invoke(healer, target, amount);
+        }
+
     }
 }

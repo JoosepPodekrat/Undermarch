@@ -18,12 +18,13 @@ namespace Undermarch.Simulation.Entities
         bool isDead = false;
         bool isScared = false;
         public string Name = "Character";
-        public int gold = 0; // Gold carried by this character
+        public int gold = 0; 
         public int wood = 0;
         public int food = 0;
         public int metal = 0;
         public int magic = 0;
         public string history;
+        public bool isHealer;
         // base stats, i think these should default to 10, so every point increase is roughly a 10% increase in effectiveness of the stat.
         public Faction faction; // { Hero, Defender, Neutral, ProjectileHero, ProjectileDefender }
         public int agility = 10; // Influences speed, increases armor, increases crit 
@@ -214,7 +215,18 @@ namespace Undermarch.Simulation.Entities
 
         public virtual void Act(IBoard board)
         {
-            // Base character does nothing.
+            if (isHealer)
+            {
+                var pos = board.GetPositionOf(this);
+                var ally = FindWoundedAlly(board, pos);
+
+                if (ally != null)
+                {
+                    int healAmount = effectiveIntelligence;
+                    Heal(ally, healAmount);
+                    return; // Healer spent its action
+                }
+            }// Base character does nothing.
         }
 
         public void Attack(Character target)
@@ -308,17 +320,23 @@ namespace Undermarch.Simulation.Entities
             var occupant = board.GetEntityAt(nextPos);
             if (occupant != null)
             {
-                // If the occupant is an enemy, attack it
                 if (occupant.faction != this.faction)
                 {
                     Attack(occupant);
-                    return true; // Action taken: Attack
+                    return true;
                 }
-                else
+
+                // Ally encountered → heal instead of block
+                if (occupant.faction == this.faction && isHealer && occupant.currentHP < occupant.maxHP)
                 {
-                    return false; // Blocked by an ally
+                    int healAmount = effectiveIntelligence ;
+                    Heal(occupant, healAmount);
+                    return true;
                 }
+
+                return false;
             }
+
             else
             {
                 // The tile is empty, so move
@@ -328,5 +346,52 @@ namespace Undermarch.Simulation.Entities
                 return true; // Action taken: Move
             }
         }
+        public Character FindWoundedAlly(IBoard board, TilePos pos)
+        {
+            TilePos[] neighbors =
+            {
+                new TilePos(pos.x + 1, pos.y),
+                new TilePos(pos.x - 1, pos.y),
+                new TilePos(pos.x, pos.y + 1),
+                new TilePos(pos.x, pos.y - 1),
+            };
+
+            foreach (TilePos adjacent in neighbors)
+            {
+                if (!board.InBounds(adjacent))
+                    continue;
+
+                var ally = board.GetEntityAt(adjacent);
+                if (ally != null &&
+                    ally.faction == this.faction &&
+                    ally.currentHP < ally.maxHP &&
+                    !ally.IsDead)
+                {
+                    return ally;
+                }
+            }
+
+            return null;
+        }
+
+        public bool Heal(Character target, int amount)
+        {
+            if (target.IsDead)
+                return false;
+
+            int manaCost = Math.Max(1, effectiveIntelligence / 2);
+
+            if (currentMana < manaCost)
+                return false; // Not enough mana
+
+            currentMana -= manaCost;
+
+            int finalHeal = Math.Max(0, amount);
+            target.currentHP = Math.Min(target.maxHP, target.currentHP + finalHeal);
+
+            return true;
+        }
+
+
     }
 }
