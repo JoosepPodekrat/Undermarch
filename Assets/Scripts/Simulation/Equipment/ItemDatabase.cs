@@ -66,7 +66,7 @@ namespace Undermarch
         {
             name = "Priestess staff",
             description = "A blessed staff, wielded by priestesses",
-            damage = 5,
+            damage = 14,
             damageType = DamageType.Light,
         };
         public static readonly Weapon warlockStaff = new Weapon
