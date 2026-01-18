@@ -325,17 +325,48 @@ namespace Undermarch.Simulation.Entities
         {
             Name = "Red Demon",
             faction = Faction.Defender,
-            strength = 20,
-            stamina = 10,
+            isHealer = true,
+            strength = 3,
+            stamina = 15,
             agility = 15,
-            intelligence = 8,
-            spirit = 9,
-            charWeapon = ItemDatabase.ironSword,
-            charArmor = ItemDatabase.leatherArmor,
+            intelligence = 10,
+            spirit = 50,
+            charWeapon = ItemDatabase.priestessStaff,
+            charArmor = ItemDatabase.priestessRobe,
             charHelmet = ItemDatabase.leatherCap,
             charAccessory = ItemDatabase.charmOfFocus
         };
         public static readonly Monster strongerDemon = new Monster
+        {
+            Name = "Purple Demon",
+            faction = Faction.Defender,
+            isHealer = true,
+            strength = 10,
+            stamina = 20,
+            agility = 15,
+            intelligence = 15,
+            spirit = 100,
+            charWeapon = ItemDatabase.priestessStaff,
+            charArmor = ItemDatabase.priestessRobe,
+            charHelmet = ItemDatabase.leatherCap,
+            charAccessory = ItemDatabase.charmOfFocus
+        };
+        public static readonly Monster redSpider = new Monster
+        {
+            Name = "Purple Demon",
+            faction = Faction.Defender,
+            strength = 20,
+            stamina = 20,
+            agility = 15,
+            intelligence = 13,
+            spirit = 15,
+            charWeapon = ItemDatabase.ironSword,
+            charArmor = ItemDatabase.leatherArmor,
+            charHelmet = ItemDatabase.leatherCap,
+            charAccessory = ItemDatabase.charmOfFocus
+
+        };
+        public static readonly Monster purpleSpider = new Monster
         {
             Name = "Purple Demon",
             faction = Faction.Defender,

@@ -147,7 +147,8 @@ namespace Undermarch.Simulation.Entities
             this.maxHP = (int) Math.Round(effectiveStamina * maxHPModifier * StaminaToHealthMultiplier);
             this.maxMana = (int) Math.Round(effectiveIntelligence * maxManaModifier);
             this.maxMorale = (int) Math.Round(effectiveSpirit * maxMoraleModifier);
-            
+            this.manaRegen = (int)Math.Round((double)effectiveSpirit / 10);
+
 
 
         }
@@ -217,6 +218,7 @@ namespace Undermarch.Simulation.Entities
         {
             if (isHealer)
             {
+                this.currentMana += this.manaRegen;
                 var pos = board.GetPositionOf(this);
                 var ally = FindWoundedAlly(board, pos);
 
