@@ -611,7 +611,7 @@ MonoBehaviour:
   optionsPanel: {fileID: 902610533}
   levelPanel: {fileID: 2002358396}
   newGamePanel: {fileID: 0}
-  slideshowPanel: {fileID: 0}
+  slideshowPanel: {fileID: 844855721}
 --- !u!4 &469056787
 Transform:
   m_ObjectHideFlags: 0
@@ -1207,7 +1207,7 @@ MonoBehaviour:
   - {fileID: -3721379475995641100, guid: 3cb4eaf4ed1c78241a63de57a106d1bd, type: 3}
   - {fileID: 6758538247443650707, guid: 945b93e4ead765e489a2a254b5c322c2, type: 3}
   - {fileID: -2302599494945119830, guid: 991b164414a910c4dbf636256afc0d6c, type: 3}
-  slideImage: {fileID: 844855724}
+  displayImage: {fileID: 844855724}
   slideshowPanel: {fileID: 844855721}
 --- !u!114 &844855724
 MonoBehaviour:
@@ -1222,7 +1222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5176471}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3440,9 +3440,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 844855723}
-        m_TargetAssemblyTypeName: SlideshowUI, Game.Presentation
-        m_MethodName: CloseSlideshow
+      - m_Target: {fileID: 469056786}
+        m_TargetAssemblyTypeName: MenuManager, Game.Presentation
+        m_MethodName: OpenMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

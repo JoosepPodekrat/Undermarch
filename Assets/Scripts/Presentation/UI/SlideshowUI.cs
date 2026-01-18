@@ -76,4 +76,5 @@ public class SlideshowUI : MonoBehaviour
             Debug.LogWarning("SlideshowUI: Slideshow panel not assigned!");
         }
     }
+
 }

@@ -40,7 +40,7 @@ namespace Undermarch.Simulation.Levels
             LoadLayout = LevelLoader.LoadDungeon,
             CreateWaves = level => LevelLoader.CreateWaveSchedule1Level3(level.Entrances),
             CreateSecondWaves = level =>
-                LevelLoader.CreateWaveSchedule2Level2(level.Entrances)
+                LevelLoader.CreateWaveSchedule2Level3(level.Entrances)
         };
 
         public static Level LevelFour = new Level
@@ -50,40 +50,9 @@ namespace Undermarch.Simulation.Levels
             LoadLayout = LevelLoader.LoadDungeon,
             CreateWaves = level => LevelLoader.CreateWaveSchedule1Level4(level.Entrances),
             CreateSecondWaves = level =>
-                LevelLoader.CreateWaveSchedule2Level2(level.Entrances)
-        };
-
-        public static Level LevelFive = new Level
-        {
-            Width = 20,
-            Height = 20,
-            LoadLayout = LevelLoader.LoadDungeon,
-
-            CreateWaves = level =>
-                LevelLoader.CreateWaveSchedule5(level.Entrances),
-            CreateSecondWaves = level =>
-                LevelLoader.CreateWaveSchedule2Level2(level.Entrances)
-        };
-
-
-        public static Level LevelSix = new Level
-        {
-            Width = 20,
-            Height = 20,
-            LoadLayout = LevelLoader.LoadDungeon,
-            CreateWaves = level => LevelLoader.CreateWaveSchedule6(level.Entrances),
-            CreateSecondWaves = level =>
-                LevelLoader.CreateWaveSchedule2Level2(level.Entrances)
-        };
-
-        public static Level LevelSeven = new Level
-        {
-            Width = 20,
-            Height = 20,
-            LoadLayout = LevelLoader.LoadDungeon,
-            CreateWaves = level => LevelLoader.CreateWaveSchedule7(level.Entrances),
-            CreateSecondWaves = level =>
-                LevelLoader.CreateWaveSchedule2Level2(level.Entrances)
+                LevelLoader.CreateWaveSchedule2Level4(level.Entrances)
         };
     }
+
+       
 }

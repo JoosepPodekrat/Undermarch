@@ -33,7 +33,6 @@ namespace Undermarch.Data
                 LevelLoaderType.LevelTwo => Simulation.Levels.LevelLoader.LoadLevelTwo(board),
                 LevelLoaderType.LevelThree => Simulation.Levels.LevelLoader.LoadLevelThree(board),
                 LevelLoaderType.LevelFour => Simulation.Levels.LevelLoader.LoadLevelFour(board),
-                LevelLoaderType.LevelFive => Simulation.Levels.LevelLoader.LoadLevelFive(board),
                 //LevelLoaderType.LevelSix => Simulation.Levels.LevelLoader.LoadLevelSix(board),
                 //LevelLoaderType.LevelSeven => Simulation.Levels.LevelLoader.LoadLevelSeven(board),
                 _ => Simulation.Levels.LevelLoader.LoadLevelOne(board)

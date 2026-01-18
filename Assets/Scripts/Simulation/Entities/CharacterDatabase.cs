@@ -315,10 +315,10 @@ namespace Undermarch.Simulation.Entities
             agility = 10,
             intelligence = 23,
             spirit = 15,
-            charWeapon = ItemDatabase.apprenticeStaff, // Placeholder
-            charArmor = ItemDatabase.apprenticeRobe, // Placeholder
-            charHelmet = ItemDatabase.mysticCowl, // Placeholder
-            charAccessory = ItemDatabase.charmOfFocus // Placeholder
+            charWeapon = ItemDatabase.warlockStaff, // Placeholder
+            charArmor = ItemDatabase.heroArmor, // Placeholder
+            charHelmet = ItemDatabase.enchantedHood, // Placeholder
+            charAccessory = ItemDatabase.heroTalisman // Placeholder
         };
 
         public static readonly Monster weakerDemon = new Monster
