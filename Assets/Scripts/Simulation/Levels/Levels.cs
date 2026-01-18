@@ -1,5 +1,3 @@
-using Undermarch.Simulation.Levels;
-
 namespace Undermarch.Simulation.Levels
 {
     public static class PremadeLevels
@@ -9,7 +7,9 @@ namespace Undermarch.Simulation.Levels
             Width = 20,
             Height = 20,
             LoadLayout = LevelLoader.LoadDungeon,
-            CreateWaves = level => LevelLoader.CreateWaveScheduleTutorial(level.Entrances)
+            CreateWaves = level => LevelLoader.CreateWaveScheduleTutorial(level.Entrances),
+            CreateSecondWaves = level =>
+                LevelLoader.CreateWaveScheduleTutorial(level.Entrances)
         };
 
         public static Level LevelOne = new Level
@@ -52,6 +52,4 @@ namespace Undermarch.Simulation.Levels
                 LevelLoader.CreateWaveSchedule2Level4(level.Entrances)
         };
     }
-
-       
 }
