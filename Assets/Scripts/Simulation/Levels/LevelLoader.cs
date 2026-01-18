@@ -413,50 +413,83 @@ namespace Undermarch.Simulation.Levels
             spawner.ResetScheduler();
 
             TilePos entrance = entrances.Count > 0 ? entrances[0] : new TilePos(9, 1);
-            var wave1 = CreateHeroParty(new List<Character>
-            {
 
-            }, entrance);
+            // Wave 1 – Light scouting party
+            var wave1 = CreateHeroParty(new List<Character>
+    {
+        CharacterDatabase.peasant,
+        CharacterDatabase.peasant,
+        CharacterDatabase.apprenticeMage
+    }, entrance);
             wave1.TicksUntilNextWave = 20;
             ScheduleWave(wave1, spawner);
-            var wave2 = CreateHeroParty(new List<Character>
-            {
 
-            }, entrance);
+            // Wave 2 – Mobility & magic
+            var wave2 = CreateHeroParty(new List<Character>
+    {
+        CharacterDatabase.rogue,
+        CharacterDatabase.apprenticeMage,
+        CharacterDatabase.peasant
+    }, entrance);
             wave2.TicksUntilNextWave = 20;
             ScheduleWave(wave2, spawner);
-            var wave3 = CreateHeroParty(new List<Character>
-            {
 
-            }, entrance);
+            // Wave 3 – Sustained fight
+            var wave3 = CreateHeroParty(new List<Character>
+    {
+        CharacterDatabase.warrior,
+        CharacterDatabase.priestess,
+        CharacterDatabase.peasant,
+        CharacterDatabase.peasant
+    }, entrance);
             wave3.TicksUntilNextWave = 20;
             ScheduleWave(wave3, spawner);
-            var wave4 = CreateHeroParty(new List<Character>
-            {
 
-            }, entrance);
+            // Wave 4 – Burst threat
+            var wave4 = CreateHeroParty(new List<Character>
+    {
+        CharacterDatabase.rogue,
+        CharacterDatabase.rogue,
+        CharacterDatabase.apprenticeMage,
+        CharacterDatabase.priestess
+    }, entrance);
             wave4.TicksUntilNextWave = 20;
             ScheduleWave(wave4, spawner);
-            var wave5 = CreateHeroParty(new List<Character>
-            {
 
-            }, entrance);
+            // Wave 5 – Heavy frontline
+            var wave5 = CreateHeroParty(new List<Character>
+    {
+        CharacterDatabase.knight,
+        CharacterDatabase.warrior,
+        CharacterDatabase.priestess
+    }, entrance);
             wave5.TicksUntilNextWave = 20;
             ScheduleWave(wave5, spawner);
-            var wave6 = CreateHeroParty(new List<Character>
-            {
 
-            }, entrance);
+            // Wave 6 – Elite casters & support
+            var wave6 = CreateHeroParty(new List<Character>
+    {
+        CharacterDatabase.Mage,
+        CharacterDatabase.highPriestess,
+        CharacterDatabase.rogue
+    }, entrance);
             wave6.TicksUntilNextWave = 20;
             ScheduleWave(wave6, spawner);
-            var wave7 = CreateHeroParty(new List<Character>
-            {
 
-            }, entrance);
+            // Wave 7 – Mini-boss mixed elite group
+            var wave7 = CreateHeroParty(new List<Character>
+    {
+        CharacterDatabase.knight,
+        CharacterDatabase.warrior,
+        CharacterDatabase.Mage,
+        CharacterDatabase.highPriestess
+    }, entrance);
             wave7.TicksUntilNextWave = 20;
             ScheduleWave(wave7, spawner);
+
             return spawner;
         }
+
         public static WaveSpawner CreateWaveSchedule2Level3(List<TilePos> entrances)
         {
             WaveSpawner spawner = new WaveSpawner();
@@ -840,22 +873,22 @@ namespace Undermarch.Simulation.Levels
                 "####################",
                 "###############  C #",
                 "##                 #",
-                "##D           ### ##",
-                "##            ### ##",
-                "################# ##",
-                "################# ##",
-                "E                   ",
-                "X                   ",
-                "#### ###############",
-                "#### ###############",
-                "#### ###############",
-                "#### ###############",
-                "#### #         #####",
-                "####          C#####",
-                "#### #         #####",
-                "#### ###### ########",
-                "#### #      ########",
-                "####        ########",
+                "##D         ##    ##",
+                "##          ##    ##",
+                "##############    ##",
+                "##############    ##",
+                "E      #            ",
+                "X      #            ",
+                "##     #         ###",
+                "##     ####      ###",
+                "##     ####      ###",
+                "##     ####      ###",
+                "##             #####",
+                "##            C#####",
+                "#### #      #  #####",
+                "####           #####",
+                "#### #      #  #####",
+                "####           #####",
                 "####################",
             };
 
