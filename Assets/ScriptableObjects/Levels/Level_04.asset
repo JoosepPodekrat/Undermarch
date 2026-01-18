@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3595694b4f54567a96db5caf9659a8d, type: 3}
   m_Name: Level_04
   m_EditorClassIdentifier: Game.Data::Undermarch.Data.LevelDataSO
-  displayName: Level
+  displayName: Level 4
   levelIndex: 0
   loaderType: 4
   availableBuildables:
