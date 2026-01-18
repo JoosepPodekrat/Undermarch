@@ -437,8 +437,42 @@ namespace Undermarch.Presentation.UI
                 case PlacementType.BearTrap:
                     placementController.SelectBearTrap();
                     break;
+                case PlacementType.MetalSpikeTrap:
+                    placementController.SelectMetalSpikeTrap();
+                    break;
+
+                case PlacementType.GasTrap:
+                    placementController.SelectGasTrap();
+                    break;
+
+                case PlacementType.RedDemon:
+                    placementController.SelectRedDemon();
+                    break;
+
+                case PlacementType.PurpleDemon:
+                    placementController.SelectPurpleDemon();
+                    break;
+
+                case PlacementType.RedSpider:
+                    placementController.SelectRedSpider();
+                    break;
+
+                case PlacementType.PurpleSpider:
+                    placementController.SelectPurpleSpider();
+                    break;
+
+                case PlacementType.GreenSlime:
+                    placementController.SelectGreenSlime();
+                    break;
+
+                case PlacementType.BlueSlime:
+                    placementController.SelectBlueSlime();
+                    break;
+
                 default:
-                    Debug.LogWarning($"BuildableSliderUI: Unknown placement type {buildable.placementType}");
+                    Debug.LogWarning(
+                        $"BuildableSliderUI: Unknown placement type {buildable.placementType}"
+                    );
                     break;
             }
         }

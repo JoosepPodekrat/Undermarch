@@ -15,3 +15,8 @@ MonoBehaviour:
   displayName: Level 2
   levelIndex: 2
   loaderType: 2
+  availableBuildables:
+  - {fileID: 11400000, guid: b5da550947a9973478b9f81d7fe13a57, type: 2}
+  - {fileID: 11400000, guid: 531e601dcb0cd0344883312588f72b4a, type: 2}
+  - {fileID: 11400000, guid: 99371710c0d5e1d44b7cc6d73b5b0281, type: 2}
+  - {fileID: 11400000, guid: 550ce0fe9ea534647a822adefa56c2b2, type: 2}
